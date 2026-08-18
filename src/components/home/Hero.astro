@@ -1,0 +1,57 @@
+---
+const base = import.meta.env.BASE_URL;
+const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
+---
+<section class="text-left min-h-full">
+    <span class="mb-4 inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-sm sm:text-base md:text-lg font-medium tracking-wide text-orange-500 ring-1 ring-black/10 dark:bg-white/5 dark:text-orange-400 dark:ring-white/10">
+        <svg class="h-4 w-4 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 1.5l2.245 4.63 5.105.744-3.694 3.6.872 5.086L10 13.15l-4.528 2.41.872-5.086-3.694-3.6 5.105-.744L10 1.5z" />
+        </svg>
+        The curated guide to local pros
+    </span>
+    <h1 class="text-4xl sm:text-5xl md:text-7xl font-medium leading-tight">
+        <span class="dark:text-slate-50 text-black">Edmonton's home services,</span>  <br>
+        vetted by locals.
+    </h1>
+    <p class="text-lg sm:text-xl md:text-2xl text-(--text-dim) dark:text-slate-300 mt-4 max-w-[700px]">
+        Skip the generic directories. We personally review and curate Edmonton's best house cleaners, renovators, and landscapers.
+    </p>
+
+    <form
+        class="mt-8 flex max-w-[700px] items-center gap-2 rounded-full bg-black/5 p-2 pl-5 ring-1 ring-black/10 dark:bg-white/5 dark:ring-white/10"
+        role="search"
+        method="get"
+        action={href('search')}
+    >
+        <svg class="h-5 w-5 flex-none text-slate-500 dark:text-slate-400" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="9" cy="9" r="6" />
+            <path d="m17 17-4-4" stroke-linecap="round" />
+        </svg>
+        <input
+            type="search"
+            name="q"
+            placeholder="What service do you need? (e.g. House Cleaning)"
+            autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent py-2 text-base text-(--text) placeholder:text-slate-500 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-400"
+        />
+        <button
+            type="submit"
+            class="flex-none appearance-none rounded-full border-0 bg-(--primary) px-6 py-3 text-sm font-bold text-(--primary-ink) cursor-pointer hover:opacity-90"
+        >
+            Search Providers
+        </button>
+    </form>
+    <div class="mt-6 flex">
+        <p class="px-2">Popular searches:  </p>
+        <div class="flex gap-2">
+            <p>
+            House Cleaning
+        </p>
+
+        <p>
+            Landscaping
+        </p>
+        <p>Renovation  </p>
+        </div>
+    </div>
+</section>

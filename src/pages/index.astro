@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CategoryBox from '../components/CategoryBox.astro';
 import { sortListings } from '../lib/sort';
 import { SITE_TITLE, SITE_TAGLINE, PER_CATEGORY } from '../consts';
+import Hero from '../components/home/Hero.astro';
 
 const listings = await getCollection('listings');
 const categories = (await getCollection('categories')).sort(
@@ -23,11 +24,13 @@ const sections = categories
 ---
 <BaseLayout>
   <div class="landing-header">
-    <h1>{SITE_TITLE}</h1>
-    <p class="landing-tagline">{SITE_TAGLINE}</p>
-    <p class="landing-meta">
+    <!-- <h1>{SITE_TITLE}</h1>
+    <p class="landing-tagline">{SITE_TAGLINE}</p> -->
+
+    <Hero />
+    <!-- <p class="landing-meta">
       {listings.length} listings in {sections.length} categories
-    </p>
+    </p> -->
   </div>
 
   {sections.length === 0 ? (

@@ -1,5 +1,4 @@
 ---
-import '../styles/app.css';
 import '../styles/tailwind.css';
 import { getCollection } from 'astro:content';
 import { SITE_TITLE, SITE_DESCRIPTION, COUNT_CLICKS } from '../consts';
@@ -79,24 +78,25 @@ const footerPages = pages.filter((p) => p.data.inFooter);
      toggle keeps working here exactly as it does everywhere else. -->
 <header class="border-b border-(--line) bg-(--bg) py-5">
   <div class="wrap flex items-center gap-6">
-    <a class="flex items-center gap-2.5 text-(--text) no-underline hover:text-(--accent)" href={base}>
-      <span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-(--accent) text-(--accent-ink)" aria-hidden="true">
-        <svg class="h-4.5 w-4.5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"/></svg>
+    <a class="flex items-center gap-3 no-underline hover:opacity-80" href={base}>
+      <span class="flex h-9 items-center rounded-lg px-2.5 dark:bg-(--primary)" aria-hidden="true">
+        <span class="font-(family-name:--font-display) text-lg font-extrabold tracking-tight text-(--primary) dark:text-(--primary-ink)">EH</span><span class="font-(family-name:--font-display) text-lg font-extrabold tracking-tight text-(--accent) dark:text-(--primary-ink)">S</span>
       </span>
-      <span class="font-[family-name:var(--font-display)] text-[19px] font-bold">{SITE_TITLE}</span>
+      <span class="h-6 w-px bg-(--line)" aria-hidden="true"></span>
+      <span class="font-(family-name:--font-display) text-[19px] font-bold text-(--text)">{SITE_TITLE}</span>
     </a>
 
     <!-- Nav, CTA and theme toggle travel together as one right-hand group. -->
     <div class="ml-auto flex items-center gap-8">
       <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
-        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={base}>Home</a>
-        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={href('#categories')}>Categories</a>
-        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={href('about')}>About</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={base}>Home</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={href('#categories')}>Categories</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={href('about')}>About</a>
       </nav>
 
       <div class="flex items-center gap-3">
         <a
-          class="hidden items-center rounded-full border border-(--line) bg-(--panel-head) px-4.5 py-2 text-sm font-semibold text-(--text) no-underline hover:border-(--accent) hover:text-(--accent) md:inline-flex"
+          class="hidden items-center rounded-full bg-(--panel-head) px-4.5 py-2 text-sm font-semibold text-(--text) no-underline hover:bg-(--panel-hover) md:inline-flex"
           href={submitHref}
         >
           Submit Your Business

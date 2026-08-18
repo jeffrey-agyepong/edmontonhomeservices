@@ -1,12 +1,35 @@
 /*
- * Tailwind, scoped to the navbar only (see BaseLayout.astro).
+ * Tailwind, used piecemeal alongside app.css (the navbar, the home page's
+ * Hero) rather than as a full-site rewrite.
  *
  * The rest of the site still runs on app.css, which the README says is
  * shared with the PHP/WordPress/Joomla sibling editions. Preflight resets
  * base element styles (headings, links, buttons, ...) globally, which would
- * fight that shared stylesheet everywhere, not just in the header — so only
- * the theme tokens and utility classes are imported, and Preflight is left
- * out. Nothing here changes how any non-Tailwind element renders.
+ * fight that shared stylesheet everywhere, not just in the Tailwind-authored
+ * bits — so only the theme tokens and utility classes are imported, and
+ * Preflight is left out. Nothing here changes how any non-Tailwind element
+ * renders.
+ *
+ * app.css is pulled in here too, inside its own named layer. CSS rules
+ * written outside of any @layer count as an implicit, always-wins-last
+ * layer — so left as a plain import, app.css's `a { color: var(--primary) }`
+ * (and anything else on the same property) would silently beat a Tailwind
+ * utility class every time, regardless of specificity. Naming the layers
+ * explicitly and declaring this order up front makes "utilities" the
+ * highest-priority one, so a Tailwind class on an element always wins over
+ * an app.css rule for the same property, as expected.
  */
+@layer base, theme, utilities;
+
+@import "./app.css" layer(base);
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * The site's light/dark toggle sets data-theme="dark" on <html> (see
+ * BaseLayout.astro) rather than following the OS's prefers-color-scheme or
+ * toggling a .dark class — Tailwind's default dark: variant does neither of
+ * those, so without this it would silently ignore the toggle. This makes
+ * dark: track data-theme instead, for the element itself and its descendants.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
