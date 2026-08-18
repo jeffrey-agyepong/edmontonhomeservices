@@ -1,0 +1,174 @@
+---
+import '../styles/app.css';
+import '../styles/tailwind.css';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE, SITE_DESCRIPTION, COUNT_CLICKS } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const pageTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
+const pageDesc = description || SITE_DESCRIPTION;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const base = import.meta.env.BASE_URL;
+
+/** Join onto the base path without ever producing a double slash. */
+const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
+
+/*
+ * "Submit Your Business" needs somewhere to write to, same constraint as the
+ * outbound listing links (see ListingRow.astro). With a directory API behind
+ * the site, send people to its submission form; in local-JSON mode there is
+ * nowhere for a submission to go, so point at the About page instead.
+ */
+const submitHref = COUNT_CLICKS
+  ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/submit`
+  : href('about');
+
+// About, privacy, terms — whatever this directory has. Sorted the way the
+// admin ordered them, so the static build matches the PHP site's footer.
+const pages = (await getCollection('pages'))
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+const footerPages = pages.filter((p) => p.data.inFooter);
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script is:inline>
+    /* Runs before first paint so the page never flashes the wrong theme.
+       Falls back to system preference when nothing is saved yet. */
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved === 'light' || saved === 'dark'
+        ? saved
+        : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="canonical" href={canonical} />
+
+  <!-- Outfit for headings/brand, Inter for body copy and UI — see the
+       --font-display / --font-body variables in app.css. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+  />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <meta property="og:site_name" content={SITE_TITLE} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:type" content="website" />
+  <link rel="sitemap" href={`${base}sitemap-index.xml`.replace(/\/+/g, '/')} />
+</head>
+<body>
+
+<!-- Tailwind-authored navbar (see src/styles/tailwind.css) — the rest of the
+     site still runs on app.css, which the README says is shared with the
+     PHP/WordPress/Joomla editions. Colours below reference that stylesheet's
+     CSS custom properties (not Tailwind's own palette) so the light/dark
+     toggle keeps working here exactly as it does everywhere else. -->
+<header class="border-b border-(--line) bg-(--bg) py-5">
+  <div class="wrap flex items-center gap-6">
+    <a class="flex items-center gap-2.5 text-(--text) no-underline hover:text-(--accent)" href={base}>
+      <span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-(--accent) text-(--accent-ink)" aria-hidden="true">
+        <svg class="h-4.5 w-4.5" viewBox="0 0 20 20" fill="currentColor"><path d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"/></svg>
+      </span>
+      <span class="font-[family-name:var(--font-display)] text-[19px] font-bold">{SITE_TITLE}</span>
+    </a>
+
+    <!-- Nav, CTA and theme toggle travel together as one right-hand group. -->
+    <div class="ml-auto flex items-center gap-8">
+      <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={base}>Home</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={href('#categories')}>Categories</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--accent)" href={href('about')}>About</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          class="hidden items-center rounded-full border border-(--line) bg-(--panel-head) px-4.5 py-2 text-sm font-semibold text-(--text) no-underline hover:border-(--accent) hover:text-(--accent) md:inline-flex"
+          href={submitHref}
+        >
+          Submit Your Business
+        </a>
+
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM5.404 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM14.596 15.657a.75.75 0 001.06 0l1.06-1.06a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 000 1.06zM4 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 014 10zM5.404 4.343a.75.75 0 10-1.06 1.061l1.06 1.06a.75.75 0 001.061-1.06l-1.06-1.06zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75z"/></svg>
+          <svg class="icon-moon" viewBox="0 0 20 20" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+        </button>
+
+        <!-- Same markup as the PHP and WordPress editions, so all three look
+             identical. <details> keeps it working with no JavaScript at all. -->
+        <details class="menu md:hidden" id="c00d-menu">
+        <summary class="menu-button" aria-label="Menu" title="Menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-burger"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="icon-close"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4L10.6 10.6l6.3-6.3z"/></svg>
+        </summary>
+        <div class="menu-panel">
+          <form class="menu-search" role="search" method="get" action={href('search')}>
+            <input type="search" name="q" placeholder="Search the directory…" aria-label="Search" />
+            <button type="submit">Search</button>
+          </form>
+          <nav class="menu-links">
+            <a href={base}>Home</a>
+            <a href={href('#categories')}>Categories</a>
+            {pages.map((p) => <a href={href(p.data.slug)}>{p.data.title}</a>)}
+            <a href={submitHref}>Submit Your Business</a>
+          </nav>
+        </div>
+      </details>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <slot />
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    {footerPages.length > 0 && (
+      <nav class="footer-links">
+        {footerPages.map((p) => <a href={href(p.data.slug)}>{p.data.title}</a>)}
+      </nav>
+    )}
+    <p>&copy; {new Date().getFullYear()} {SITE_TITLE}</p>
+  </div>
+</footer>
+
+<script>
+  /* Progressive enhancement only — the menu opens and closes without this.
+     Adds click-outside and Escape-to-close, matching the PHP edition. */
+  const menu = document.getElementById('c00d-menu') as HTMLDetailsElement | null;
+  if (menu) {
+    document.addEventListener('click', (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) menu.open = false;
+    });
+  }
+
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  }
+</script>
+
+</body>
+</html>

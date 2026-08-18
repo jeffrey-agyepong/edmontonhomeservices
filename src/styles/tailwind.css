@@ -1,0 +1,12 @@
+/*
+ * Tailwind, scoped to the navbar only (see BaseLayout.astro).
+ *
+ * The rest of the site still runs on app.css, which the README says is
+ * shared with the PHP/WordPress/Joomla sibling editions. Preflight resets
+ * base element styles (headings, links, buttons, ...) globally, which would
+ * fight that shared stylesheet everywhere, not just in the header — so only
+ * the theme tokens and utility classes are imported, and Preflight is left
+ * out. Nothing here changes how any non-Tailwind element renders.
+ */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
