@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { SITE_TITLE } from "../consts";
+
+interface Props {
+  footerPages: CollectionEntry<"pages">[];
+  href: (p: string) => string;
+  base: string;
+  submitHref: string;
+}
+
+const { footerPages, href, base, submitHref } = Astro.props;
+
+const categories = (await getCollection("categories"))
+  .sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name))
+  .slice(0, 4);
+---
+
+<footer class="border-t-4 border-green-900 bg-(--bg) pt-14 pb-8">
+  <div class="wrap">
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+      <div>
+        <a class="flex items-center gap-3 no-underline hover:opacity-80" href={base}>
+          <span class="flex h-9 items-center rounded-lg px-2.5" aria-hidden="true">
+            <span class="font-(family-name:--font-display) text-lg font-extrabold tracking-tight text-(--primary)">EH</span><span class="font-(family-name:--font-display) text-lg font-extrabold tracking-tight text-(--accent)">S</span>
+          </span>
+          <span class="h-6 w-px bg-(--line)" aria-hidden="true"></span>
+          <span class="font-(family-name:--font-display) text-[19px] font-bold text-(--text)">{SITE_TITLE}</span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm text-(--text-dim)">
+          Your trusted local guide to finding vetted, high-quality home service professionals in Edmonton, Alberta.
+        </p>
+      </div>
+
+      {categories.length > 0 && (
+        <div>
+          <h3 class="mb-4 text-[15px] font-bold text-(--text)">Categories</h3>
+          <ul class="m-0 flex list-none flex-col gap-3 p-0">
+            {categories.map((c) => (
+              <li>
+                <a
+                  class="text-sm text-(--text-dim) no-underline hover:text-(--primary)"
+                  href={`${base}c/${c.data.slug}`.replace(/\/+/g, "/")}
+                >
+                  {c.data.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div>
+        <h3 class="mb-4 text-[15px] font-bold text-(--text)">Company</h3>
+        <ul class="m-0 flex list-none flex-col gap-3 p-0">
+          {footerPages.map((p) => (
+            <li>
+              <a class="text-sm text-(--text-dim) no-underline hover:text-(--primary)" href={href(p.data.slug)}>
+                {p.data.title}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a class="text-sm text-(--text-dim) no-underline hover:text-(--primary)" href={submitHref}>
+              Submit Business
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-2 border-t border-(--line) pt-6 text-xs text-(--text-dim) sm:flex-row sm:items-center sm:justify-between">
+      <p class="m-0">&copy; {new Date().getFullYear()} {SITE_TITLE}. All rights reserved.</p>
+      <p class="m-0">Built for YEG.</p>
+    </div>
+  </div>
+</footer>

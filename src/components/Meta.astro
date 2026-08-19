@@ -1,0 +1,44 @@
+---
+import { SITE_TITLE } from '../consts';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: URL;
+  noindex: boolean;
+  base: string;
+}
+
+const { title, description, canonical, noindex, base } = Astro.props;
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script is:inline>
+  /* Runs before first paint so the page never flashes the wrong theme.
+     Falls back to system preference when nothing is saved yet. */
+  (function () {
+    var saved = localStorage.getItem('theme');
+    var theme = saved === 'light' || saved === 'dark'
+      ? saved
+      : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<!-- Outfit for headings/brand, Inter for body copy and UI — see the
+     --font-display / --font-body variables in app.css. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+/>
+{noindex && <meta name="robots" content="noindex, follow" />}
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<link rel="sitemap" href={`${base}sitemap-index.xml`.replace(/\/+/g, '/')} />
