@@ -1,0 +1,62 @@
+---
+const faqs = [
+  {
+    question: 'Is it free to use?',
+    answer: "Yes — browsing the directory and requesting quotes is completely free for homeowners. There's no cost or account required to search, view listings, or contact a business.",
+  },
+  {
+    question: 'How do I request a quote from a business?',
+    answer: "Visit any business's profile and use the quote-request form or the contact info listed there to reach out directly — no login needed.",
+  },
+  {
+    question: 'Can I leave a review?',
+    answer: "Yes — reviews can be submitted on any business's profile page. A quick email verification step helps keep reviews genuine.",
+  },
+  {
+    question: 'Do you cover St. Albert, Sherwood Park, or just Edmonton proper?',
+    answer: "The directory is focused on Edmonton, but many listed businesses also serve nearby communities like St. Albert and Sherwood Park — check each business's profile for their specific service area.",
+  },
+];
+---
+<section class="wrap py-10">
+  <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center">
+    Frequently Asked Questions
+  </h2>
+  <p class="text-(--text-dim) text-center text-base sm:text-lg md:text-xl">
+    Everything you need to know about using Edmonton Home Services.
+  </p>
+
+  <div class="faq-list mt-6 mx-0 sm:mx-auto sm:max-w-2xl md:max-w-3xl">
+    {faqs.map(({ question, answer }) => (
+      <details class="faq-item">
+        <summary class="faq-question text-lg font-bold text-(--primary) cursor-pointer">
+          {question}
+        </summary>
+        <p class="faq-answer text-(--text-dim) mt-2">{answer}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    display: block;
+    background: var(--panel-head);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .faq-question {
+    list-style: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+</style>

@@ -196,4 +196,28 @@ const sponsors = listings
     text-decoration: none;
     text-transform: uppercase;
   }
+
+  @media (max-width: 640px) {
+    .sponsors-title {
+      font-size: 1.5rem;
+    }
+
+    .sponsors-subtitle {
+      font-size: 1rem;
+    }
+
+    .sponsor-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .sponsor-card {
+      flex-direction: column;
+    }
+
+    .sponsor-media {
+      flex: 0 0 auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
 </style>
