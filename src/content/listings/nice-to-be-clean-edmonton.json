@@ -1,0 +1,18 @@
+{
+  "name": "Nice To Be Clean",
+  "category": "house-cleaning",
+  "neighborhood": "",
+  "phone": "(780) 940-3866",
+  "website": "https://www.edmonton-cleaning.com/",
+  "description": "A family-owned Edmonton cleaning company operating since 2013, offering standard and deep residential cleaning, move-in/move-out cleaning, and specialty services like post-construction and senior-focused cleaning across Edmonton and nearby communities.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 13,
+  "licensed_insured": false,
+  "address": "4030 Morrison Way NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Deep Cleaning", "Move-Out Cleaning", "Recurring Cleaning", "Senior Cleaning", "Condo Cleaning", "Post-Construction Cleaning"],
+  "slug": "nice-to-be-clean-edmonton",
+  "premium": true
+}

@@ -15,8 +15,7 @@ const index = listings.map((l) => ({
   name: l.data.name,
   slug: l.data.slug,
   description: l.data.description,
-  rating: l.data.rating,
-  favicon: l.data.favicon,
+  photo: l.data.photo,
 }));
 
 const base = import.meta.env.BASE_URL;
@@ -77,21 +76,14 @@ const base = import.meta.env.BASE_URL;
 
         results.innerHTML = hits.map((i) => {
           const initialLetter = escapeHtml(i.name.slice(0, 1).toUpperCase());
-          const icon = i.favicon
-            ? '<img src="' + escapeHtml(i.favicon) + '" alt="" class="site-favicon" width="24" height="24" loading="lazy">'
+          const icon = i.photo
+            ? '<img src="' + escapeHtml(i.photo) + '" alt="" class="site-favicon" width="24" height="24" loading="lazy">'
             : '<span class="site-favicon site-favicon--placeholder" aria-hidden="true">' + initialLetter + '</span>';
-
-          let rating = '';
-          if (i.rating !== null && i.rating !== undefined) {
-            const parts = Number(i.rating).toFixed(1).split('.');
-            rating = '<span class="rating-text"><span class="rating-score-value">' + parts[0] +
-                     '<span class="dot">.</span><span class="decimal">' + parts[1] + '</span></span></span>';
-          }
 
           return '<div class="site-item"><a class="site-name-link" href="' +
                  escapeHtml((base + 'l/' + i.slug).replace(/\/+/g, '/')) +
                  '"><div class="left">' + icon + '<span class="site-name">' +
-                 escapeHtml(i.name) + '</span></div>' + rating + '</a></div>';
+                 escapeHtml(i.name) + '</span></div></a></div>';
         }).join('');
       }
 

@@ -1,0 +1,17 @@
+{
+  "name": "Precision Snow Removal",
+  "category": "snow-removal",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.precision-snow.ca/",
+  "description": "A locally owned Edmonton company clearing driveways, walkways, and parking lots for homeowners, HOAs, and commercial properties, with monthly winter service plans available.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "224 36 St SW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "slug": "precision-snow-removal-edmonton",
+  "services": ["Driveway Clearing", "Sidewalk & Walkway Clearing", "Commercial Parking Lot Clearing", "HOA & Strata Snow Removal", "Monthly Winter Service Plans"]
+}

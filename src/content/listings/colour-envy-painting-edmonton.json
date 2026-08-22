@@ -1,0 +1,17 @@
+{
+  "name": "Colour Envy Painting",
+  "category": "painters-painting-contractors",
+  "neighborhood": "",
+  "phone": "+1 780 651 1525",
+  "website": "https://www.colourenvypainting.com/",
+  "description": "An Edmonton-based residential and commercial painting company offering color consultation and full interior and exterior painting services across the city and surrounding suburbs.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "11511 160th Street Unit A NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Commercial Painting", "Residential Painting", "Kitchen Cabinet Painting & Refinishing", "Drywall & Ceiling Repair", "Deck Staining & Painting", "Fence Painting"],
+  "slug": "colour-envy-painting-edmonton"
+}

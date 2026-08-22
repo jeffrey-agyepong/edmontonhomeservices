@@ -1,0 +1,17 @@
+{
+  "name": "Reno King General Contractors",
+  "category": "general-contractors",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.renokingcontractors.ca/",
+  "description": "An Edmonton-based general contracting firm operating since 2013, handling residential and commercial renovation projects such as kitchens, bathrooms, basements, additions, roofing, and design-build work.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "Unit 400, 8170 50 St NW, Edmonton, AB",
+  "services": ["Kitchen Renovations", "Bathroom Renovations", "Basement Renovations", "Home Expansion", "Residential Roofing", "Design-Build Services"],
+  "latitude": null,
+  "longitude": null,
+  "slug": "reno-king-general-contractors-edmonton"
+}

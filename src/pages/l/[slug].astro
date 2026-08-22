@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Rating from '../../components/Rating.astro';
 import { COUNT_CLICKS } from '../../consts';
 
 export async function getStaticPaths() {
@@ -22,20 +21,40 @@ const d = listing.data;
 const base = import.meta.env.BASE_URL;
 
 const host = (() => {
-  try { return new URL(d.url).host.replace(/^www\./, ''); } catch { return d.url; }
+  try { return new URL(d.website).host.replace(/^www\./, ''); } catch { return d.website; }
 })();
 
 const visitHref = COUNT_CLICKS
   ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${d.slug}`
-  : d.url;
+  : d.website;
 
 const jsonld = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
+  '@type': 'LocalBusiness',
   name: d.name,
-  url: d.url,
+  url: d.website,
   ...(d.description ? { description: d.description } : {}),
+  ...(d.phone ? { telephone: d.phone } : {}),
+  ...(d.address ? { address: d.address } : {}),
 };
+
+/*
+ * Premium listings get a small placeholder photo gallery until real photos
+ * exist — a deterministic gradient per listing (from a hash of its name),
+ * matching the same decorative-placeholder approach used on the homepage
+ * category cards. Not a claim of a real photo.
+ */
+function hashHue(seed: string): number {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return h % 360;
+}
+const galleryStyles = d.premium
+  ? [0, 1, 2].map((i) => {
+      const hue = (hashHue(d.slug) + i * 40) % 360;
+      return `linear-gradient(135deg, hsl(${hue} 45% 38%), hsl(${(hue + 30) % 360} 45% 55%))`;
+    })
+  : [];
 ---
 <BaseLayout title={d.name} description={d.description}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -45,14 +64,39 @@ const jsonld = {
   </nav>
 
   <article class="listing-detail">
+    {d.premium && (
+      <div class="listing-gallery">
+        {galleryStyles.map((style) => (
+          <div class="listing-gallery-item" style={`background:${style}`} />
+        ))}
+      </div>
+    )}
+
     <div class="listing-head">
-      {d.favicon && <img class="listing-favicon" src={d.favicon} alt="" width="48" height="48" decoding="async" />}
+      {d.photo && <img class="listing-favicon" src={d.photo} alt="" width="48" height="48" decoding="async" />}
       <h1>{d.name}</h1>
-      <Rating rating={d.rating} />
-      {d.featured && <span class="badge-featured">Featured</span>}
+      {d.premium && <span class="badge-premium">Premium</span>}
     </div>
 
     {d.description && <p class="page-head-desc">{d.description}</p>}
+
+    <ul class="listing-facts">
+      {d.address && <li><strong>Address:</strong> {d.address}</li>}
+      {d.neighborhood && <li><strong>Area served:</strong> {d.neighborhood}</li>}
+      {d.phone && <li><strong>Phone:</strong> {d.phone}</li>}
+      {d.hours && <li><strong>Hours:</strong> {d.hours}</li>}
+      {d.years_in_business !== null && <li><strong>Years in business:</strong> {d.years_in_business}</li>}
+      {d.licensed_insured && <li><strong>Licensed &amp; insured</strong> (self-reported)</li>}
+    </ul>
+
+    {d.services.length > 0 && (
+      <div class="listing-services">
+        <h2 class="section-heading">Services</h2>
+        <ul class="service-chips">
+          {d.services.map((s) => <li class="service-chip">{s}</li>)}
+        </ul>
+      </div>
+    )}
 
     <p class="listing-actions">
       <a class="btn-primary" href={visitHref} target="_blank" rel="nofollow noopener">
@@ -62,5 +106,70 @@ const jsonld = {
     </p>
   </article>
 
+  {d.premium && (
+    <section class="quote-section">
+      <h2 class="quote-heading">Request a Quote from {d.name}</h2>
+      <p class="section-note">Send a few details and they'll get back to you.</p>
+      <form class="coming-soon-form" data-coming-soon>
+        <div class="form-row">
+          <label>
+            Your name
+            <input type="text" name="name" autocomplete="name" required />
+          </label>
+          <label>
+            Phone or email
+            <input type="text" name="contact" autocomplete="email" required />
+          </label>
+        </div>
+        <label>
+          What do you need done?
+          <textarea name="message" rows="3" required></textarea>
+        </label>
+        <button type="submit" class="btn-primary">Send Request</button>
+        <p class="coming-soon-note" hidden>Quote requests aren't live yet — check back soon.</p>
+      </form>
+    </section>
+  )}
+
+  <section class="reviews-section">
+    <h2 class="reviews-heading">Reviews of {d.name}</h2>
+    <p class="section-note">Written by the community, not {d.name} — no reviews yet, be the first to leave one.</p>
+
+    <form class="coming-soon-form review-form" data-coming-soon>
+      <label>
+        Your name
+        <input type="text" name="name" autocomplete="name" required />
+      </label>
+      <label>
+        Rating
+        <select name="rating" required>
+          <option value="">Select a rating</option>
+          <option value="5">5 — Excellent</option>
+          <option value="4">4 — Good</option>
+          <option value="3">3 — Average</option>
+          <option value="2">2 — Below average</option>
+          <option value="1">1 — Poor</option>
+        </select>
+      </label>
+      <label>
+        Your review
+        <textarea name="review" rows="3" required></textarea>
+      </label>
+      <button type="submit" class="btn-primary">Submit Review</button>
+      <p class="coming-soon-note" hidden>Reviews aren't live yet — check back soon.</p>
+    </form>
+  </section>
+
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+
+  <script>
+    // No backend yet — surface a clear "coming soon" message instead of
+    // silently doing nothing or submitting somewhere that doesn't exist.
+    document.querySelectorAll<HTMLFormElement>('[data-coming-soon]').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        form.querySelector('.coming-soon-note')?.removeAttribute('hidden');
+      });
+    });
+  </script>
 </BaseLayout>

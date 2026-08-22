@@ -1,0 +1,17 @@
+{
+  "name": "Hellamaid",
+  "category": "house-cleaning",
+  "neighborhood": "",
+  "phone": "587-287-6243",
+  "website": "https://hellamaid.ca/house-cleaning-services-edmonton/",
+  "description": "An online-bookable house cleaning service covering Edmonton, St. Albert, and Sherwood Park, offering standard, deep, move-out, and eco-friendly cleaning with recurring plans for homes and short-term rentals.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "12420 104 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Deep Cleaning", "Move-In/Move-Out Cleaning", "Condo & Apartment Cleaning", "Eco-Friendly Cleaning", "Post-Renovation Cleaning", "Airbnb Cleaning"],
+  "slug": "hellamaid-edmonton"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Griffin Landscaping & Snow Removal Inc",
+  "category": "snow-removal",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.griffinlsr.com/commercial-snow-removal",
+  "description": "A locally owned Edmonton contractor since 2009 offering commercial and industrial snow clearing, sanding, and de-icing for dealerships, retail lots, townhomes, and offices.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 17,
+  "licensed_insured": false,
+  "address": "5373 75 St, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "slug": "griffin-landscaping-snow-removal",
+  "services": ["Parking Lot Clearing", "Sanding", "De-Icing", "Snow Push & Pile", "Snow Hauling", "Sidewalk & Curb Clearing"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "iPaint Painting",
+  "category": "painters-painting-contractors",
+  "neighborhood": "",
+  "phone": "780-938-9555",
+  "website": "https://ipaintpainting.ca/",
+  "description": "An in-house painting crew serving Edmonton and nearby communities with interior, exterior, and cabinet painting, backed by MPI certification and a multi-year workmanship warranty.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": true,
+  "address": "9821 33 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Interior Painting", "Exterior Painting", "Commercial Painting", "Cabinet Refinishing", "Epoxy Flooring", "Deck & Fence Staining"],
+  "slug": "ipaint-painting-edmonton"
+}

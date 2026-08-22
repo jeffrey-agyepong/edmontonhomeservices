@@ -1,0 +1,18 @@
+{
+  "name": "Acclaimed! Heating, Cooling & Furnace Cleaning",
+  "category": "furnace-heating-repair",
+  "neighborhood": "",
+  "phone": "587-741-7517",
+  "website": "https://www.acclaimedfurnace.com/",
+  "description": "A family-owned Edmonton HVAC company operating since 1995, providing furnace repair, installation, and maintenance alongside air conditioning, duct cleaning, and water heater services for homes across the Edmonton area.",
+  "services": ["Furnace Repair", "Furnace Installation", "Furnace Maintenance", "Air Conditioning Repair", "Furnace Air Duct Cleaning", "Water Heater Repair"],
+  "photo": "",
+  "hours": "",
+  "years_in_business": 31,
+  "licensed_insured": false,
+  "address": "12237 154 St, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "slug": "acclaimed-heating-cooling-furnace-edmonton",
+  "premium": true
+}

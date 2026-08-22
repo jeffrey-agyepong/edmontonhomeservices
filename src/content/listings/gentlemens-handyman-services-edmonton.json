@@ -1,0 +1,18 @@
+{
+  "name": "Gentlemen's Handyman Services",
+  "category": "handyman-services",
+  "neighborhood": "",
+  "phone": "780-935-0229",
+  "website": "https://www.gentlemenshandyman.ca/",
+  "description": "A locally owned handyman crew serving Edmonton and surrounding communities with drywall repair, painting, carpentry, small renovations, and general property maintenance for homeowners and businesses.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Drywall Repair", "Painting", "Carpentry", "Bathroom & Kitchen Renovations", "Basement Finishing", "Furniture Assembly"],
+  "slug": "gentlemens-handyman-services-edmonton",
+  "premium": true
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Ladybug Lawn & Garden",
+  "category": "landscaping-lawn-care",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://ladybuglawn.ca/",
+  "description": "A locally owned West Edmonton lawn and landscaping company providing seasonal lawn maintenance, spring cleanups, hedge pruning, weed control and hardscaping such as pavers, retaining walls and firepits.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "slug": "ladybug-lawn-and-garden-edmonton",
+  "services": ["Lawn Mowing & Trim", "Spring Clean-Up", "Hedge & Shrub Pruning", "Weed Control", "Pavers & Retaining Walls", "Firepits"]
+}

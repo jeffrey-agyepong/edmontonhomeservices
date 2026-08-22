@@ -1,0 +1,17 @@
+{
+  "name": "Fair and Square Roofing Inc",
+  "category": "roofing-roof-repair",
+  "neighborhood": "",
+  "phone": "780-499-9668",
+  "website": "https://fairandsquareroofing.com/",
+  "description": "A full-service roofing contractor based in Edmonton offering residential and commercial roof replacement, repairs, and eavestrough work, along with extras like drone inspections and winter snow removal. Also serves St. Albert and Sherwood Park with a strong track record of positive customer reviews.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "5715 185 St NW, Edmonton, AB",
+  "services": ["Roof Replacement", "Roof Repairs", "Eavestrough Solutions", "Roof Snow Removal", "Drone Inspection", "Euroshield Rubber Roofing"],
+  "latitude": null,
+  "longitude": null,
+  "slug": "fair-and-square-roofing-edmonton"
+}

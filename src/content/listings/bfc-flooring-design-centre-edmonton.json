@@ -1,0 +1,18 @@
+{
+  "name": "BFC Flooring & Design Centre",
+  "category": "flooring",
+  "neighborhood": "",
+  "phone": "780-437-5750",
+  "website": "https://bfcflooring.com/",
+  "description": "A long-running Edmonton flooring showroom offering carpet, hardwood, laminate, vinyl, and tile with in-home estimates and professional installation, along with cabinetry and countertop design services.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 47,
+  "licensed_insured": false,
+  "address": "4132 99 St NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Carpet", "Hardwood Flooring", "Laminate Flooring", "Vinyl Flooring", "Tile Flooring", "Cabinetry & Countertops"],
+  "slug": "bfc-flooring-design-centre-edmonton",
+  "premium": true
+}

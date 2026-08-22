@@ -1,0 +1,17 @@
+{
+  "name": "Weed Patrol",
+  "category": "landscaping-lawn-care",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.weedpatrol.ca/",
+  "description": "An Edmonton lawn care company focused on weed control, liquid fertilization, core aeration and overseeding, serving residential customers across the city with pet-friendly treatment programs.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 37,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "slug": "weed-patrol-edmonton",
+  "services": ["Weed Control", "Lawn Fertilization", "Core Aeration", "Overseeding"]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Excel Heating & Air Conditioning",
+  "category": "furnace-heating-repair",
+  "neighborhood": "",
+  "phone": "780-905-9594",
+  "website": "https://excelhomecomfort.com/",
+  "description": "A Carrier Factory Authorized Dealer serving the Edmonton area since 2007, offering furnace repair, installation, and maintenance from NATE-certified technicians for homes throughout the region.",
+  "services": ["Furnace Installation", "Furnace Repair", "Air Conditioner Installation", "Air Conditioner Repair", "Furnace & AC Maintenance"],
+  "photo": "",
+  "hours": "",
+  "years_in_business": 19,
+  "licensed_insured": true,
+  "address": "16551 75 Street NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "slug": "excel-heating-air-conditioning-edmonton"
+}

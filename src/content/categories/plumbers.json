@@ -1,7 +1,7 @@
 {
-  "name": "Plumbing",
-  "slug": "plumbing",
+  "name": "Plumbers",
+  "slug": "plumbers",
   "description": "Leaks, clogs, installs, and emergency repairs.",
   "icon": "",
-  "order": 1
+  "order": 9
 }

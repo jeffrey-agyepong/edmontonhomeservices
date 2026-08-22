@@ -1,0 +1,17 @@
+{
+  "name": "MMi Electrical Services",
+  "category": "electricians",
+  "neighborhood": "",
+  "phone": "780-265-5057",
+  "website": "https://www.mmielectrical.com/",
+  "description": "An Edmonton-area electrical contractor offering residential repairs, panel upgrades, EV charger and hot tub installations, and home safety evaluations, backed by master electrician credentials and a satisfaction guarantee.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 20,
+  "licensed_insured": true,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Electrical Service & Panel Upgrades", "EV Charger Installation", "Hot Tub / Spa Installations", "Home Safety Electrical Evaluation", "LED Lighting Installation", "Whole Home Surge Protection"],
+  "slug": "mmi-electrical-edmonton"
+}

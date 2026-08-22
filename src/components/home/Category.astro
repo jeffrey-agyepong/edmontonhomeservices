@@ -9,7 +9,7 @@ const categories = await getCollection('categories');
 
 // The homepage teaser only spotlights these three; the rest live behind
 // "View All Categories" in the full grid further down the page.
-const featuredSlugs = ['cleaning-restoration', 'renovations', 'landscaping-yard'];
+const featuredSlugs = ['house-cleaning', 'general-contractors', 'landscaping-lawn-care'];
 const featured = featuredSlugs
   .map((slug) => categories.find((c) => c.data.slug === slug))
   .filter((c): c is NonNullable<typeof c> => Boolean(c));
@@ -17,9 +17,9 @@ const featured = featuredSlugs
 // No photography yet — each card gets a distinct gradient band with the
 // category's initial until real images are ready to drop in.
 const imageStyles: Record<string, string> = {
-  'cleaning-restoration': 'linear-gradient(135deg, #3776a5, #5aa9c4)',
-  renovations: 'linear-gradient(135deg, #8a5a2b, #c98a4b)',
-  'landscaping-yard': 'linear-gradient(135deg, #2f6b3f, #6ea15a)',
+  'house-cleaning': 'linear-gradient(135deg, #3776a5, #5aa9c4)',
+  'general-contractors': 'linear-gradient(135deg, #8a5a2b, #c98a4b)',
+  'landscaping-lawn-care': 'linear-gradient(135deg, #2f6b3f, #6ea15a)',
 };
 
 const cards = featured.map((category) => ({

@@ -1,0 +1,18 @@
+{
+  "name": "Jetco Plumbing & Heating",
+  "category": "plumbers",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://jetcomechanical.com/",
+  "description": "A long-running, locally owned Edmonton plumbing and mechanical contractor handling everything from hot water tanks and tankless heaters to gas lines, furnace repair, and 24/7 emergency service for homes and businesses.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 70,
+  "licensed_insured": false,
+  "address": "15035 114 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Plumbing Repairs", "Hot Water Tank Replacement", "Tankless Water Heaters", "Furnace Repair", "Gas Line Installation", "Sump Pump Installation"],
+  "slug": "jetco-plumbing-heating-edmonton",
+  "premium": true
+}

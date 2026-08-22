@@ -1,0 +1,17 @@
+{
+  "name": "Eazy Peazy Plumbing & Gas",
+  "category": "plumbers",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://eazypeazyplumbing.ca/",
+  "description": "A family-owned Edmonton-area plumbing and gas fitting company handling residential and commercial repairs, hot water systems, and renovation plumbing, with 24/7 emergency callouts and multiple HomeStars award recognitions.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Drain Cleaning", "Leak Repair", "Fixture Installation", "Hot Water Tank Service", "Gas Fitting", "Basement Bathroom Plumbing"],
+  "slug": "eazy-peazy-plumbing-edmonton"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "RG Handyman",
+  "category": "handyman-services",
+  "neighborhood": "",
+  "phone": "587-853-5409",
+  "website": "https://www.rghandyman.ca/",
+  "description": "An owner-operated handyman business tackling the small jobs many contractors skip in west and southwest Edmonton, including drywall repair, door adjustments, fixture installation, and interior painting.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Drywall Repair", "House Maintenance", "Plumbing Repairs", "Electrical", "Assembly Services"],
+  "slug": "rg-handyman-edmonton"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Alberta Arborists",
+  "category": "tree-removal-arborist",
+  "neighborhood": "",
+  "phone": "780-448-0584",
+  "website": "https://www.albertaarborists.com/",
+  "description": "A long-running Edmonton tree care company offering hazardous and large tree removal, pruning, stump grinding, and emergency storm cleanup. Their ISA-certified crews are licensed, insured, and WCB-covered, drawing on more than 25 years of local experience.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 25,
+  "licensed_insured": true,
+  "address": "#231, 6005 Gateway Blvd, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Tree Removal", "Tree Pruning", "Stump Grinding & Removal", "Tree Fertilization", "Tree Assessment", "Emergency Storm Cleanup"],
+  "slug": "alberta-arborists-edmonton",
+  "premium": true
+}

@@ -1,7 +1,7 @@
 {
-  "name": "Electrical",
-  "slug": "electrical",
+  "name": "Electricians",
+  "slug": "electricians",
   "description": "Wiring, panel upgrades, lighting, and safety inspections.",
   "icon": "",
-  "order": 2
+  "order": 10
 }

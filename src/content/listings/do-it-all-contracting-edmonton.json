@@ -1,0 +1,18 @@
+{
+  "name": "Do It All Contracting Ltd.",
+  "category": "general-contractors",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://doitallcontracting.ca/",
+  "description": "A St. Albert-based general contractor serving Edmonton and area since 1997, offering full home renovations, kitchen and bathroom remodelling, basement development, and water damage repair.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 29,
+  "licensed_insured": false,
+  "address": "",
+  "services": ["Full Home Renovations", "Kitchen Remodelling", "Bathroom Remodelling", "Basement Development", "Water Damage Repair", "Exterior Remodelling"],
+  "latitude": null,
+  "longitude": null,
+  "slug": "do-it-all-contracting-edmonton",
+  "premium": true
+}

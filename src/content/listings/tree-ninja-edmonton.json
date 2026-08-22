@@ -1,0 +1,17 @@
+{
+  "name": "Tree Ninja",
+  "category": "tree-removal-arborist",
+  "neighborhood": "",
+  "phone": "780-394-4024",
+  "website": "https://treeninjaedmonton.com/",
+  "description": "An Edmonton-based arborist company, operating since 2015, providing tree removal, pruning, cabling, and stump grinding for residential and commercial properties. Backed by ISA-certified arborists and a strong local reputation with hundreds of positive Google reviews.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 11,
+  "licensed_insured": true,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Tree Removal", "Tree Pruning", "Stump Grinding", "Tree Cabling", "Emergency Storm Response", "Tree Protection Plans"],
+  "slug": "tree-ninja-edmonton"
+}

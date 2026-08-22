@@ -1,0 +1,17 @@
+{
+  "name": "The Gentlemen Plumbers",
+  "category": "plumbers",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.thegentlemenplumbersedmonton.com/",
+  "description": "A residential plumbing and heating company serving Edmonton, offering everything from drain and sewer repair to sump pump, furnace, and air conditioning work. Technicians undergo background checks and drug testing, and the company is well reviewed on Yelp and Google.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "#101-3239 97 St NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Emergency Plumbing", "Drain Cleaning", "Sewer Camera Inspection", "Sewer Pipe Lining", "In-Floor Heating Installation", "Furnace Replacement"],
+  "slug": "gentlemen-plumbers-edmonton"
+}

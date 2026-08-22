@@ -1,0 +1,17 @@
+{
+  "name": "Mr. Handyman of SW Edmonton",
+  "category": "handyman-services",
+  "neighborhood": "",
+  "phone": "587-203-2038",
+  "website": "https://www.mrhandyman.ca/sw-edmonton/",
+  "description": "A franchise of the national Mr. Handyman network offering a wide range of residential and commercial repair, remodeling, and installation services throughout southwest Edmonton, backed by dozens of customer reviews.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Drywall & Ceiling Repair", "Bathroom & Kitchen Remodeling", "Window & Door Services", "Painting", "Carpentry", "Plumbing"],
+  "slug": "mr-handyman-sw-edmonton"
+}

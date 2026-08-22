@@ -1,0 +1,18 @@
+{
+  "name": "RCLcanada",
+  "category": "landscaping-lawn-care",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://rclcanada.com/",
+  "description": "A long-standing, family-run landscape contractor in Edmonton offering design-build services such as sod, stonework, decks, fencing, irrigation and outdoor lighting, along with a retail landscape supply yard.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 45,
+  "licensed_insured": false,
+  "address": "9535 62 Ave, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "slug": "rclcanada-edmonton",
+  "premium": true,
+  "services": ["Deck Building", "Sod Installation", "Stonework & Paving", "Fence Installation", "Irrigation Systems", "Outdoor Lighting"]
+}

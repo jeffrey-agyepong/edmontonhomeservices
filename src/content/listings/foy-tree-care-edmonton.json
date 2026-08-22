@@ -1,0 +1,17 @@
+{
+  "name": "Foy Tree Care",
+  "category": "tree-removal-arborist",
+  "neighborhood": "",
+  "phone": "780-885-4633",
+  "website": "https://foytreecare.com/",
+  "description": "A locally owned Edmonton tree service led by an ISA-certified arborist, handling tree removal, pruning, stump grinding, and tree health assessments. Carries WCB coverage and $2M liability insurance, with active client reviews across Google and social media.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": true,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Tree Removal", "Pruning & Maintenance", "Stump Removal", "Tree Planting", "Emergency Tree Services", "Tree Health & Disease Management"],
+  "slug": "foy-tree-care-edmonton"
+}

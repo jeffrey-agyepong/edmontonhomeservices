@@ -1,0 +1,17 @@
+{
+  "name": "Diamond Contracting",
+  "category": "general-contractors",
+  "neighborhood": "",
+  "phone": "",
+  "website": "https://www.diamondcontractingab.ca/",
+  "description": "A family-owned Edmonton design-build renovation company that has served the city since 1999, taking on custom home builds, kitchen and bathroom remodels, basement developments, and home additions.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 27,
+  "licensed_insured": false,
+  "address": "9754 27 Ave NW, Edmonton, AB",
+  "services": ["Kitchen Renovations", "Bathroom Renovations", "Basement Development", "Exterior Renovations", "Decks & Outdoor Spaces"],
+  "latitude": null,
+  "longitude": null,
+  "slug": "diamond-contracting-edmonton"
+}

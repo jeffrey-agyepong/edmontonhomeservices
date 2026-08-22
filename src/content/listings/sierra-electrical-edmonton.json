@@ -1,0 +1,18 @@
+{
+  "name": "Sierra Electrical Ltd.",
+  "category": "electricians",
+  "neighborhood": "",
+  "phone": "780-944-9400",
+  "website": "https://sierraelectrical.com/",
+  "description": "A longstanding Edmonton electrical contractor handling residential and commercial work, from panel upgrades and rewiring to lighting installs and aluminum wiring corrections. Licensed and insured electricians have served the area for over three decades.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": 35,
+  "licensed_insured": false,
+  "address": "9808 45th Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Panel Upgrades", "New Wiring & Rewiring", "LED Lighting Upgrades", "Aluminum Wiring Correction", "Hot Tub Connections", "Troubleshooting & Emergency Repairs"],
+  "slug": "sierra-electrical-edmonton",
+  "premium": true
+}

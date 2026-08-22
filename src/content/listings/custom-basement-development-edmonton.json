@@ -1,0 +1,17 @@
+{
+  "name": "Custom Basement Development",
+  "category": "basement-development",
+  "neighborhood": "",
+  "phone": "587-355-9331",
+  "website": "https://custombasementdevelopment.ca/",
+  "description": "An Edmonton renovation company that specializes exclusively in basements, managing everything from design and permits to framing, electrical, and finishing work. Named an A+ basement renovation company on RenovationFind in 2025.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "latitude": null,
+  "longitude": null,
+  "slug": "custom-basement-development-edmonton",
+  "services": ["Basement Design & Planning", "Basement Finishing", "Basement Bathrooms", "Basement Kitchens & Wet Bars", "Plumbing, Electrical & HVAC", "Framing & Drywall"]
+}

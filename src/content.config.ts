@@ -14,15 +14,29 @@ import type { Loader } from 'astro/loaders';
  * end over a live dataset. Rebuild to publish changes.
  */
 
+/*
+ * Free-tier listing fields, plus `premium` and the two fields it gates:
+ * a placeholder photo gallery and a quote-request form (both UI-only for
+ * now — see ListingRow/[slug].astro). Everything else premium (extended
+ * bio, dofollow outbound link) is still a separate field set for later.
+ */
 const listingSchema = z.object({
   name: z.string(),
-  slug: z.string(),
-  url: z.string().url(),
+  category: z.string().nullable().optional(),
+  neighborhood: z.string().default(''),
+  phone: z.string().default(''),
+  website: z.string().url(),
   description: z.string().default(''),
-  category: z.string().optional(),
-  rating: z.number().min(0).max(10).nullable().default(null),
-  featured: z.boolean().default(false),
-  favicon: z.string().default(''),
+  photo: z.string().default(''),
+  hours: z.string().default(''),
+  years_in_business: z.number().nullable().default(null),
+  licensed_insured: z.boolean().default(false),
+  address: z.string().default(''),
+  latitude: z.number().nullable().default(null),
+  longitude: z.number().nullable().default(null),
+  services: z.array(z.string()).default([]),
+  premium: z.boolean().default(false),
+  slug: z.string(),
 });
 
 const categorySchema = z.object({
@@ -103,12 +117,20 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
           mapped = {
             name: row.name,
             slug: row.slug,
-            url: row.url,
+            website: row.website ?? row.url,
             description: row.description ?? '',
             category: row.category?.slug ?? undefined,
-            rating: row.rating ?? null,
-            featured: Boolean(row.featured),
-            favicon: row.favicon ?? '',
+            neighborhood: row.neighborhood ?? '',
+            phone: row.phone ?? '',
+            photo: row.photo ?? '',
+            hours: row.hours ?? '',
+            years_in_business: row.years_in_business ?? null,
+            licensed_insured: Boolean(row.licensed_insured),
+            address: row.address ?? '',
+            latitude: row.latitude ?? null,
+            longitude: row.longitude ?? null,
+            services: Array.isArray(row.services) ? row.services : [],
+            premium: Boolean(row.premium),
           };
         } else if (kind === 'categories') {
           mapped = {

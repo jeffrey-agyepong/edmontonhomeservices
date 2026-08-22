@@ -1,0 +1,17 @@
+{
+  "name": "Hauer Power Electrical Services",
+  "category": "electricians",
+  "neighborhood": "",
+  "phone": "(780) 935-0622",
+  "website": "https://hauerpower.ca/",
+  "description": "A BBB-accredited electrical contractor based in Edmonton providing service upgrades, EV charger and hot tub wiring, lighting, and emergency after-hours electrical repairs for homes and businesses across the metro area.",
+  "photo": "",
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": true,
+  "address": "15808 112 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "services": ["Panel & Service Upgrades", "Aluminum Wiring Replacement", "EV Charger Installation", "Hot Tub Wiring", "Remodels, Renovations & Additions", "Electrical Load Calculations"],
+  "slug": "hauer-power-edmonton"
+}
