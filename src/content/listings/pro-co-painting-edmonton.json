@@ -14,5 +14,7 @@
   "longitude": null,
   "services": ["Interior Painting", "Exterior Painting", "Residential Painting", "Commercial Painting", "New Construction Painting"],
   "slug": "pro-co-painting-edmonton",
-  "premium": true
+  "premium": false,
+  "google_rating": 4.9,
+  "google_review_count": 246
 }

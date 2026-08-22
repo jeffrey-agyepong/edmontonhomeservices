@@ -1,80 +1,164 @@
 ---
-import { getCollection } from 'astro:content';
+import { getPopulatedCategories } from '../../lib/categories';
+import { sortListings } from '../../lib/sort';
+import { placeholderGradient } from '../../lib/placeholder';
+import Rating from '../Rating.astro';
 
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
+const listingHref = (id: string) => `${base}l/${id}`.replace(/\/+/g, '/');
+const categoryHref = (id: string) => `${base}c/${id}`.replace(/\/+/g, '/');
 
-const listings = await getCollection('listings');
-const categories = await getCollection('categories');
+const populated = await getPopulatedCategories();
 
-// The homepage teaser only spotlights these three; the rest live behind
-// "View All Categories" in the full grid further down the page.
-const featuredSlugs = ['house-cleaning', 'general-contractors', 'landscaping-lawn-care'];
-const featured = featuredSlugs
-  .map((slug) => categories.find((c) => c.data.slug === slug))
-  .filter((c): c is NonNullable<typeof c> => Boolean(c));
+// One "featured" listing (with an image slot) plus a couple of compact
+// name-only rows underneath — same idea as the /categories page's boxes,
+// just trimmed down for a homepage teaser card.
+const TEASER_LISTINGS = 3;
 
-// No photography yet — each card gets a distinct gradient band with the
-// category's initial until real images are ready to drop in.
-const imageStyles: Record<string, string> = {
-  'house-cleaning': 'linear-gradient(135deg, #3776a5, #5aa9c4)',
-  'general-contractors': 'linear-gradient(135deg, #8a5a2b, #c98a4b)',
-  'landscaping-lawn-care': 'linear-gradient(135deg, #2f6b3f, #6ea15a)',
-};
-
-const cards = featured.map((category) => ({
+const cards = populated.map(({ category, listings }) => ({
   category,
-  count: listings.filter((l) => l.data.category === category.data.slug).length,
-  imageStyle: imageStyles[category.data.slug] ?? 'linear-gradient(135deg, #37765f, #5a9a80)',
+  listings: sortListings(listings, 'name').slice(0, TEASER_LISTINGS),
 }));
 ---
-<section class="relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel) py-10">
+<section class="relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel-head) py-10">
   <div class="wrap">
     <div>
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-left">
-        Explore by Category
+       Browse by Category
       </h2>
       <p class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl">
-        Browse our curated directory of top Edmonton home professionals.
+       Find the best organically rated professionals in Edmonton, sorted by the services you need.
       </p>
     </div>
 
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"
     >
-      {cards.map(({ category, count, imageStyle }) => (
-        <a
-          class="category block overflow-hidden rounded-lg border border-(--line) bg-(--bg) no-underline hover:border-(--primary)"
-          href={`${base}c/${category.data.slug}`.replace(/\/+/g, '/')}
-        >
-          <div
-            class="flex aspect-video w-full items-center justify-center"
-            style={`background: ${imageStyle}`}
-          >
-            <span class="text-4xl font-bold text-white/90">{category.data.name.charAt(0)}</span>
-          </div>
-          <div class="p-6">
-            <h3 class="text-lg sm:text-2xl font-medium text-left text-(--text)">{category.data.name}</h3>
-            {category.data.description && (
-              <p class="text-(--text-dim) text-left text-base sm:text-lg mt-2">
-                {category.data.description}
-              </p>
-            )}
-            <p class="text-left text-(--text-dim) text-sm mt-3">
-              {count} {count === 1 ? 'provider' : 'providers'}
+      {cards.map(({ category, listings }) => (
+        <div class="category-card rounded-lg border border-(--line) bg-(--bg) p-6">
+          <a class="no-underline" href={categoryHref(category.id)}>
+            <h3 class="text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">{category.data.name}</h3>
+          </a>
+          {category.data.description && (
+            <p class="text-(--text-dim) text-left text-base sm:text-lg mt-0 mb-2">
+              {category.data.description}
             </p>
+          )}
+
+          <div class="category-listings mt-4">
+            {listings.map(({ id, data: d }, i) =>
+              i === 0 ? (
+                <a class="category-listing category-listing--featured no-underline" href={listingHref(id)}>
+                  <div class="category-listing-media">
+                    {d.photo
+                      ? <img src={d.photo} alt="" loading="lazy" decoding="async" />
+                      : <div class="category-listing-placeholder" style={`background:${placeholderGradient(id)}`}>
+                          <span>{d.name.charAt(0)}</span>
+                        </div>}
+                  </div>
+                  <div>
+                    <p class="category-listing-name text-(--text)">{d.name}</p>
+                    <Rating rating={d.google_rating} count={d.google_review_count} showCount />
+                    {d.description && <p class="category-listing-desc text-(--text-dim)">{d.description}</p>}
+                  </div>
+                </a>
+              ) : (
+                <a class="category-listing category-listing--compact no-underline" href={listingHref(id)}>
+                  <p class="category-listing-name text-(--text)">{d.name}</p>
+                  <Rating rating={d.google_rating} />
+                </a>
+              )
+            )}
           </div>
-        </a>
+
+          <a class="category-view-all text-(--primary)" href={categoryHref(category.id)}>
+            View all {category.data.name} &rarr;
+          </a>
+        </div>
       ))}
     </div>
 
-    <div class="mt-8 flex justify-center">
+    <!-- <div class="mt-8 flex justify-center">
       <a
-        href={href('#categories')}
+        href={href('categories')}
         class="inline-flex items-center rounded-full bg-(--primary) px-6 py-3 text-sm font-semibold text-(--bg) no-underline hover:opacity-90"
       >
         View All Categories
       </a>
-    </div>
+    </div> -->
   </div>
 </section>
+
+<style>
+  /* Structure only — no color, type, or decoration beyond what's needed for
+     the placeholder initial to read against its gradient. */
+
+  .category-listings {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .category-listing {
+    display: block;
+  }
+
+  .category-listing--compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .category-listing--featured {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .category-listing-media {
+    flex: 0 0 auto;
+    width: 3.5rem;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .category-listing-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .category-listing-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .category-listing-placeholder span {
+    font-weight: 700;
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .category-listing-name {
+    margin: 0;
+  }
+
+  .category-listing-desc {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .category-view-all {
+    display: inline-block;
+    margin-top: 0.75rem;
+  }
+</style>

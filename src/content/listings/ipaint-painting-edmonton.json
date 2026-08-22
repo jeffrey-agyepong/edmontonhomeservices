@@ -13,5 +13,7 @@
   "latitude": null,
   "longitude": null,
   "services": ["Interior Painting", "Exterior Painting", "Commercial Painting", "Cabinet Refinishing", "Epoxy Flooring", "Deck & Fence Staining"],
-  "slug": "ipaint-painting-edmonton"
+  "slug": "ipaint-painting-edmonton",
+  "google_rating": 4.9,
+  "google_review_count": 156
 }

@@ -65,7 +65,7 @@ img { max-width: 100%; }
     background: var(--primary); color: var(--primary-ink); font: inherit; font-weight: 600; cursor: pointer;
 }
 
-main.wrap { padding-top: 22px; padding-bottom: 40px; min-height: 100vh; }
+main.wrap { padding-top: 22px; min-height: 100vh; }
 
 /* ------------------------------------------------------------------ landing */
 .landing-header { text-align: center; margin: 10px 0 26px; }
@@ -179,7 +179,7 @@ main.wrap { padding-top: 22px; padding-bottom: 40px; min-height: 100vh; }
 }
 
 .listing-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 16px; }
-.listing-gallery-item { aspect-ratio: 4 / 3; border-radius: 6px; }
+.listing-gallery-item { aspect-ratio: 4 / 3; border-radius: 6px; width: 100%; object-fit: cover; }
 
 .section-heading { font-size: 17px; margin: 24px 0 4px; }
 .section-note { color: var(--text-dim); font-size: 14px; margin: 0 0 12px; }

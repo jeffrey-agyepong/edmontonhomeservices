@@ -13,6 +13,8 @@
   "latitude": null,
   "longitude": null,
   "services": ["Panel Upgrades", "New Wiring & Rewiring", "LED Lighting Upgrades", "Aluminum Wiring Correction", "Hot Tub Connections", "Troubleshooting & Emergency Repairs"],
+  "google_rating": 4.7,
+  "google_review_count": 28,
   "slug": "sierra-electrical-edmonton",
-  "premium": true
+  "premium": false
 }

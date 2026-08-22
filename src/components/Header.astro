@@ -30,7 +30,7 @@ const { base, href, submitHref, pages } = Astro.props;
     <div class="ml-auto flex items-center gap-8">
       <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
         <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={base}>Home</a>
-        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={href('#categories')}>Categories</a>
+        <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={href('categories')}>Categories</a>
         <a class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)" href={href('about')}>About</a>
       </nav>
 
@@ -61,8 +61,8 @@ const { base, href, submitHref, pages } = Astro.props;
           </form>
           <nav class="menu-links">
             <a href={base}>Home</a>
-            <a href={href('#categories')}>Categories</a>
-            {pages.map((p) => <a href={href(p.data.slug)}>{p.data.title}</a>)}
+            <a href={href('categories')}>Categories</a>
+            {pages.map((p) => <a href={href(p.id)}>{p.data.title}</a>)}
             <a href={submitHref}>Submit Your Business</a>
           </nav>
         </div>

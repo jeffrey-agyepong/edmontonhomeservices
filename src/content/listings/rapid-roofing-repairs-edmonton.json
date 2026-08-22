@@ -13,5 +13,7 @@
   "services": ["Roof Repairs", "Roof Replacement", "Roof Inspections", "Flat Roof Repair", "Gutter Cleaning"],
   "latitude": null,
   "longitude": null,
-  "slug": "rapid-roofing-repairs-edmonton"
+  "slug": "rapid-roofing-repairs-edmonton",
+  "google_rating": 4.6,
+  "google_review_count": 192
 }

@@ -1,17 +1,22 @@
 {
   "name": "Duty Cleaners",
   "category": "house-cleaning",
-  "neighborhood": "",
   "phone": "(780) 913-6565",
   "website": "https://dutycleaners.ca/",
   "description": "An Edmonton-based residential and commercial cleaning company with over eight years of local experience, providing regular house cleaning, deep cleans, move-in/move-out service, and add-ons like oven and window cleaning with online instant booking.",
-  "photo": "",
-  "hours": "",
+  "gallery": [],
   "years_in_business": 8,
   "licensed_insured": false,
   "address": "18615 71 Ave NW, Edmonton, AB",
-  "latitude": null,
-  "longitude": null,
-  "services": ["Regular House Cleaning", "Deep Clean", "Move-In/Move-Out Cleaning", "Office Commercial Cleaning", "Post-Construction Cleaning"],
-  "slug": "duty-cleaners-edmonton"
+  "services": [
+    "Regular House Cleaning",
+    "Deep Clean",
+    "Move-In/Move-Out Cleaning",
+    "Office Commercial Cleaning",
+    "Post-Construction Cleaning"
+  ],
+  "premium": false,
+  "sponsored": true,
+  "google_rating": 4.8,
+  "google_review_count": 357
 }

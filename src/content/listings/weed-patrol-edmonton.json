@@ -12,6 +12,8 @@
   "address": "",
   "latitude": null,
   "longitude": null,
+  "google_rating": 4.9,
+  "google_review_count": 820,
   "slug": "weed-patrol-edmonton",
   "services": ["Weed Control", "Lawn Fertilization", "Core Aeration", "Overseeding"]
 }

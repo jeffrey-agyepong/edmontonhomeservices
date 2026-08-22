@@ -18,7 +18,7 @@ export default config({
       slugField: 'slug',
       path: 'src/content/listings/*',
       format: { data: 'json' },
-      columns: ['category', 'phone'],
+      columns: ['name', 'category', 'phone'],
       schema: {
         name: fields.text({ label: 'Company Name', validation: { isRequired: true } }),
         slug: fields.text({ label: 'Slug', validation: { isRequired: true } }),
@@ -28,6 +28,14 @@ export default config({
         website: fields.url({ label: 'Website', validation: { isRequired: true } }),
         description: fields.text({ label: 'Description', multiline: true }),
         photo: fields.text({ label: 'Photo URL' }),
+        gallery: fields.array(
+          fields.url({ label: 'Photo URL', validation: { isRequired: true } }),
+          {
+            label: 'Gallery photos (premium)',
+            description: 'Shown on the listing page in place of the placeholder gallery. Leave empty to use the auto-generated placeholder.',
+            itemLabel: (props) => props.value || 'Photo',
+          },
+        ),
         hours: fields.text({ label: 'Hours' }),
         years_in_business: fields.number({ label: 'Years in business' }),
         licensed_insured: fields.checkbox({ label: 'Licensed & insured (self-reported)' }),
@@ -41,6 +49,19 @@ export default config({
         premium: fields.checkbox({
           label: 'Premium listing',
           description: 'Unlocks the photo gallery and quote-request form on the listing page.',
+        }),
+        sponsored: fields.checkbox({
+          label: 'Sponsored',
+          description: 'Shows this listing in the "Local Spotlight" section on the homepage.',
+        }),
+        google_rating: fields.number({
+          label: 'Google rating',
+          description: 'A manually looked-up snapshot (0-5) of the business\'s real public Google rating — not live-synced. Leave blank if unverified.',
+          step: 0.1,
+        }),
+        google_review_count: fields.number({
+          label: 'Google review count',
+          description: 'Review count at the time the rating above was looked up.',
         }),
       },
     }),

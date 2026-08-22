@@ -13,5 +13,7 @@
   "latitude": null,
   "longitude": null,
   "services": ["Commercial Painting", "Residential Painting", "Kitchen Cabinet Painting & Refinishing", "Drywall & Ceiling Repair", "Deck Staining & Painting", "Fence Painting"],
-  "slug": "colour-envy-painting-edmonton"
+  "slug": "colour-envy-painting-edmonton",
+  "google_rating": null,
+  "google_review_count": null
 }

@@ -14,5 +14,7 @@
   "longitude": null,
   "services": ["Deep Cleaning", "Move-Out Cleaning", "Recurring Cleaning", "Senior Cleaning", "Condo Cleaning", "Post-Construction Cleaning"],
   "slug": "nice-to-be-clean-edmonton",
-  "premium": true
+  "premium": false,
+  "google_rating": 5.0,
+  "google_review_count": 267
 }

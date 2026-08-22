@@ -13,6 +13,8 @@
   "latitude": null,
   "longitude": null,
   "services": ["Tree Removal", "Tree Pruning", "Stump Grinding & Removal", "Tree Fertilization", "Tree Assessment", "Emergency Storm Cleanup"],
+  "google_rating": 4.9,
+  "google_review_count": 99,
   "slug": "alberta-arborists-edmonton",
-  "premium": true
+  "premium": false
 }

@@ -9,11 +9,11 @@ export async function getStaticPaths() {
   const listings = await getCollection('listings');
 
   return categories.map((category) => ({
-    params: { slug: category.data.slug },
+    params: { slug: category.id },
     props: {
       category,
       listings: sortListings(
-        listings.filter((l) => l.data.category === category.data.slug),
+        listings.filter((l) => l.data.category === category.id),
         'top'
       ),
     },

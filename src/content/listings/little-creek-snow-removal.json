@@ -13,6 +13,6 @@
   "latitude": null,
   "longitude": null,
   "slug": "little-creek-snow-removal",
-  "premium": true,
+  "premium": false,
   "services": ["Commercial Snow Removal", "Salting & Sanding", "Job Site Snow Removal", "Residential & Apartment Complex Clearing", "Seasonal Contracts", "Same-Day Service"]
 }

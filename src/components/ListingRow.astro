@@ -2,7 +2,7 @@
 import { COUNT_CLICKS } from '../consts';
 
 interface Props {
-  listing: { data: { name: string; slug: string; website: string; description: string; photo: string; phone: string; premium: boolean } };
+  listing: { id: string; data: { name: string; website: string; description: string; photo: string; phone: string; premium: boolean } };
   rank?: number;
 }
 
@@ -15,11 +15,11 @@ const initial = d.name.slice(0, 1).toUpperCase();
  * directory API behind it, the visit route counts first and then redirects.
  */
 const href = COUNT_CLICKS
-  ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${d.slug}`
+  ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${listing.id}`
   : d.website;
 ---
 <div class={`site-item rank-${rank}`}>
-  <a href={`${import.meta.env.BASE_URL}l/${d.slug}`.replace(/\/+/g, '/')} class="site-name-link">
+  <a href={`${import.meta.env.BASE_URL}l/${listing.id}`.replace(/\/+/g, '/')} class="site-name-link">
     <div class="left">
       {d.photo
         ? <img src={d.photo} alt="" class="site-favicon" width="24" height="24" loading="lazy" decoding="async" />

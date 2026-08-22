@@ -13,5 +13,7 @@
   "latitude": null,
   "longitude": null,
   "services": ["Electrical Service & Panel Upgrades", "EV Charger Installation", "Hot Tub / Spa Installations", "Home Safety Electrical Evaluation", "LED Lighting Installation", "Whole Home Surge Protection"],
+  "google_rating": 4.8,
+  "google_review_count": 80,
   "slug": "mmi-electrical-edmonton"
 }

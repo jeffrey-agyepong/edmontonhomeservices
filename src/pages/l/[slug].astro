@@ -2,16 +2,17 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { COUNT_CLICKS } from '../../consts';
+import { placeholderGradient } from '../../lib/placeholder';
 
 export async function getStaticPaths() {
   const listings = await getCollection('listings');
   const categories = await getCollection('categories');
 
   return listings.map((listing) => ({
-    params: { slug: listing.data.slug },
+    params: { slug: listing.id },
     props: {
       listing,
-      category: categories.find((c) => c.data.slug === listing.data.category) ?? null,
+      category: categories.find((c) => c.id === listing.data.category) ?? null,
     },
   }));
 }
@@ -25,7 +26,7 @@ const host = (() => {
 })();
 
 const visitHref = COUNT_CLICKS
-  ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${d.slug}`
+  ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${listing.id}`
   : d.website;
 
 const jsonld = {
@@ -39,32 +40,32 @@ const jsonld = {
 };
 
 /*
- * Premium listings get a small placeholder photo gallery until real photos
- * exist — a deterministic gradient per listing (from a hash of its name),
- * matching the same decorative-placeholder approach used on the homepage
- * category cards. Not a claim of a real photo.
+ * Premium listings get a photo gallery: real `gallery` photos if the
+ * business has supplied any (via Keystatic), otherwise a deterministic
+ * placeholder gradient per listing. The placeholder is never presented as
+ * a real photo.
  */
-function hashHue(seed: string): number {
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-  return h % 360;
-}
-const galleryStyles = d.premium
-  ? [0, 1, 2].map((i) => {
-      const hue = (hashHue(d.slug) + i * 40) % 360;
-      return `linear-gradient(135deg, hsl(${hue} 45% 38%), hsl(${(hue + 30) % 360} 45% 55%))`;
-    })
+const galleryStyles = d.premium && d.gallery.length === 0
+  ? [0, 1, 2].map((i) => placeholderGradient(listing.id, i))
   : [];
 ---
 <BaseLayout title={d.name} description={d.description}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={base}>Home</a>
-    {category && <><span>/</span><a href={`${base}c/${category.data.slug}`.replace(/\/+/g, '/')}>{category.data.name}</a></>}
+    {category && <><span>/</span><a href={`${base}c/${category.id}`.replace(/\/+/g, '/')}>{category.data.name}</a></>}
     <span>/</span>{d.name}
   </nav>
 
   <article class="listing-detail">
-    {d.premium && (
+    {d.premium && d.gallery.length > 0 && (
+      <div class="listing-gallery">
+        {d.gallery.map((src) => (
+          <img class="listing-gallery-item" src={src} alt={d.name} loading="lazy" decoding="async" />
+        ))}
+      </div>
+    )}
+
+    {d.premium && d.gallery.length === 0 && (
       <div class="listing-gallery">
         {galleryStyles.map((style) => (
           <div class="listing-gallery-item" style={`background:${style}`} />

@@ -14,5 +14,7 @@
   "latitude": null,
   "longitude": null,
   "slug": "reids-roofing-insulation-edmonton",
-  "premium": true
+  "premium": false,
+  "google_rating": null,
+  "google_review_count": null
 }

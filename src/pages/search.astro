@@ -13,7 +13,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const listings = await getCollection('listings');
 const index = listings.map((l) => ({
   name: l.data.name,
-  slug: l.data.slug,
+  slug: l.id,
   description: l.data.description,
   photo: l.data.photo,
 }));

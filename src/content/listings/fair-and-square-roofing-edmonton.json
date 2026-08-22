@@ -13,5 +13,7 @@
   "services": ["Roof Replacement", "Roof Repairs", "Eavestrough Solutions", "Roof Snow Removal", "Drone Inspection", "Euroshield Rubber Roofing"],
   "latitude": null,
   "longitude": null,
-  "slug": "fair-and-square-roofing-edmonton"
+  "slug": "fair-and-square-roofing-edmonton",
+  "google_rating": 4.9,
+  "google_review_count": 190
 }

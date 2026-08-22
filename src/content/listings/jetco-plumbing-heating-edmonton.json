@@ -13,6 +13,8 @@
   "latitude": null,
   "longitude": null,
   "services": ["Plumbing Repairs", "Hot Water Tank Replacement", "Tankless Water Heaters", "Furnace Repair", "Gas Line Installation", "Sump Pump Installation"],
+  "google_rating": 4.9,
+  "google_review_count": 99,
   "slug": "jetco-plumbing-heating-edmonton",
-  "premium": true
+  "premium": false
 }

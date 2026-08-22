@@ -14,5 +14,5 @@
   "longitude": null,
   "services": ["Drywall Repair", "Painting", "Carpentry", "Bathroom & Kitchen Renovations", "Basement Finishing", "Furniture Assembly"],
   "slug": "gentlemens-handyman-services-edmonton",
-  "premium": true
+  "premium": false
 }

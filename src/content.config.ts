@@ -15,10 +15,17 @@ import type { Loader } from 'astro/loaders';
  */
 
 /*
- * Free-tier listing fields, plus `premium` and the two fields it gates:
- * a placeholder photo gallery and a quote-request form (both UI-only for
- * now — see ListingRow/[slug].astro). Everything else premium (extended
- * bio, dofollow outbound link) is still a separate field set for later.
+ * Free-tier listing fields, plus two independent paid add-ons:
+ *
+ *   premium    — unlocks the photo gallery (real `gallery` photos if
+ *                supplied, else an auto-generated placeholder) and the
+ *                quote-request form on the listing's own page.
+ *   sponsored  — places the listing in the homepage "Local Spotlight"
+ *                section (see Sponsors.astro). Independent of `premium` —
+ *                a business can buy either, both, or neither.
+ *
+ * Everything else premium (extended bio, dofollow outbound link) is still
+ * a separate field set for later.
  */
 const listingSchema = z.object({
   name: z.string(),
@@ -28,20 +35,35 @@ const listingSchema = z.object({
   website: z.string().url(),
   description: z.string().default(''),
   photo: z.string().default(''),
+  gallery: z.array(z.string()).default([]),
   hours: z.string().default(''),
   years_in_business: z.number().nullable().default(null),
   licensed_insured: z.boolean().default(false),
   address: z.string().default(''),
   latitude: z.number().nullable().default(null),
   longitude: z.number().nullable().default(null),
+  sponsored: z.boolean().default(false),
   services: z.array(z.string()).default([]),
   premium: z.boolean().default(false),
-  slug: z.string(),
+  // A snapshot of the business's real public Google rating, looked up and
+  // recorded manually — not fetched live (this is a static site with no
+  // Google Places API key configured). Leave both null rather than guess
+  // when a rating can't be verified.
+  google_rating: z.number().min(0).max(5).nullable().default(null),
+  google_review_count: z.number().int().nullable().default(null),
+  // Not the source of truth for routing — Keystatic doesn't persist this
+  // field's value back into the file (it only uses it to name the file),
+  // so `entry.id` (always present, and equal to the filename) is what
+  // every consumer keys off of. Kept optional here only so a file missing
+  // it doesn't fail validation; see src/lib/categories.ts and friends.
+  slug: z.string().optional(),
 });
 
 const categorySchema = z.object({
   name: z.string(),
-  slug: z.string(),
+  // See the comment on listingSchema.slug — not the source of truth for
+  // routing, `entry.id` is.
+  slug: z.string().optional(),
   description: z.string().default(''),
   icon: z.string().default(''),
   order: z.number().default(0),
@@ -51,7 +73,7 @@ const categorySchema = z.object({
  * directory's own admin, the same content the PHP site renders. */
 const pageSchema = z.object({
   title: z.string(),
-  slug: z.string(),
+  slug: z.string().optional(),
   body: z.string().default(''),
   inFooter: z.boolean().default(true),
   order: z.number().default(0),
@@ -123,6 +145,7 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
             neighborhood: row.neighborhood ?? '',
             phone: row.phone ?? '',
             photo: row.photo ?? '',
+            gallery: Array.isArray(row.gallery) ? row.gallery : [],
             hours: row.hours ?? '',
             years_in_business: row.years_in_business ?? null,
             licensed_insured: Boolean(row.licensed_insured),
@@ -131,6 +154,9 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
             longitude: row.longitude ?? null,
             services: Array.isArray(row.services) ? row.services : [],
             premium: Boolean(row.premium),
+            sponsored: Boolean(row.sponsored),
+            google_rating: row.google_rating ?? null,
+            google_review_count: row.google_review_count ?? null,
           };
         } else if (kind === 'categories') {
           mapped = {

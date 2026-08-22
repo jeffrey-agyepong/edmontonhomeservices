@@ -1,0 +1,28 @@
+---
+/*
+ * Renders nothing when there's no real rating — a manually-verified Google
+ * rating snapshot (see google_rating/google_review_count in
+ * src/content.config.ts), never a placeholder or estimate.
+ */
+interface Props {
+  rating: number | null;
+  count?: number | null;
+  showCount?: boolean;
+}
+
+const { rating, count = null, showCount = false } = Astro.props;
+---
+{rating !== null && (
+  <span class="rating">
+    <svg class="rating-star" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.245 4.63 5.105.744-3.694 3.6.872 5.086L10 13.15l-4.528 2.41.872-5.086-3.694-3.6 5.105-.744L10 1.5z"/></svg>
+    <span class="rating-value">{rating.toFixed(1)}</span>
+    {showCount && count !== null && <span class="rating-count">({count})</span>}
+  </span>
+)}
+
+<style>
+  .rating { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .rating-star { width: 14px; height: 14px; flex: 0 0 auto; fill: var(--accent); }
+  .rating-value { font-weight: 600; color: var(--text); }
+  .rating-count { color: var(--text-dim); font-size: 0.85em; }
+</style>

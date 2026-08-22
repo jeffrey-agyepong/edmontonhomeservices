@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryBox from '../components/CategoryBox.astro';
+import { sortListings } from '../lib/sort';
+import { getPopulatedCategories } from '../lib/categories';
+import { PER_CATEGORY } from '../consts';
+
+const populated = await getPopulatedCategories();
+const sections = populated.map(({ category, listings }) => {
+  const mine = sortListings(listings, 'top');
+  return {
+    category,
+    listings: mine.slice(0, PER_CATEGORY),
+    total: mine.length,
+  };
+});
+---
+<BaseLayout title="Categories" description="Browse the full Edmonton Home Services directory by category.">
+  <div class="page-head">
+    <h1>All Categories</h1>
+    <p class="page-head-desc">Every category currently in the directory.</p>
+  </div>
+
+  {
+    sections.length === 0 ? (
+      <p class="landing-meta">
+        Nothing here yet. Add JSON files under{' '}
+        <code>src/content/listings/</code>.
+      </p>
+    ) : (
+      <div class="category-grid mb-8">
+        {sections.map((s) => (
+          <CategoryBox category={s.category} listings={s.listings} total={s.total} />
+        ))}
+      </div>
+    )
+  }
+</BaseLayout>
