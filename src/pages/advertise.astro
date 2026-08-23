@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQ from '../components/home/FAQ.astro';
+
+interface Feature {
+  label: string;
+  included?: boolean;
+}
+
+interface Tier {
+  name: string;
+  price: string;
+  priceNote?: string;
+  description: string;
+  features: Feature[];
+  cta: string;
+  href: string;
+  highlight?: boolean;
+}
+
+const tiers: Tier[] = [
+  {
+    name: 'Basic Listing',
+    price: 'Free',
+    description: 'Forever free, no credit card required.',
+    features: [
+      { label: 'Standard directory listing', included: true },
+      { label: '1 Profile photo', included: true },
+      { label: 'Phone number & address', included: true },
+      { label: 'Website link', included: true },
+      { label: 'Direct quote requests', included: true },
+      { label: 'Featured placement', included: false },
+    ],
+    cta: 'Get Started for Free',
+    href: '/submit-business',
+  },
+  {
+    name: 'Premium Partner',
+    price: '$49',
+    priceNote: '/mo',
+    description: 'Stand out and generate direct leads.',
+    features: [
+      { label: 'Top-placement Featured Card', included: true },
+      { label: 'Direct quote request form', included: true },
+      { label: 'Full photo gallery (up to 10 images)', included: true },
+      { label: '"Edmonton Verified" Trust Badge', included: true },
+      { label: 'Dofollow website link', included: true },
+      { label: 'Custom "Why Choose Us" section', included: true },
+    ],
+    cta: 'Upgrade to Premium',
+    href: '/contact',
+    highlight: true,
+  },
+  {
+    name: 'Growth + Web Design',
+    price: 'Custom',
+    description: 'For businesses needing a total digital overhaul.',
+    features: [
+      { label: 'Everything in Premium Partner', included: true },
+      { label: 'Custom Website Design & Dev', included: true },
+      { label: 'Basic Local SEO Setup', included: true },
+      { label: 'Mobile-responsive & fast', included: true },
+      { label: 'Google Business Profile optimization', included: true },
+    ],
+    cta: 'Contact for a Quote',
+    href: '/contact',
+  },
+];
+
+const advertiseFaqs = [
+  {
+    question: 'How do you vet businesses?',
+    answer:
+      'We manually review local business licenses, check insurance validity, and require at least a 4.0 average rating across Google and local review sites before approving any premium listing.',
+  },
+  {
+    question: 'What is included in the Web Design tier?',
+    answer:
+      "Our Web Design tier, built by J.A Web Design, includes a fully custom, responsive website tailored to your brand, complete with foundational SEO to help you rank locally in Edmonton. It's the perfect solution if your current site is outdated or you're starting fresh.",
+  },
+];
+---
+
+<BaseLayout
+  title="Advertise"
+  description="Grow your local business with an Edmonton Home Services listing — from a free community listing to a complete digital overhaul."
+>
+  <section
+    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
+  >
+    <h1
+      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
+    >
+      Grow your local business.
+    </h1>
+    <p
+      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center text-white"
+    >
+      Join Edmonton's most trusted home services directory. Claim your existing
+      listing or create a new one, from a free community listing to a complete
+      digital overhaul.
+    </p>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-16">
+    {
+      tiers.map((tier) => (
+        <div
+          class={`relative flex h-full flex-col rounded-xl border p-6 shadow-2xl ${
+            tier.highlight
+              ? 'border-2 border-[var(--accent)] bg-(--bg)'
+              : 'border-(--line) bg-(--bg)'
+          }`}
+        >
+          {tier.highlight && (
+            <span class="badge-premium absolute -top-3 left-1/2 -translate-x-1/2">
+              Most Popular
+            </span>
+          )}
+          <h2 class="text-xl font-bold text-(--text)">{tier.name}</h2>
+          <p class="mt-2 flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-(--primary)">
+              {tier.price}
+            </span>
+            {tier.priceNote && (
+              <span class="text-sm text-(--text-dim)">{tier.priceNote}</span>
+            )}
+          </p>
+          <p class="mt-2 text-sm text-(--text-dim)">{tier.description}</p>
+
+          <ul class="mt-5 flex flex-1 flex-col gap-3">
+            {tier.features.map((feature) => (
+              <li
+                class={`flex items-start gap-2.5 text-sm ${
+                  feature.included === false
+                    ? 'text-(--text-dim) opacity-60'
+                    : 'text-(--text)'
+                }`}
+              >
+                {feature.included === false ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5 flex-none"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-5 w-5 flex-none"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                )}
+                <span>{feature.label}</span>
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href={tier.href}
+            class={`mt-6 block rounded-lg py-2.5 text-center text-sm font-semibold no-underline ${
+              tier.highlight
+                ? 'bg-(--accent) text-white hover:opacity-90'
+                : 'bg-(--panel-head) text-(--text) hover:bg-(--panel-hover)'
+            }`}
+          >
+            {tier.cta}
+          </a>
+        </div>
+      ))
+    }
+  </section>
+
+  <FAQ
+    title="Frequently Asked Questions"
+    subtitle="Everything you need to know about advertising with Edmonton Home Services."
+    faqs={advertiseFaqs}
+    collapsible={false}
+  />
+</BaseLayout>

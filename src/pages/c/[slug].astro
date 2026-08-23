@@ -14,7 +14,7 @@ export async function getStaticPaths() {
       category,
       listings: sortListings(
         listings.filter((l) => l.data.category === category.id),
-        'top'
+        'top',
       ),
     },
   }));
@@ -24,6 +24,7 @@ const { category, listings } = Astro.props;
 const c = category.data;
 const base = import.meta.env.BASE_URL;
 ---
+
 <BaseLayout title={c.name} description={c.description}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={base}>Home</a><span>/</span>{c.name}
@@ -39,9 +40,13 @@ const base = import.meta.env.BASE_URL;
 
   <section class="category-box category-box--wide">
     <div class="category-sites">
-      {listings.length === 0
-        ? <p class="category-description">Nothing here yet.</p>
-        : listings.map((l, i) => <ListingRow listing={l} rank={i + 1} />)}
+      {
+        listings.length === 0 ? (
+          <p class="category-description">Nothing here yet.</p>
+        ) : (
+          listings.map((l, i) => <ListingRow listing={l} rank={i + 1} />)
+        )
+      }
     </div>
   </section>
 </BaseLayout>

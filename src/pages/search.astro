@@ -20,12 +20,19 @@ const index = listings.map((l) => ({
 
 const base = import.meta.env.BASE_URL;
 ---
+
 <BaseLayout title="Search" noindex={true}>
   <div class="page-head">
     <h1>Search</h1>
     <form class="page-search" role="search" id="search-form">
       <label class="screen-reader-text" for="sq">Search</label>
-      <input id="sq" type="search" name="q" placeholder="Search…" autocomplete="off" />
+      <input
+        id="sq"
+        type="search"
+        name="q"
+        placeholder="Search…"
+        autocomplete="off"
+      />
       <button type="submit">Search</button>
     </form>
     <p class="page-head-desc" id="search-count" aria-live="polite"></p>
@@ -49,45 +56,72 @@ const base = import.meta.env.BASE_URL;
       if (initial) input.value = initial;
 
       function escapeHtml(s) {
-        return String(s).replace(/[&<>"']/g, (c) => (
-          { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-        ));
+        return String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              '&': '&amp;',
+              '<': '&lt;',
+              '>': '&gt;',
+              '"': '&quot;',
+              "'": '&#39;',
+            })[c],
+        );
       }
 
       function render(term) {
         const q = term.trim().toLowerCase();
 
         if (!q) {
-          results.innerHTML = '<p class="category-description">Type to search.</p>';
+          results.innerHTML =
+            '<p class="category-description">Type to search.</p>';
           count.textContent = '';
           return;
         }
 
-        const hits = index.filter((i) =>
-          i.name.toLowerCase().includes(q) || (i.description || '').toLowerCase().includes(q)
+        const hits = index.filter(
+          (i) =>
+            i.name.toLowerCase().includes(q) ||
+            (i.description || '').toLowerCase().includes(q),
         );
 
-        count.textContent = hits.length === 1 ? '1 result' : hits.length + ' results';
+        count.textContent =
+          hits.length === 1 ? '1 result' : hits.length + ' results';
 
         if (!hits.length) {
-          results.innerHTML = '<p class="category-description">Nothing matched that search.</p>';
+          results.innerHTML =
+            '<p class="category-description">Nothing matched that search.</p>';
           return;
         }
 
-        results.innerHTML = hits.map((i) => {
-          const initialLetter = escapeHtml(i.name.slice(0, 1).toUpperCase());
-          const icon = i.photo
-            ? '<img src="' + escapeHtml(i.photo) + '" alt="" class="site-favicon" width="24" height="24" loading="lazy">'
-            : '<span class="site-favicon site-favicon--placeholder" aria-hidden="true">' + initialLetter + '</span>';
+        results.innerHTML = hits
+          .map((i) => {
+            const initialLetter = escapeHtml(i.name.slice(0, 1).toUpperCase());
+            const icon = i.photo
+              ? '<img src="' +
+                escapeHtml(i.photo) +
+                '" alt="" class="site-favicon" width="24" height="24" loading="lazy">'
+              : '<span class="site-favicon site-favicon--placeholder" aria-hidden="true">' +
+                initialLetter +
+                '</span>';
 
-          return '<div class="site-item"><a class="site-name-link" href="' +
-                 escapeHtml((base + 'l/' + i.slug).replace(/\/+/g, '/')) +
-                 '"><div class="left">' + icon + '<span class="site-name">' +
-                 escapeHtml(i.name) + '</span></div></a></div>';
-        }).join('');
+            return (
+              '<div class="site-item"><a class="site-name-link" href="' +
+              escapeHtml((base + 'l/' + i.slug).replace(/\/+/g, '/')) +
+              '"><div class="left">' +
+              icon +
+              '<span class="site-name">' +
+              escapeHtml(i.name) +
+              '</span></div></a></div>'
+            );
+          })
+          .join('');
       }
 
-      form.addEventListener('submit', (e) => { e.preventDefault(); render(input.value); });
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        render(input.value);
+      });
       input.addEventListener('input', () => render(input.value));
       if (initial) render(initial);
     })();

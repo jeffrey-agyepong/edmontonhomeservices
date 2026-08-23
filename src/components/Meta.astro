@@ -11,6 +11,7 @@ interface Props {
 
 const { title, description, canonical, noindex, base } = Astro.props;
 ---
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script is:inline>
@@ -18,9 +19,12 @@ const { title, description, canonical, noindex, base } = Astro.props;
      Falls back to system preference when nothing is saved yet. */
   (function () {
     var saved = localStorage.getItem('theme');
-    var theme = saved === 'light' || saved === 'dark'
-      ? saved
-      : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    var theme =
+      saved === 'light' || saved === 'dark'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark';
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>

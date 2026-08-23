@@ -24,33 +24,45 @@ const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
 /*
  * "Submit Your Business" needs somewhere to write to, same constraint as the
  * outbound listing links (see ListingRow.astro). With a directory API behind
- * the site, send people to its submission form; in local-JSON mode there is
- * nowhere for a submission to go, so point at the About page instead.
+ * the site, send people to its submission form; in local-JSON mode, submissions
+ * go to the static Netlify-forms page instead (see submit-business.astro).
  */
 const submitHref = COUNT_CLICKS
   ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/submit`
-  : href('about');
+  : href('submit-business');
 
 // About, privacy, terms — whatever this directory has. Sorted the way the
 // admin ordered them, so the static build matches the PHP site's footer.
-const pages = (await getCollection('pages'))
-  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+const pages = (await getCollection('pages')).sort(
+  (a, b) =>
+    a.data.order - b.data.order || a.data.title.localeCompare(b.data.title),
+);
 const footerPages = pages.filter((p) => p.data.inFooter);
 ---
+
 <!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <Meta title={pageTitle} description={pageDesc} canonical={canonical} noindex={noindex} base={base} />
-</head>
-<body>
+  <head>
+    <Meta
+      title={pageTitle}
+      description={pageDesc}
+      canonical={canonical}
+      noindex={noindex}
+      base={base}
+    />
+  </head>
+  <body>
+    <Header base={base} href={href} submitHref={submitHref} />
 
-<Header base={base} href={href} submitHref={submitHref} pages={pages} />
+    <main class="wrap">
+      <slot />
+    </main>
 
-<main class="wrap">
-  <slot />
-</main>
-
-<Footer footerPages={footerPages} href={href} base={base} submitHref={submitHref} />
-
-</body>
+    <Footer
+      footerPages={footerPages}
+      href={href}
+      base={base}
+      submitHref={submitHref}
+    />
+  </body>
 </html>

@@ -17,70 +17,110 @@ const TEASER_LISTINGS = 3;
 
 // Prefer shorter company names for the teaser — long names wrap awkwardly
 // in these compact cards. Alphabetical is the tiebreak for equal lengths.
-const byShortName = (a: (typeof populated)[number]['listings'][number], b: typeof a) =>
-  a.data.name.length - b.data.name.length || a.data.name.localeCompare(b.data.name);
+const byShortName = (
+  a: (typeof populated)[number]['listings'][number],
+  b: typeof a,
+) =>
+  a.data.name.length - b.data.name.length ||
+  a.data.name.localeCompare(b.data.name);
 
 const cards = populated.map(({ category, listings }) => ({
   category,
   listings: [...listings].sort(byShortName).slice(0, TEASER_LISTINGS),
 }));
 ---
-<section class="relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel-head) py-10">
+
+<section
+  class="relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel-head) py-10"
+>
   <div class="wrap">
     <div>
       <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-left">
-       Browse by Category
+        Browse by Category
       </h2>
       <p class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl">
-       Find the best organically rated professionals in Edmonton, sorted by the services you need.
+        Find the best organically rated professionals in Edmonton, sorted by the
+        services you need.
       </p>
     </div>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"
-    >
-      {cards.map(({ category, listings }) => (
-        <div class="category-card rounded-xl border border-(--line) bg-(--bg) p-6 shadow-2xl flex flex-col h-full">
-          <a class="category-card-title-wrap no-underline" href={categoryHref(category.id)}>
-            <h3 class="category-card-title text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">{category.data.name}</h3>
-          </a>
-          <div class="category-card-desc-wrap">
-            <p class="category-card-desc text-(--text-dim) text-left text-base sm:text-sm mt-0 mb-2">
-              {category.data.description ?? ''}
-            </p>
-          </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+      {
+        cards.map(({ category, listings }) => (
+          <div class="category-card rounded-xl border border-(--line) bg-(--bg) p-6 shadow-2xl flex flex-col h-full">
+            <a
+              class="category-card-title-wrap no-underline"
+              href={categoryHref(category.id)}
+            >
+              <h3 class="category-card-title text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">
+                {category.data.name}
+              </h3>
+            </a>
+            <div class="category-card-desc-wrap">
+              <p class="category-card-desc text-(--text-dim) text-left text-base sm:text-sm mt-0 mb-2">
+                {category.data.description ?? ''}
+              </p>
+            </div>
 
-          <div class="category-listings mt-4 flex-1">
-            {listings.map(({ id, data: d }, i) =>
-              i === 0 ? (
-                <a class="category-listing category-listing--featured no-underline" href={listingHref(id)}>
-                  <div class="category-listing-media">
-                    {d.photo
-                      ? <img src={d.photo} alt="" loading="lazy" decoding="async" />
-                      : <div class="category-listing-placeholder" style={`background:${placeholderGradient(id)}`}>
+            <div class="category-listings mt-4 flex-1">
+              {listings.map(({ id, data: d }, i) =>
+                i === 0 ? (
+                  <a
+                    class="category-listing category-listing--featured no-underline"
+                    href={listingHref(id)}
+                  >
+                    <div class="category-listing-media">
+                      {d.photo ? (
+                        <img
+                          src={d.photo}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div
+                          class="category-listing-placeholder"
+                          style={`background:${placeholderGradient(id)}`}
+                        >
                           <span>{d.name.charAt(0)}</span>
-                        </div>}
-                  </div>
-                  <div>
-                    <p class="category-listing-name text-(--text) font-bold">{d.name}</p>
-                    <Rating rating={d.google_rating} count={d.google_review_count} showCount />
-                    <p class="category-listing-desc text-(--text-dim)">{d.description ?? ''}</p>
-                  </div>
-                </a>
-              ) : (
-                <a class="category-listing category-listing--compact no-underline" href={listingHref(id)}>
-                  <p class="category-listing-name text-(--text)">{d.name}</p>
-                  <Rating rating={d.google_rating} />
-                </a>
-              )
-            )}
-          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p class="category-listing-name text-(--text) font-bold">
+                        {d.name}
+                      </p>
+                      <Rating
+                        rating={d.google_rating}
+                        count={d.google_review_count}
+                        showCount
+                      />
+                      <p class="category-listing-desc text-(--text-dim)">
+                        {d.description ?? ''}
+                      </p>
+                    </div>
+                  </a>
+                ) : (
+                  <a
+                    class="category-listing category-listing--compact no-underline"
+                    href={listingHref(id)}
+                  >
+                    <p class="category-listing-name text-(--text)">{d.name}</p>
+                    <Rating rating={d.google_rating} />
+                  </a>
+                ),
+              )}
+            </div>
 
-          <a class="category-view-all text-(--primary)" href={categoryHref(category.id)}>
-            View all {category.data.name} &rarr;
-          </a>
-        </div>
-      ))}
+            <a
+              class="category-view-all text-(--primary)"
+              href={categoryHref(category.id)}
+            >
+              View all {category.data.name} &rarr;
+            </a>
+          </div>
+        ))
+      }
     </div>
 
     <!-- <div class="mt-8 flex justify-center">

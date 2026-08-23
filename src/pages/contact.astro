@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Edmonton Home Services."
+>
+  <section
+    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
+  >
+    <h1
+      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
+    >
+      Contact Us
+    </h1>
+    <p
+      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl flex justify-center mx-auto text-center text-white"
+    >
+      Whether you have a question about a listing, need help claiming your
+      profile, or want to partner with us, we'd love to hear from you.
+    </p>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto mb-16">
+    <div>
+      <h2 class="text-3xl font-bold mb-4">How can we help?</h2>
+      <p class="max-w-xl text-xl mb-8">
+        Our team is based right here in Edmonton. Drop us a message using the
+        form, or reach out directly using the information below.
+      </p>
+
+      <div class="flex flex-col items-start gap-6">
+        <div class="flex items-start gap-4">
+          <span
+            class="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-(--panel-head)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--primary)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6"
+              aria-hidden="true"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 6-10 7L2 6"></path>
+            </svg>
+          </span>
+          <div>
+            <h3 class="mt-0 mb-1 text-xl font-semibold text-(--text)">
+              Email Support
+            </h3>
+            <p class="mt-0 mb-1">Typically responds within 24 hours.</p>
+            <p class="mt-0 mb-0">
+              <a
+                href="mailto:info@edmontonhomeservices.com"
+                class="text-(--primary) hover:opacity-80"
+              >
+                info@edmontonhomeservices.com
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <span
+            class="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-(--panel-head)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--primary)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6"
+              aria-hidden="true"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+              ></path>
+            </svg>
+          </span>
+          <div>
+            <h3 class="mt-0 mb-1 text-xl font-semibold text-(--text)">
+              Phone Support
+            </h3>
+            <p class="mt-0 mb-1">Mon–Fri, 9am–5pm MST.</p>
+            <p class="mt-0 mb-0">
+              <a
+                href="tel:+17809837309"
+                class="text-(--primary) hover:opacity-80"
+              >
+                780-983-7309
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <span
+            class="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-(--panel-head)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--primary)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6"
+              aria-hidden="true"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </span>
+          <div>
+            <h3 class="mt-0 mb-1 text-xl font-semibold text-(--text)">
+              Location
+            </h3>
+            <p class="mt-0 mb-0">Edmonton, Alberta and surrounding area.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="form-card">
+        <h2 class="flex items-center gap-3">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6"
+            aria-hidden="true"
+          >
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+            ></path>
+          </svg>Send a message
+        </h2>
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hidden">
+            <label
+              >Don't fill this out if you're human: <input
+                name="bot-field"
+              /></label
+            >
+          </p>
+          <div class="form-row">
+            <label for="name"
+              >First Name
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="John"
+                required
+              />
+            </label>
+
+            <label for="lastname"
+              >Last Name
+              <input
+                type="text"
+                name="lastname"
+                id="lastname"
+                placeholder="Doe"
+                required
+              />
+            </label>
+          </div>
+
+          <label for="email"
+            >Email
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="john.doe@example.com"
+              required
+            />
+          </label>
+          <label for="topic"
+            >Topic
+            <select name="topic" id="topic">
+              <option>Listing Support (Update or Claim)</option>
+              <option>General Inquiry</option>
+              <option>Partnership or Advertising</option>
+              <option>Report an Issue</option>
+            </select>
+          </label>
+
+          <label for="message"
+            >Message
+            <textarea
+              name="message"
+              id="message"
+              rows="5"
+              placeholder="Your message here..."
+              required></textarea>
+          </label>
+
+          <button type="submit" class="btn-accent text-white border-0 mt-2"
+            >Send Message</button
+          >
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

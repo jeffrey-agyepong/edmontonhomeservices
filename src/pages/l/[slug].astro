@@ -22,7 +22,11 @@ const d = listing.data;
 const base = import.meta.env.BASE_URL;
 
 const host = (() => {
-  try { return new URL(d.website).host.replace(/^www\./, ''); } catch { return d.website; }
+  try {
+    return new URL(d.website).host.replace(/^www\./, '');
+  } catch {
+    return d.website;
+  }
 })();
 
 const visitHref = COUNT_CLICKS
@@ -45,36 +49,70 @@ const jsonld = {
  * placeholder gradient per listing. The placeholder is never presented as
  * a real photo.
  */
-const galleryStyles = d.premium && d.gallery.length === 0
-  ? [0, 1, 2].map((i) => placeholderGradient(listing.id, i))
-  : [];
+const galleryStyles =
+  d.premium && d.gallery.length === 0
+    ? [0, 1, 2].map((i) => placeholderGradient(listing.id, i))
+    : [];
 ---
+
 <BaseLayout title={d.name} description={d.description}>
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={base}>Home</a>
-    {category && <><span>/</span><a href={`${base}c/${category.id}`.replace(/\/+/g, '/')}>{category.data.name}</a></>}
+    {
+      category && (
+        <>
+          <>
+            <span>/</span>
+            <a href={`${base}c/${category.id}`.replace(/\/+/g, '/')}>
+              {category.data.name}
+            </a>
+          </>
+        </>
+      )
+    }
     <span>/</span>{d.name}
   </nav>
 
   <article class="listing-detail">
-    {d.premium && d.gallery.length > 0 && (
-      <div class="listing-gallery">
-        {d.gallery.map((src) => (
-          <img class="listing-gallery-item" src={src} alt={d.name} loading="lazy" decoding="async" />
-        ))}
-      </div>
-    )}
+    {
+      d.premium && d.gallery.length > 0 && (
+        <div class="listing-gallery">
+          {d.gallery.map((src) => (
+            <img
+              class="listing-gallery-item"
+              src={src}
+              alt={d.name}
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </div>
+      )
+    }
 
-    {d.premium && d.gallery.length === 0 && (
-      <div class="listing-gallery">
-        {galleryStyles.map((style) => (
-          <div class="listing-gallery-item" style={`background:${style}`} />
-        ))}
-      </div>
-    )}
+    {
+      d.premium && d.gallery.length === 0 && (
+        <div class="listing-gallery">
+          {galleryStyles.map((style) => (
+            <div class="listing-gallery-item" style={`background:${style}`} />
+          ))}
+        </div>
+      )
+    }
 
     <div class="listing-head">
-      {d.photo && <img class="listing-favicon" src={d.photo} alt="" width="48" height="48" decoding="async" />}
+      {
+        d.photo && (
+          <img
+            class="listing-favicon"
+            src={d.photo}
+            alt=""
+            width="48"
+            height="48"
+            decoding="async"
+          />
+        )
+      }
       <h1>{d.name}</h1>
       {d.premium && <span class="badge-premium">Premium</span>}
     </div>
@@ -82,59 +120,122 @@ const galleryStyles = d.premium && d.gallery.length === 0
     {d.description && <p class="page-head-desc">{d.description}</p>}
 
     <ul class="listing-facts">
-      {d.address && <li><strong>Address:</strong> {d.address}</li>}
-      {d.neighborhood && <li><strong>Area served:</strong> {d.neighborhood}</li>}
-      {d.phone && <li><strong>Phone:</strong> {d.phone}</li>}
-      {d.hours && <li><strong>Hours:</strong> {d.hours}</li>}
-      {d.years_in_business !== null && <li><strong>Years in business:</strong> {d.years_in_business}</li>}
-      {d.licensed_insured && <li><strong>Licensed &amp; insured</strong> (self-reported)</li>}
+      {
+        d.address && (
+          <li>
+            <strong>Address:</strong> {d.address}
+          </li>
+        )
+      }
+      {
+        d.neighborhood && (
+          <li>
+            <strong>Area served:</strong> {d.neighborhood}
+          </li>
+        )
+      }
+      {
+        d.phone && (
+          <li>
+            <strong>Phone:</strong> {d.phone}
+          </li>
+        )
+      }
+      {
+        d.hours && (
+          <li>
+            <strong>Hours:</strong> {d.hours}
+          </li>
+        )
+      }
+      {
+        d.years_in_business !== null && (
+          <li>
+            <strong>Years in business:</strong> {d.years_in_business}
+          </li>
+        )
+      }
+      {
+        d.licensed_insured && (
+          <li>
+            <strong>Licensed &amp; insured</strong> (self-reported)
+          </li>
+        )
+      }
     </ul>
 
-    {d.services.length > 0 && (
-      <div class="listing-services">
-        <h2 class="section-heading">Services</h2>
-        <ul class="service-chips">
-          {d.services.map((s) => <li class="service-chip">{s}</li>)}
-        </ul>
-      </div>
-    )}
+    {
+      d.services.length > 0 && (
+        <div class="listing-services">
+          <h2 class="section-heading">Services</h2>
+          <ul class="service-chips">
+            {d.services.map((s) => (
+              <li class="service-chip">{s}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
 
     <p class="listing-actions">
-      <a class="btn-primary" href={visitHref} target="_blank" rel="nofollow noopener">
+      <a
+        class="btn-primary"
+        href={visitHref}
+        target="_blank"
+        rel="nofollow noopener"
+      >
         Visit {host}
-        <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.2 5.6 11.8 7l4 4H4v2h11.8l-4 4 1.4 1.4L19.6 12z"/></svg>
+        <svg
+          class="arrow"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+          ><path d="M13.2 5.6 11.8 7l4 4H4v2h11.8l-4 4 1.4 1.4L19.6 12z"
+          ></path></svg
+        >
       </a>
     </p>
   </article>
 
-  {d.premium && (
-    <section class="quote-section">
-      <h2 class="quote-heading">Request a Quote from {d.name}</h2>
-      <p class="section-note">Send a few details and they'll get back to you.</p>
-      <form class="coming-soon-form" data-coming-soon>
-        <div class="form-row">
+  {
+    d.premium && (
+      <section class="quote-section">
+        <h2 class="quote-heading">Request a Quote from {d.name}</h2>
+        <p class="section-note">
+          Send a few details and they'll get back to you.
+        </p>
+        <form class="coming-soon-form" data-coming-soon>
+          <div class="form-row">
+            <label>
+              Your name
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+            <label>
+              Phone or email
+              <input type="text" name="contact" autocomplete="email" required />
+            </label>
+          </div>
           <label>
-            Your name
-            <input type="text" name="name" autocomplete="name" required />
+            What do you need done?
+            <textarea name="message" rows="3" required />
           </label>
-          <label>
-            Phone or email
-            <input type="text" name="contact" autocomplete="email" required />
-          </label>
-        </div>
-        <label>
-          What do you need done?
-          <textarea name="message" rows="3" required></textarea>
-        </label>
-        <button type="submit" class="btn-primary">Send Request</button>
-        <p class="coming-soon-note" hidden>Quote requests aren't live yet — check back soon.</p>
-      </form>
-    </section>
-  )}
+          <button type="submit" class="btn-primary">
+            Send Request
+          </button>
+          <p class="coming-soon-note" hidden>
+            Quote requests aren't live yet — check back soon.
+          </p>
+        </form>
+      </section>
+    )
+  }
 
   <section class="reviews-section">
     <h2 class="reviews-heading">Reviews of {d.name}</h2>
-    <p class="section-note">Written by the community, not {d.name} — no reviews yet, be the first to leave one.</p>
+    <p class="section-note">
+      Written by the community, not {d.name} — no reviews yet, be the first to leave
+      one.
+    </p>
 
     <form class="coming-soon-form review-form" data-coming-soon>
       <label>
@@ -157,7 +258,9 @@ const galleryStyles = d.premium && d.gallery.length === 0
         <textarea name="review" rows="3" required></textarea>
       </label>
       <button type="submit" class="btn-primary">Submit Review</button>
-      <p class="coming-soon-note" hidden>Reviews aren't live yet — check back soon.</p>
+      <p class="coming-soon-note" hidden>
+        Reviews aren't live yet — check back soon.
+      </p>
     </form>
   </section>
 
@@ -166,11 +269,13 @@ const galleryStyles = d.premium && d.gallery.length === 0
   <script>
     // No backend yet — surface a clear "coming soon" message instead of
     // silently doing nothing or submitting somewhere that doesn't exist.
-    document.querySelectorAll<HTMLFormElement>('[data-coming-soon]').forEach((form) => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        form.querySelector('.coming-soon-note')?.removeAttribute('hidden');
+    document
+      .querySelectorAll<HTMLFormElement>('[data-coming-soon]')
+      .forEach((form) => {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          form.querySelector('.coming-soon-note')?.removeAttribute('hidden');
+        });
       });
-    });
   </script>
 </BaseLayout>

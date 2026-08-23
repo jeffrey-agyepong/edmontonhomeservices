@@ -23,48 +23,65 @@ const sponsors = listings
   }));
 ---
 
-{sponsors.length > 0 && (
-  <section class="sponsors relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel) py-10">
-    <div class="wrap">
-      <div class="sponsors-header">
-        <div class="sponsors-heading">
-          <span class="sponsors-badge">Sponsored</span>
-          <h2 class="sponsors-title">Local Spotlight</h2>
-          <p class="sponsors-subtitle">Support the businesses that support our community.</p>
+{
+  sponsors.length > 0 && (
+    <section class="sponsors relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel) py-10">
+      <div class="wrap">
+        <div class="sponsors-header">
+          <div class="sponsors-heading">
+            <span class="sponsors-badge">Sponsored</span>
+            <h2 class="sponsors-title">Local Spotlight</h2>
+            <p class="sponsors-subtitle">
+              Support the businesses that support our community.
+            </p>
+          </div>
+          <a class="sponsors-cta" href={href('about')}>
+            Advertise your business here &rarr;
+          </a>
         </div>
-        <a class="sponsors-cta" href={href('about')}>Advertise your business here &rarr;</a>
-      </div>
 
-      <div class="sponsor-grid">
-        {sponsors.map(({ listing, category }) => {
-          const d = listing.data;
-          return (
-            <article class="sponsor-card">
-              <div class="sponsor-media">
-                {d.photo
-                  ? <img src={d.photo} alt="" loading="lazy" decoding="async" />
-                  : <div class="sponsor-media-placeholder" style={`background:${placeholderGradient(listing.id)}`}>
+        <div class="sponsor-grid">
+          {sponsors.map(({ listing, category }) => {
+            const d = listing.data;
+            return (
+              <article class="sponsor-card">
+                <div class="sponsor-media">
+                  {d.photo ? (
+                    <img src={d.photo} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <div
+                      class="sponsor-media-placeholder"
+                      style={`background:${placeholderGradient(listing.id)}`}
+                    >
                       <span>{d.name.charAt(0)}</span>
-                    </div>}
-              </div>
-              <div class="sponsor-body">
-                {/* <span class="sponsor-ad-badge text-red-500">AD</span> */}
+                    </div>
+                  )}
+                </div>
+                <div class="sponsor-body">
+                  {/* <span class="sponsor-ad-badge text-red-500">AD</span> */}
 
-                {category && <span class="sponsor-category">{category.data.name}</span>}
+                  {category && (
+                    <span class="sponsor-category">{category.data.name}</span>
+                  )}
 
-                <h3 class="sponsor-name">{d.name}</h3>
+                  <h3 class="sponsor-name">{d.name}</h3>
 
-                {d.description && <p class="sponsor-description">{d.description}</p>}
+                  {d.description && (
+                    <p class="sponsor-description">{d.description}</p>
+                  )}
 
-                <a class="sponsor-button" href={listingHref(listing.id)}>View Profile</a>
-              </div>
-            </article>
-          );
-        })}
+                  <a class="sponsor-button" href={listingHref(listing.id)}>
+                    View Profile
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
-)}
+    </section>
+  )
+}
 
 <style>
   /* Structure only — no color, type, or decoration here on purpose. */
@@ -90,28 +107,26 @@ const sponsors = listings
     font-weight: 600;
     margin: 0.25rem 0 0;
   }
-    .sponsors-subtitle {
-        font-size: 1.25rem;
-        margin: 0.25rem 0 0;
-    }
+  .sponsors-subtitle {
+    font-size: 1.25rem;
+    margin: 0.25rem 0 0;
+  }
 
-    .sponsor-ad-badge{
-        
-        font-size: 0.75rem;
-        font-weight: 600;
-        border-radius: 4px;
-        border: 1px solid var(--line);
-        padding: 0.25rem 0.5rem;
-    }
-    .sponsor-category{
-        
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--text-dim);
-        border-radius: 4px;
-        border: 1px solid var(--line);
-        padding: 0.25rem 0.5rem;
-    }
+  .sponsor-ad-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    padding: 0.25rem 0.5rem;
+  }
+  .sponsor-category {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    padding: 0.25rem 0.5rem;
+  }
 
   .sponsor-grid {
     display: grid;

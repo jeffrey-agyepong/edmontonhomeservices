@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPopulatedCategories } from '../lib/categories';
+
+const categories = (await getPopulatedCategories()).map((c) => c.category);
+---
+
+<BaseLayout
+  title="Submit Your Business"
+  description="List your Edmonton home service business in our directory."
+>
+  <section
+    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
+  >
+    <h1
+      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
+    >
+      Submit Your Business
+    </h1>
+    <p
+      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center text-white"
+    >
+      Get your business listed in front of Edmonton homeowners looking for
+      trusted local pros. Fill out the form below and we'll review your
+      submission.
+    </p>
+  </section>
+
+  <section class="max-w-2xl mx-auto mb-16">
+    <div class="form-card">
+      <h2 class="flex items-center gap-3">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--accent)"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-6 h-6"
+          aria-hidden="true"
+        >
+          <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"></path>
+        </svg>Business details
+      </h2>
+      <form
+        name="submit-business"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value="submit-business" />
+        <p class="hidden">
+          <label
+            >Don't fill this out if you're human: <input
+              name="bot-field"
+            /></label
+          >
+        </p>
+
+        <label for="business-name"
+          >Business Name
+          <input
+            type="text"
+            name="business-name"
+            id="business-name"
+            placeholder="Acme Plumbing"
+            required
+          />
+        </label>
+
+        <label for="category"
+          >Category
+          <select name="category" id="category" required>
+            <option value="" selected disabled>Select a category</option>
+            {categories.map((c) => <option value={c.id}>{c.data.name}</option>)}
+            <option value="other">Other</option>
+          </select>
+        </label>
+
+        <div class="form-row">
+          <label for="phone"
+            >Phone
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              placeholder="780-555-0123"
+              required
+            />
+          </label>
+
+          <label for="website"
+            >Website
+            <input
+              type="url"
+              name="website"
+              id="website"
+              placeholder="https://example.com"
+            />
+          </label>
+        </div>
+
+        <label for="neighborhood"
+          >Neighborhood
+          <input
+            type="text"
+            name="neighborhood"
+            id="neighborhood"
+            placeholder="e.g. Strathcona"
+          />
+        </label>
+
+        <label for="contact-email"
+          >Your Email
+          <input
+            type="email"
+            name="contact-email"
+            id="contact-email"
+            placeholder="you@example.com"
+            required
+          />
+        </label>
+
+        <label for="description"
+          >Tell us about the business
+          <textarea
+            name="description"
+            id="description"
+            rows="5"
+            placeholder="Services offered, years in business, what makes you stand out..."
+            required></textarea>
+        </label>
+
+        <button type="submit" class="btn-accent text-white border-0 mt-2"
+          >Submit Business</button
+        >
+      </form>
+    </div>
+  </section>
+</BaseLayout>

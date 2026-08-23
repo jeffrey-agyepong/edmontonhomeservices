@@ -2,7 +2,17 @@
 import { COUNT_CLICKS } from '../consts';
 
 interface Props {
-  listing: { id: string; data: { name: string; website: string; description: string; photo: string; phone: string; premium: boolean } };
+  listing: {
+    id: string;
+    data: {
+      name: string;
+      website: string;
+      description: string;
+      photo: string;
+      phone: string;
+      premium: boolean;
+    };
+  };
   rank?: number;
 }
 
@@ -18,18 +28,43 @@ const href = COUNT_CLICKS
   ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${listing.id}`
   : d.website;
 ---
+
 <div class={`site-item rank-${rank}`}>
-  <a href={`${import.meta.env.BASE_URL}l/${listing.id}`.replace(/\/+/g, '/')} class="site-name-link">
+  <a
+    href={`${import.meta.env.BASE_URL}l/${listing.id}`.replace(/\/+/g, '/')}
+    class="site-name-link"
+  >
     <div class="left">
-      {d.photo
-        ? <img src={d.photo} alt="" class="site-favicon" width="24" height="24" loading="lazy" decoding="async" />
-        : <span class="site-favicon site-favicon--placeholder" aria-hidden="true">{initial}</span>}
+      {
+        d.photo ? (
+          <img
+            src={d.photo}
+            alt=""
+            class="site-favicon"
+            width="24"
+            height="24"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span
+            class="site-favicon site-favicon--placeholder"
+            aria-hidden="true"
+          >
+            {initial}
+          </span>
+        )
+      }
       <span class="site-name">{d.name}</span>
       {d.premium && <span class="badge-premium">Premium</span>}
     </div>
     {d.phone && <span class="site-phone">{d.phone}</span>}
   </a>
-  {d.description && (
-    <div class="site-description floater"><span class="text">{d.description}</span></div>
-  )}
+  {
+    d.description && (
+      <div class="site-description floater">
+        <span class="text">{d.description}</span>
+      </div>
+    )
+  }
 </div>
