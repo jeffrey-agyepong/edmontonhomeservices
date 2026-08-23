@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { placeholderGradient } from '../../lib/placeholder';
+import Rating from '../Rating.astro';
 
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
@@ -35,7 +36,7 @@ const sponsors = listings
               Support the businesses that support our community.
             </p>
           </div>
-          <a class="sponsors-cta" href={href('about')}>
+          <a class="sponsors-cta" href={href('advertise')}>
             Advertise your business here &rarr;
           </a>
         </div>
@@ -58,11 +59,21 @@ const sponsors = listings
                   )}
                 </div>
                 <div class="sponsor-body">
-                  {/* <span class="sponsor-ad-badge text-red-500">AD</span> */}
-
-                  {category && (
-                    <span class="sponsor-category">{category.data.name}</span>
-                  )}
+                  <div class="sponsor-top-row">
+                    <div class="sponsor-meta">
+                      {category && (
+                        <span class="sponsor-category">
+                          {category.data.name}
+                        </span>
+                      )}
+                      <Rating
+                        rating={d.google_rating}
+                        count={d.google_review_count}
+                        showCount={true}
+                      />
+                    </div>
+                    <span class="sponsor-ad-badge">AD</span>
+                  </div>
 
                   <h3 class="sponsor-name">{d.name}</h3>
 
@@ -96,11 +107,14 @@ const sponsors = listings
 
   .sponsors-badge {
     display: inline-block;
-    border-radius: 4px;
+    border-radius: 9999px;
     border: 1px solid var(--line);
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
   }
   .sponsors-title {
     font-size: 2rem;
@@ -112,39 +126,61 @@ const sponsors = listings
     margin: 0.25rem 0 0;
   }
 
+  .sponsor-top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
   .sponsor-ad-badge {
+    flex: 0 0 auto;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 4px;
     border: 1px solid var(--line);
     padding: 0.25rem 0.5rem;
   }
+  .sponsor-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
   .sponsor-category {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-dim);
-    border-radius: 4px;
-    border: 1px solid var(--line);
-    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+    background: var(--panel-head);
+    border-radius: 9999px;
+    padding: 0.25rem 0.65rem;
   }
 
   .sponsor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-top: 1.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .sponsor-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .sponsor-card {
     display: flex;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 14px;
     border: 1px solid var(--line);
   }
 
   .sponsor-media {
     flex: 0 0 40%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
   }
 
@@ -170,19 +206,12 @@ const sponsors = listings
   }
 
   .sponsor-body {
-    position: relative;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
     padding: 1rem;
-  }
-
-  .sponsor-ad-badge {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
   }
 
   .sponsor-name {
@@ -205,11 +234,10 @@ const sponsors = listings
     width: 100%;
     background: var(--primary);
     color: var(--primary-ink);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
     font-weight: 600;
     text-decoration: none;
-    text-transform: uppercase;
   }
 
   @media (max-width: 640px) {

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Rating from '../../components/Rating.astro';
 import { COUNT_CLICKS } from '../../consts';
 import { placeholderGradient } from '../../lib/placeholder';
 
@@ -21,6 +22,10 @@ const { listing, category } = Astro.props;
 const d = listing.data;
 const base = import.meta.env.BASE_URL;
 
+const categoryHref = category
+  ? `${base}c/${category.id}`.replace(/\/+/g, '/')
+  : `${base}categories`.replace(/\/+/g, '/');
+
 const host = (() => {
   try {
     return new URL(d.website).host.replace(/^www\./, '');
@@ -32,6 +37,12 @@ const host = (() => {
 const visitHref = COUNT_CLICKS
   ? `${import.meta.env.DIRECTORY_API?.replace(/\/+$/, '')}/visit/${listing.id}`
   : d.website;
+
+// Premium Partner tier feature (see /advertise) — non-premium outbound links
+// stay nofollow.
+const websiteRel = d.premium ? 'noopener' : 'nofollow noopener';
+
+const telHref = d.phone ? `tel:${d.phone.replace(/[^\d+]/g, '')}` : null;
 
 const jsonld = {
   '@context': 'https://schema.org',
@@ -56,213 +67,329 @@ const galleryStyles =
 ---
 
 <BaseLayout title={d.name} description={d.description}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href={base}>Home</a>
-    {
-      category && (
-        <>
-          <>
-            <span>/</span>
-            <a href={`${base}c/${category.id}`.replace(/\/+/g, '/')}>
-              {category.data.name}
-            </a>
-          </>
-        </>
-      )
-    }
-    <span>/</span>{d.name}
-  </nav>
+  <div class="listing-page">
+    <a class="back-link" href={categoryHref}>
+      &larr; Back to {category ? category.data.name : 'Categories'}
+    </a>
 
-  <article class="listing-detail">
-    {
-      d.premium && d.gallery.length > 0 && (
-        <div class="listing-gallery">
-          {d.gallery.map((src) => (
+    <article class="listing-detail">
+      {
+        d.premium && d.gallery.length > 0 && (
+          <div class="listing-gallery">
+            {d.gallery.map((src) => (
+              <img
+                class="listing-gallery-item"
+                src={src}
+                alt={d.name}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
+          </div>
+        )
+      }
+
+      {
+        d.premium && d.gallery.length === 0 && (
+          <div class="listing-gallery">
+            {galleryStyles.map((style) => (
+              <div class="listing-gallery-item" style={`background:${style}`} />
+            ))}
+          </div>
+        )
+      }
+
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        {category && <span class="service-chip">{category.data.name}</span>}
+        {d.premium && <span class="badge-verified">&#10003; Verified</span>}
+      </div>
+
+      <div class="listing-head">
+        {
+          d.photo && (
             <img
-              class="listing-gallery-item"
-              src={src}
-              alt={d.name}
-              loading="lazy"
+              class="listing-favicon"
+              src={d.photo}
+              alt=""
+              width="48"
+              height="48"
               decoding="async"
             />
-          ))}
-        </div>
-      )
-    }
+          )
+        }
+        <h1>{d.name}</h1>
+      </div>
 
-    {
-      d.premium && d.gallery.length === 0 && (
-        <div class="listing-gallery">
-          {galleryStyles.map((style) => (
-            <div class="listing-gallery-item" style={`background:${style}`} />
-          ))}
-        </div>
-      )
-    }
+      {d.description && <p class="page-head-desc">{d.description}</p>}
 
-    <div class="listing-head">
-      {
-        d.photo && (
-          <img
-            class="listing-favicon"
-            src={d.photo}
-            alt=""
-            width="48"
-            height="48"
-            decoding="async"
-          />
-        )
-      }
-      <h1>{d.name}</h1>
-      {d.premium && <span class="badge-premium">Premium</span>}
-    </div>
-
-    {d.description && <p class="page-head-desc">{d.description}</p>}
-
-    <ul class="listing-facts">
-      {
-        d.address && (
-          <li>
-            <strong>Address:</strong> {d.address}
-          </li>
-        )
-      }
-      {
-        d.neighborhood && (
-          <li>
-            <strong>Area served:</strong> {d.neighborhood}
-          </li>
-        )
-      }
-      {
-        d.phone && (
-          <li>
-            <strong>Phone:</strong> {d.phone}
-          </li>
-        )
-      }
-      {
-        d.hours && (
-          <li>
-            <strong>Hours:</strong> {d.hours}
-          </li>
-        )
-      }
-      {
-        d.years_in_business !== null && (
-          <li>
-            <strong>Years in business:</strong> {d.years_in_business}
-          </li>
-        )
-      }
-      {
-        d.licensed_insured && (
-          <li>
-            <strong>Licensed &amp; insured</strong> (self-reported)
-          </li>
-        )
-      }
-    </ul>
-
-    {
-      d.services.length > 0 && (
-        <div class="listing-services">
-          <h2 class="section-heading">Services</h2>
-          <ul class="service-chips">
-            {d.services.map((s) => (
-              <li class="service-chip">{s}</li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-
-    <p class="listing-actions">
-      <a
-        class="btn-primary"
-        href={visitHref}
-        target="_blank"
-        rel="nofollow noopener"
+      <div
+        class="flex flex-wrap items-center gap-4 text-sm text-(--text-dim) mt-2 mb-4"
       >
-        Visit {host}
-        <svg
-          class="arrow"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-          ><path d="M13.2 5.6 11.8 7l4 4H4v2h11.8l-4 4 1.4 1.4L19.6 12z"
-          ></path></svg
-        >
-      </a>
-    </p>
-  </article>
+        {d.premium && <span>&#10003; Edmonton Verified</span>}
+        {
+          d.google_rating !== null && (
+            <Rating
+              rating={d.google_rating}
+              count={d.google_review_count}
+              showCount={true}
+            />
+          )
+        }
+        {
+          d.years_in_business !== null && (
+            <span>{d.years_in_business} Years in Business</span>
+          )
+        }
+      </div>
 
-  {
-    d.premium && (
-      <section class="quote-section">
-        <h2 class="quote-heading">Request a Quote from {d.name}</h2>
-        <p class="section-note">
-          Send a few details and they'll get back to you.
-        </p>
-        <form class="coming-soon-form" data-coming-soon>
-          <div class="form-row">
-            <label>
-              Your name
-              <input type="text" name="name" autocomplete="name" required />
-            </label>
-            <label>
-              Phone or email
-              <input type="text" name="contact" autocomplete="email" required />
-            </label>
-          </div>
-          <label>
-            What do you need done?
-            <textarea name="message" rows="3" required />
-          </label>
-          <button type="submit" class="btn-primary">
-            Send Request
-          </button>
-          <p class="coming-soon-note" hidden>
-            Quote requests aren't live yet — check back soon.
+      <div class="listing-columns">
+        <div class="listing-main">
+          {
+            d.services.length > 0 && (
+              <div class="mb-4">
+                <h2 class="section-heading">Services Offered</h2>
+                <ul class="service-chips">
+                  {d.services.map((s) => (
+                    <li class="service-chip">{s}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+
+          {
+            d.premium && d.why_choose_us && (
+              <div class="form-card mb-4">
+                <h2 class="section-heading">Why Choose Us</h2>
+                <p class="text-(--text-dim) m-0">{d.why_choose_us}</p>
+              </div>
+            )
+          }
+
+          <p class="listing-actions">
+            <a
+              class="btn-primary"
+              href={visitHref}
+              target="_blank"
+              rel={websiteRel}
+            >
+              Visit {host}
+              <svg
+                class="arrow"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+                ><path d="M13.2 5.6 11.8 7l4 4H4v2h11.8l-4 4 1.4 1.4L19.6 12z"
+                ></path></svg
+              >
+            </a>
           </p>
-        </form>
-      </section>
-    )
-  }
+        </div>
 
-  <section class="reviews-section">
-    <h2 class="reviews-heading">Reviews of {d.name}</h2>
-    <p class="section-note">
-      Written by the community, not {d.name} — no reviews yet, be the first to leave
-      one.
-    </p>
+        <aside class="listing-sidebar">
+          <div class="form-card">
+            <h2 class="section-heading">Contact &amp; Hours</h2>
+            <ul class="listing-facts">
+              {
+                d.phone && (
+                  <li>
+                    <strong>Phone:</strong> <a href={telHref}>{d.phone}</a>
+                  </li>
+                )
+              }
+              {
+                d.email && (
+                  <li>
+                    <strong>Email:</strong>{' '}
+                    <a href={`mailto:${d.email}`}>{d.email}</a>
+                  </li>
+                )
+              }
+              <li>
+                <strong>Website:</strong>{' '}
+                <a href={visitHref} target="_blank" rel={websiteRel}>
+                  {host}
+                </a>
+              </li>
+              {
+                d.hours && (
+                  <li>
+                    <strong>Hours:</strong> {d.hours}
+                  </li>
+                )
+              }
+              {
+                d.neighborhood && (
+                  <li>
+                    <strong>Service area:</strong> {d.neighborhood}
+                  </li>
+                )
+              }
+              {
+                d.address && (
+                  <li>
+                    <strong>Address:</strong> {d.address}
+                  </li>
+                )
+              }
+              {
+                d.years_in_business !== null && (
+                  <li>
+                    <strong>Years in business:</strong> {d.years_in_business}
+                  </li>
+                )
+              }
+              {
+                d.licensed_insured && (
+                  <li>
+                    <strong>Licensed &amp; insured</strong> (self-reported)
+                  </li>
+                )
+              }
+            </ul>
 
-    <form class="coming-soon-form review-form" data-coming-soon>
-      <label>
-        Your name
-        <input type="text" name="name" autocomplete="name" required />
-      </label>
-      <label>
-        Rating
-        <select name="rating" required>
-          <option value="">Select a rating</option>
-          <option value="5">5 — Excellent</option>
-          <option value="4">4 — Good</option>
-          <option value="3">3 — Average</option>
-          <option value="2">2 — Below average</option>
-          <option value="1">1 — Poor</option>
-        </select>
-      </label>
-      <label>
-        Your review
-        <textarea name="review" rows="3" required></textarea>
-      </label>
-      <button type="submit" class="btn-primary">Submit Review</button>
-      <p class="coming-soon-note" hidden>
-        Reviews aren't live yet — check back soon.
-      </p>
-    </form>
-  </section>
+            {
+              d.premium && (
+                <>
+                  <a class="btn-accent text-white w-full mt-2" href="#quote">
+                    Request a Quote
+                  </a>
+                  <p class="hint mt-2 mb-0 text-center">
+                    Typically responds quickly
+                  </p>
+                </>
+              )
+            }
+          </div>
+        </aside>
+      </div>
+    </article>
+
+    {
+      d.premium && (
+        <section class="quote-section" id="quote">
+          <h2 class="quote-heading">Request a Quote from {d.name}</h2>
+          <p class="section-note">
+            Send a message directly to {d.name}. They typically respond quickly.
+          </p>
+          <form class="coming-soon-form" data-coming-soon>
+            <div class="form-row">
+              <label>
+                First Name
+                <input
+                  type="text"
+                  name="first_name"
+                  autocomplete="given-name"
+                  required
+                />
+              </label>
+              <label>
+                Last Name
+                <input
+                  type="text"
+                  name="last_name"
+                  autocomplete="family-name"
+                  required
+                />
+              </label>
+            </div>
+            <div class="form-row">
+              <label>
+                Email
+                <input
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  required
+                />
+              </label>
+              <label>
+                Phone Number
+                <input type="tel" name="phone" autocomplete="tel" />
+              </label>
+            </div>
+            <label>
+              Message / Project Details
+              <textarea name="message" rows="4" required />
+            </label>
+            <button
+              type="submit"
+              class="btn-accent text-white inline-block w-auto"
+            >
+              Send Request
+            </button>
+            <p class="coming-soon-note" hidden>
+              Quote requests aren't live yet — check back soon.
+            </p>
+          </form>
+        </section>
+      )
+    }
+
+    <section class="reviews-section">
+      <h2 class="reviews-heading">Reviews &amp; Testimonials</h2>
+
+      {
+        d.google_rating !== null && (
+          <p class="mb-2">
+            <Rating
+              rating={d.google_rating}
+              count={d.google_review_count}
+              showCount={true}
+            />
+          </p>
+        )
+      }
+
+      {
+        d.reviews.length > 0 ? (
+          <div class="flex flex-col gap-3 mb-4">
+            {d.reviews.map((r) => (
+              <article class="review-card">
+                <div class="flex items-center justify-between gap-2">
+                  <strong>{r.name}</strong>
+                  <Rating rating={r.rating} />
+                </div>
+                {r.location && <p class="hint mt-1 mb-2">{r.location}</p>}
+                <p class="m-0">&ldquo;{r.text}&rdquo;</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="section-note">
+            Written by the community, not {d.name} — no reviews yet, be the
+            first to leave one.
+          </p>
+        )
+      }
+
+      <form class="coming-soon-form review-form" data-coming-soon>
+        <label>
+          Your name
+          <input type="text" name="name" autocomplete="name" required />
+        </label>
+        <label>
+          Rating
+          <select name="rating" required>
+            <option value="">Select a rating</option>
+            <option value="5">5 — Excellent</option>
+            <option value="4">4 — Good</option>
+            <option value="3">3 — Average</option>
+            <option value="2">2 — Below average</option>
+            <option value="1">1 — Poor</option>
+          </select>
+        </label>
+        <label>
+          Your review
+          <textarea name="review" rows="3" required></textarea>
+        </label>
+        <button type="submit" class="btn-primary">Submit Review</button>
+        <p class="coming-soon-note" hidden>
+          Reviews aren't live yet — check back soon.
+        </p>
+      </form>
+    </section>
+  </div>
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
 
@@ -279,3 +406,57 @@ const galleryStyles =
       });
   </script>
 </BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    margin: 14px 0;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .back-link:hover {
+    color: var(--primary);
+  }
+
+  .badge-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 9999px;
+    padding: 3px 10px;
+  }
+
+  .listing-columns {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* .form-card is normally a centred, width-capped standalone form (see
+     contact.astro) — here it's reused just for its panel look, so it needs
+     to fill its grid column instead. */
+  .listing-sidebar .form-card {
+    max-width: none;
+    margin: 0;
+  }
+
+  .review-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+
+  @media (max-width: 760px) {
+    .listing-columns {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

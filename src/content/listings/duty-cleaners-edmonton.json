@@ -15,7 +15,7 @@
     "Office Commercial Cleaning",
     "Post-Construction Cleaning"
   ],
-  "premium": false,
+  "premium": true,
   "sponsored": true,
   "google_rating": 4.8,
   "google_review_count": 357

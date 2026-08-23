@@ -18,22 +18,25 @@ import type { Loader } from 'astro/loaders';
  * Free-tier listing fields, plus two independent paid add-ons:
  *
  *   premium    — unlocks the photo gallery (real `gallery` photos if
- *                supplied, else an auto-generated placeholder) and the
- *                quote-request form on the listing's own page.
+ *                supplied, else an auto-generated placeholder), the
+ *                quote-request form, the "Edmonton Verified" badge, the
+ *                custom "Why Choose Us" section, and a dofollow outbound
+ *                link on the listing's own page — see the Advertise page's
+ *                Premium Partner tier.
  *   sponsored  — places the listing in the homepage "Local Spotlight"
  *                section (see Sponsors.astro). Independent of `premium` —
  *                a business can buy either, both, or neither.
- *
- * Everything else premium (extended bio, dofollow outbound link) is still
- * a separate field set for later.
  */
 const listingSchema = z.object({
   name: z.string(),
   category: z.string().nullable().optional(),
   neighborhood: z.string().default(''),
   phone: z.string().default(''),
+  email: z.string().default(''),
   website: z.string().url(),
   description: z.string().default(''),
+  // Premium-only pitch shown in its own "Why Choose Us" section.
+  why_choose_us: z.string().default(''),
   photo: z.string().default(''),
   gallery: z.array(z.string()).default([]),
   hours: z.string().default(''),
@@ -45,6 +48,19 @@ const listingSchema = z.object({
   sponsored: z.boolean().default(false),
   services: z.array(z.string()).default([]),
   premium: z.boolean().default(false),
+  // Hand-curated, real reviews (never scraped or fabricated) — shown on the
+  // listing page if present, otherwise it falls back to the "no reviews
+  // yet" empty state with the submission form.
+  reviews: z
+    .array(
+      z.object({
+        name: z.string(),
+        location: z.string().default(''),
+        rating: z.number().min(1).max(5),
+        text: z.string(),
+      }),
+    )
+    .default([]),
   // A snapshot of the business's real public Google rating, looked up and
   // recorded manually — not fetched live (this is a static site with no
   // Google Places API key configured). Leave both null rather than guess
@@ -99,7 +115,9 @@ async function fetchAll(base: string, path: string): Promise<any[]> {
   let page = 1;
 
   for (;;) {
-    const res = await fetch(`${base}${path}${path.includes('?') ? '&' : '?'}per_page=100&page=${page}`);
+    const res = await fetch(
+      `${base}${path}${path.includes('?') ? '&' : '?'}per_page=100&page=${page}`,
+    );
     if (!res.ok) {
       throw new Error(`${path} returned ${res.status}`);
     }
@@ -123,7 +141,9 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
       const base = apiBase();
 
       if (!base) {
-        logger.info(`${kind}: using local JSON (set DIRECTORY_API to fetch instead)`);
+        logger.info(
+          `${kind}: using local JSON (set DIRECTORY_API to fetch instead)`,
+        );
         return;
       }
 
@@ -141,9 +161,11 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
             slug: row.slug,
             website: row.website ?? row.url,
             description: row.description ?? '',
+            why_choose_us: row.why_choose_us ?? '',
             category: row.category?.slug ?? undefined,
             neighborhood: row.neighborhood ?? '',
             phone: row.phone ?? '',
+            email: row.email ?? '',
             photo: row.photo ?? '',
             gallery: Array.isArray(row.gallery) ? row.gallery : [],
             hours: row.hours ?? '',
@@ -157,6 +179,7 @@ function directoryLoader(kind: 'listings' | 'categories' | 'pages'): Loader {
             sponsored: Boolean(row.sponsored),
             google_rating: row.google_rating ?? null,
             google_review_count: row.google_review_count ?? null,
+            reviews: Array.isArray(row.reviews) ? row.reviews : [],
           };
         } else if (kind === 'categories') {
           mapped = {
