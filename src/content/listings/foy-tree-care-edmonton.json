@@ -13,5 +13,7 @@
   "latitude": null,
   "longitude": null,
   "services": ["Tree Removal", "Pruning & Maintenance", "Stump Removal", "Tree Planting", "Emergency Tree Services", "Tree Health & Disease Management"],
-  "slug": "foy-tree-care-edmonton"
+  "slug": "foy-tree-care-edmonton",
+  "google_rating": 5.0,
+  "google_review_count": 267
 }

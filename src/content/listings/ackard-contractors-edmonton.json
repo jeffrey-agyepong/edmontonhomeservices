@@ -1,0 +1,21 @@
+{
+  "name": "Ackard Contractors Ltd.",
+  "category": "general-contractors",
+  "neighborhood": "",
+  "phone": "780-414-0686",
+  "website": "https://www.ackard.com/",
+  "description": "A long-running Edmonton general contractor with roughly 40 years in business, handling kitchen and bathroom remodeling, structural repairs, electrical upgrades, and other home renovation projects.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 40,
+  "licensed_insured": false,
+  "address": "10879 184 St NW, Edmonton, AB",
+  "latitude": 53.555713,
+  "longitude": -113.639006,
+  "sponsored": false,
+  "services": ["Kitchen Remodeling", "Bathroom Remodeling", "Structural Repairs", "Electrical Upgrades", "General Home Renovations"],
+  "premium": false,
+  "google_rating": 4.4,
+  "google_review_count": 50
+}

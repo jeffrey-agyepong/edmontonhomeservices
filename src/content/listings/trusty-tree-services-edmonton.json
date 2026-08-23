@@ -1,0 +1,22 @@
+{
+  "name": "Trusty Tree Services",
+  "category": "tree-removal-arborist",
+  "phone": "780-860-5500",
+  "website": "https://trustytree.ca/",
+  "description": "An Edmonton tree care company with ISA Certified Arborists providing tree removal, pruning, stump grinding, tree health assessments, and emergency tree services, as well as municipal and utility line-clearance work.",
+  "gallery": [],
+  "licensed_insured": true,
+  "address": "",
+  "services": [
+    "Tree Removal",
+    "Tree Pruning & Trimming",
+    "Stump Grinding",
+    "Tree Health Assessment",
+    "Emergency Tree Services",
+    "Cabling & Bracing"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 90
+}

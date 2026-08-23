@@ -1,0 +1,21 @@
+{
+  "name": "Handyman Reality",
+  "category": "handyman-services",
+  "neighborhood": "",
+  "phone": "780-707-5558",
+  "website": "https://www.handymanreality.com/",
+  "description": "An owner-operated Edmonton handyman business run by Don Moody since 2008, handling plumbing, electrical fixtures, drywall repair and painting, and general household repairs on a time-and-materials basis.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 18,
+  "licensed_insured": false,
+  "address": "5328 Calgary Trail NW #1554, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Plumbing Repairs", "Electrical Fixtures", "Drywall Repair & Painting", "Furniture Assembly", "Door Lock Repair", "Appliance Installation"],
+  "premium": false,
+  "google_rating": 4.9,
+  "google_review_count": 66
+}

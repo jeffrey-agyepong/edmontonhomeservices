@@ -1,0 +1,23 @@
+{
+  "name": "Action Furnace",
+  "category": "furnace-heating-repair",
+  "phone": "780-970-2777",
+  "website": "https://actionfurnace.ca/locations/edmonton/",
+  "description": "An Edmonton heating and cooling company operating since 1975, offering furnace installation, repair, and tune-ups, heat pump and AC service, duct cleaning, and water heater installation and repair, with 24/7 service availability.",
+  "gallery": [],
+  "years_in_business": 50,
+  "licensed_insured": false,
+  "address": "8441 Coronet Road, Edmonton, AB T6E 4N7",
+  "services": [
+    "Furnace Installation & Repair",
+    "Furnace Tune-Ups",
+    "Heat Pump Services",
+    "AC Installation & Repair",
+    "Duct Cleaning",
+    "Water Heater Installation & Repair"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 4451
+}

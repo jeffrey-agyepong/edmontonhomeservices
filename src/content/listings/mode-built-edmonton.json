@@ -1,0 +1,22 @@
+{
+  "name": "Mode Built",
+  "category": "basement-development",
+  "phone": "780-221-3433",
+  "website": "https://modebuilt.ca/",
+  "description": "An Edmonton renovation contractor operating for over a decade out of a northwest Edmonton design studio, handling basement development and legal basement suites alongside kitchen, bathroom, and full home remodeling.",
+  "gallery": [],
+  "years_in_business": 14,
+  "licensed_insured": false,
+  "address": "18304 105 Ave NW #207, Edmonton, AB T5S 0C6",
+  "services": [
+    "Basement Development",
+    "Legal Basement Suites",
+    "Kitchen Renovations",
+    "Bathroom Renovations",
+    "Full Home Remodeling"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 5,
+  "google_review_count": 34
+}

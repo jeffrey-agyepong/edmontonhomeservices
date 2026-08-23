@@ -1,0 +1,22 @@
+{
+  "name": "Dust Queen",
+  "category": "house-cleaning",
+  "phone": "780-448-4973",
+  "website": "https://dustqueen.com/",
+  "description": "An Edmonton house cleaning company operating since 1989, offering recurring, one-time, and move-in/move-out residential cleaning as well as commercial cleaning through its Knight Clean division.",
+  "gallery": [],
+  "years_in_business": 37,
+  "licensed_insured": false,
+  "address": "2907 Ellwood Dr SW, Edmonton, AB T6X 0B1",
+  "services": [
+    "Recurring House Cleaning",
+    "One-Time Cleaning",
+    "Move-In/Move-Out Cleaning",
+    "Deep Cleaning",
+    "Commercial Cleaning"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.3,
+  "google_review_count": 238
+}

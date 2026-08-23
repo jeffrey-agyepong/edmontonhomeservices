@@ -1,0 +1,22 @@
+{
+  "name": "Strata Electrical",
+  "category": "electricians",
+  "phone": "780-893-3902",
+  "website": "https://strataelectrical.com/",
+  "description": "An Edmonton electrical contractor serving residential, commercial, restoration, and property-management clients, staffed by Master Electricians, Journeymen, and Apprentices handling everything from outlet installs and garage wiring to commercial electrical contracting.",
+  "gallery": [],
+  "licensed_insured": false,
+  "address": "#1, 11830 152 St, Edmonton, AB T5V 1E3",
+  "services": [
+    "Residential Electrical",
+    "Commercial Electrical Contracting",
+    "Property Management Electrical Services",
+    "Restoration Electrical Work",
+    "Garage Wiring",
+    "Outlet Installation"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.9,
+  "google_review_count": 190
+}

@@ -1,0 +1,21 @@
+{
+  "name": "ProZone Ltd.",
+  "category": "snow-removal",
+  "neighborhood": "",
+  "phone": "780-452-9777",
+  "website": "https://prozoneltd.ca/",
+  "description": "A locally owned Edmonton contractor since 2009 providing commercial snow removal and sanding alongside asphalt, concrete, and landscaping supply services for commercial and municipal clients.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 17,
+  "licensed_insured": true,
+  "address": "13919 Mark Messier Trail NW, Edmonton, AB T6V 0H8",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Commercial Snow Removal", "Sanding & De-Icing", "Asphalt & Concrete Repair", "Parking Lot Maintenance", "Landscaping Supplies"],
+  "premium": false,
+  "google_rating": 4.9,
+  "google_review_count": 54
+}

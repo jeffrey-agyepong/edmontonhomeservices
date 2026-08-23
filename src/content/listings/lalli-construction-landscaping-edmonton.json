@@ -1,0 +1,21 @@
+{
+  "name": "Lalli Construction & Landscaping Ltd.",
+  "category": "snow-removal",
+  "neighborhood": "",
+  "phone": "780-908-4000",
+  "website": "https://www.lclcanada.ca/",
+  "description": "An Edmonton design-build landscaping and construction company founded in 2012, offering residential and commercial landscaping, lot grading, and seasonal commercial snow removal.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 14,
+  "licensed_insured": false,
+  "address": "Unit #201, 8724 51 Ave NW, Edmonton, AB T6E 5E8",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Snow Removal", "Landscaping Design & Build", "Lot Grading", "Irrigation & Lighting", "Commercial Construction"],
+  "premium": false,
+  "google_rating": 4.6,
+  "google_review_count": 111
+}

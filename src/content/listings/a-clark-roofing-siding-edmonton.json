@@ -1,0 +1,23 @@
+{
+  "name": "A. Clark Roofing & Siding",
+  "category": "roofing-roof-repair",
+  "phone": "780-465-7571",
+  "website": "https://www.aclark.ca/",
+  "description": "An Edmonton roofing and siding contractor operating since 1953, handling roof repair, installation, inspections, and maintenance across residential and commercial properties, plus siding, eavestroughs, and insurance claims work.",
+  "gallery": [],
+  "years_in_business": 70,
+  "licensed_insured": false,
+  "address": "3120 93 St NW, Edmonton, AB T6N 1C7",
+  "services": [
+    "Roof Repair",
+    "Roof Installation",
+    "Roof Inspections",
+    "Siding Installation & Repair",
+    "Eavestroughs & Gutters",
+    "Insurance Claims Assistance"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.4,
+  "google_review_count": 377
+}

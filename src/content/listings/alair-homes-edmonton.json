@@ -1,0 +1,21 @@
+{
+  "name": "Alair Homes Edmonton",
+  "category": "basement-development",
+  "neighborhood": "",
+  "phone": "780-809-4501",
+  "website": "https://www.alairhomes.ca/edmonton/",
+  "description": "The Edmonton branch of the Alair Homes design-build franchise, handling custom home builds and whole-home renovations including basement developments, additions, and major remodels.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "178 St NW, Edmonton, AB",
+  "latitude": 53.5497167,
+  "longitude": -113.6279473,
+  "sponsored": false,
+  "services": ["Basement Development", "Custom Home Building", "Whole-Home Renovations", "Home Additions", "Design-Build Services"],
+  "premium": false,
+  "google_rating": 4.6,
+  "google_review_count": 60
+}

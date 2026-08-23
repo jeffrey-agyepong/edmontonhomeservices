@@ -1,0 +1,22 @@
+{
+  "name": "Home Services Edmonton Ltd.",
+  "category": "handyman-services",
+  "phone": "780-239-1355",
+  "website": "https://www.homeservicesedmonton.com/",
+  "description": "An Edmonton handyman company run by owner Franz, handling general home repairs and maintenance, drywall and taping, interior painting and carpentry, and small renovation and flooring jobs.",
+  "gallery": [],
+  "licensed_insured": false,
+  "address": "Orchards Blvd SW, Edmonton, AB T6X 2B7",
+  "services": [
+    "Home Repairs & Maintenance",
+    "Drywall & Taping",
+    "Interior Painting",
+    "Trim & Door Installation",
+    "Small Renovations",
+    "Flooring"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 5.0,
+  "google_review_count": 77
+}

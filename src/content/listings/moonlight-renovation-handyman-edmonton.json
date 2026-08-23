@@ -1,0 +1,21 @@
+{
+  "name": "Moonlight Renovation and Handyman Services",
+  "category": "handyman-services",
+  "phone": "780-616-0280",
+  "website": "https://www.moonlightcontractor.com/",
+  "description": "An Edmonton handyman and renovation company offering home repairs, flooring and tile installation, drywall work, and general improvements for residential clients.",
+  "gallery": [],
+  "licensed_insured": false,
+  "address": "16408 115 St NW #30, Edmonton, AB T5X 3W7",
+  "services": [
+    "General Handyman Repairs",
+    "Flooring & Tile Installation",
+    "Drywall Installation & Repair",
+    "Home Renovations",
+    "Smart Home Device Installation"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 44
+}

@@ -1,0 +1,16 @@
+{
+  "name": "General Landscape",
+  "category": "landscaping-lawn-care",
+  "phone": "587-588-6641",
+  "website": "https://generallandscape.ca/",
+  "description": "An Edmonton landscaping and property maintenance company offering lawn maintenance, spring and fall cleanups, tree and shrub services, grading and drainage repair, sod and landscape lighting, and fence and deck construction.",
+  "gallery": [],
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "",
+  "services": ["Lawn Maintenance", "Spring & Fall Cleanup", "Tree & Shrub Services", "Grading & Drainage Repair", "Sod & Landscape Lighting", "Fence & Deck Construction"],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.6,
+  "google_review_count": 46
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Mow Town Edmonton",
+  "category": "snow-removal",
+  "phone": "587-254-3773",
+  "website": "https://mowtownedmonton.com/",
+  "description": "A Consumer Choice Award-winning Edmonton company providing residential and commercial snow removal, including plowing, sidewalk clearing, and de-icing for multi-family, retail, and industrial properties, alongside seasonal lawn care.",
+  "gallery": [],
+  "years_in_business": 10,
+  "licensed_insured": false,
+  "address": "12829 52 St NW, Edmonton, AB T5A 3P8",
+  "services": [
+    "Residential Snow Removal",
+    "Commercial Snow Removal",
+    "Snow Plowing",
+    "Sidewalk & Walkway Clearing",
+    "De-icing",
+    "Lawn Mowing"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 5.0,
+  "google_review_count": 104
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Gorilla Property Services",
+  "category": "snow-removal",
+  "neighborhood": "",
+  "phone": "780-851-7213",
+  "website": "https://gorillapropertyservices.com/franchisees/edmonton-property-services/",
+  "description": "A locally owned and operated Edmonton property maintenance franchise offering commercial and residential snow removal and salting alongside pressure washing, gutter and window cleaning, and year-round exterior maintenance.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": true,
+  "address": "Suite 20, 14811 114 Ave, Edmonton, AB T5M 4E5",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Snow Removal & Salting", "Pressure Washing", "Gutter Cleaning", "Window Cleaning", "Roof Cleaning & Moss Removal", "Property Maintenance"],
+  "premium": false,
+  "google_rating": 4.9,
+  "google_review_count": 100
+}

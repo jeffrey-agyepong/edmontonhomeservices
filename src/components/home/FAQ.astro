@@ -2,19 +2,19 @@
 const faqs = [
   {
     question: 'Is it free to use?',
-    answer: "Yes — browsing the directory and requesting quotes is completely free for homeowners. There's no cost or account required to search, view listings, or contact a business.",
+    answer: "Yes, browsing the directory and requesting quotes is completely free for homeowners. There's no cost or account required to search, view listings, or contact a business.",
   },
   {
     question: 'How do I request a quote from a business?',
-    answer: "Visit any business's profile and use the quote-request form or the contact info listed there to reach out directly — no login needed.",
+    answer: "Visit any business's profile and use the quote-request form or the contact info listed there to reach out directly. No login needed.",
   },
   {
     question: 'Can I leave a review?',
-    answer: "Yes — reviews can be submitted on any business's profile page. A quick email verification step helps keep reviews genuine.",
+    answer: "Yes, reviews can be submitted on any business's profile page. A quick email verification step helps keep reviews genuine.",
   },
   {
     question: 'Do you cover St. Albert, Sherwood Park, or just Edmonton proper?',
-    answer: "The directory is focused on Edmonton, but many listed businesses also serve nearby communities like St. Albert and Sherwood Park — check each business's profile for their specific service area.",
+    answer: "The directory is focused on Edmonton, but many listed businesses also serve nearby communities like St. Albert and Sherwood Park. Check each business's profile for their specific service area.",
   },
 ];
 ---
@@ -30,7 +30,8 @@ const faqs = [
     {faqs.map(({ question, answer }) => (
       <details class="faq-item">
         <summary class="faq-question text-lg font-bold text-(--primary) cursor-pointer">
-          {question}
+          <span>{question}</span>
+          <span class="faq-icon" aria-hidden="true"></span>
         </summary>
         <p class="faq-answer text-(--text-dim) mt-2">{answer}</p>
       </details>
@@ -48,15 +49,53 @@ const faqs = [
   .faq-item {
     display: block;
     background: var(--panel-head);
-    padding: 0.75rem 1rem;
+    padding: 1.5rem 1rem;
     border-radius: 0.5rem;
   }
 
   .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     list-style: none;
   }
 
   .faq-question::-webkit-details-marker {
     display: none;
+  }
+
+  .faq-icon {
+    position: relative;
+    flex: 0 0 auto;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: currentColor;
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+  }
+
+  .faq-icon::before {
+    width: 0.75rem;
+    height: 3px;
+  }
+
+  .faq-icon::after {
+    width: 3px;
+    height: 0.75rem;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
   }
 </style>

@@ -1,0 +1,21 @@
+{
+  "name": "Always Plumbing & Heating",
+  "category": "plumbers",
+  "neighborhood": "",
+  "phone": "587-742-1359",
+  "website": "https://alwaysplumbing.ca/",
+  "description": "An Edmonton plumbing, heating, and cooling company serving the area since 1998, providing residential plumbing repairs, furnace service, and air conditioning work.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 28,
+  "licensed_insured": false,
+  "address": "17633 114 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Residential Plumbing", "Furnace Service", "Air Conditioning", "Drain Cleaning", "Heating Repair"],
+  "premium": false,
+  "google_rating": 4.7,
+  "google_review_count": 3745
+}

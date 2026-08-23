@@ -1,6 +1,5 @@
 ---
 import { getPopulatedCategories } from '../../lib/categories';
-import { sortListings } from '../../lib/sort';
 import { placeholderGradient } from '../../lib/placeholder';
 import Rating from '../Rating.astro';
 
@@ -16,9 +15,14 @@ const populated = await getPopulatedCategories();
 // just trimmed down for a homepage teaser card.
 const TEASER_LISTINGS = 3;
 
+// Prefer shorter company names for the teaser — long names wrap awkwardly
+// in these compact cards. Alphabetical is the tiebreak for equal lengths.
+const byShortName = (a: (typeof populated)[number]['listings'][number], b: typeof a) =>
+  a.data.name.length - b.data.name.length || a.data.name.localeCompare(b.data.name);
+
 const cards = populated.map(({ category, listings }) => ({
   category,
-  listings: sortListings(listings, 'name').slice(0, TEASER_LISTINGS),
+  listings: [...listings].sort(byShortName).slice(0, TEASER_LISTINGS),
 }));
 ---
 <section class="relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel-head) py-10">
@@ -36,17 +40,17 @@ const cards = populated.map(({ category, listings }) => ({
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"
     >
       {cards.map(({ category, listings }) => (
-        <div class="category-card rounded-lg border border-(--line) bg-(--bg) p-6">
-          <a class="no-underline" href={categoryHref(category.id)}>
-            <h3 class="text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">{category.data.name}</h3>
+        <div class="category-card rounded-xl border border-(--line) bg-(--bg) p-6 shadow-2xl flex flex-col h-full">
+          <a class="category-card-title-wrap no-underline" href={categoryHref(category.id)}>
+            <h3 class="category-card-title text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">{category.data.name}</h3>
           </a>
-          {category.data.description && (
-            <p class="text-(--text-dim) text-left text-base sm:text-lg mt-0 mb-2">
-              {category.data.description}
+          <div class="category-card-desc-wrap">
+            <p class="category-card-desc text-(--text-dim) text-left text-base sm:text-sm mt-0 mb-2">
+              {category.data.description ?? ''}
             </p>
-          )}
+          </div>
 
-          <div class="category-listings mt-4">
+          <div class="category-listings mt-4 flex-1">
             {listings.map(({ id, data: d }, i) =>
               i === 0 ? (
                 <a class="category-listing category-listing--featured no-underline" href={listingHref(id)}>
@@ -58,9 +62,9 @@ const cards = populated.map(({ category, listings }) => ({
                         </div>}
                   </div>
                   <div>
-                    <p class="category-listing-name text-(--text)">{d.name}</p>
+                    <p class="category-listing-name text-(--text) font-bold">{d.name}</p>
                     <Rating rating={d.google_rating} count={d.google_review_count} showCount />
-                    {d.description && <p class="category-listing-desc text-(--text-dim)">{d.description}</p>}
+                    <p class="category-listing-desc text-(--text-dim)">{d.description ?? ''}</p>
                   </div>
                 </a>
               ) : (
@@ -94,6 +98,49 @@ const cards = populated.map(({ category, listings }) => ({
   /* Structure only — no color, type, or decoration beyond what's needed for
      the placeholder initial to read against its gradient. */
 
+  /* Reserve space for two title lines and two description lines so every
+     card's title/description block ends at the same height, regardless of
+     how long the category name or copy is. Text bottom-aligns within the
+     reserved box so a short one-line title/description sits right above
+     the next section instead of leaving a blank line beneath it. */
+  .category-card-title-wrap {
+    display: flex;
+    align-items: flex-end;
+    min-height: 3.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .category-card-title-wrap {
+      min-height: 4rem;
+    }
+  }
+
+  .category-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .category-card-desc-wrap {
+    display: flex;
+    align-items: flex-end;
+    min-height: 3rem;
+  }
+
+  @media (min-width: 640px) {
+    .category-card-desc-wrap {
+      min-height: 2.5rem;
+    }
+  }
+
+  .category-card-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .category-listings {
     display: flex;
     flex-direction: column;
@@ -102,6 +149,8 @@ const cards = populated.map(({ category, listings }) => ({
 
   .category-listing {
     display: block;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.75rem;
   }
 
   .category-listing--compact {
@@ -155,10 +204,12 @@ const cards = populated.map(({ category, listings }) => ({
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 1.25em;
   }
 
   .category-view-all {
     display: inline-block;
     margin-top: 0.75rem;
+    text-decoration: none;
   }
 </style>

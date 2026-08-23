@@ -1,0 +1,21 @@
+{
+  "name": "Alberta Painting LTD",
+  "category": "painters-painting-contractors",
+  "neighborhood": "",
+  "phone": "780-297-5322",
+  "website": "https://albertapaintingltd.ca/",
+  "description": "A family-operated Edmonton painting company serving the city since 1995, offering interior and exterior residential, commercial, and industrial painting along with cabinet refinishing, stucco painting, and drywall repair.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 31,
+  "licensed_insured": false,
+  "address": "8033 Evans Cres NW, Edmonton, AB T6M 0T7",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Interior Painting", "Exterior Painting", "Cabinet Painting & Refinishing", "Stucco Painting", "Wallpaper Removal", "Drywall Repair"],
+  "premium": false,
+  "google_rating": 5.0,
+  "google_review_count": 193
+}

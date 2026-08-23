@@ -13,5 +13,7 @@
   "services": ["Kitchen Renovations", "Bathroom Renovations", "Basement Development", "Exterior Renovations", "Decks & Outdoor Spaces"],
   "latitude": null,
   "longitude": null,
-  "slug": "diamond-contracting-edmonton"
+  "slug": "diamond-contracting-edmonton",
+  "google_rating": 4.4,
+  "google_review_count": 22
 }

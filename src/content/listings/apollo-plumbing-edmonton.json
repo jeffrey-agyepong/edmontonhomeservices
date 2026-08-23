@@ -1,0 +1,16 @@
+{
+  "name": "Apollo Plumbing",
+  "category": "plumbers",
+  "phone": "780-200-6870",
+  "website": "https://apolloplumbing.ca/",
+  "description": "An Edmonton-area residential and commercial plumbing and heating company serving the region since 1969, offering 24/7 emergency plumbing, drain cleaning, water heater repair and replacement, furnace repair, and sump pump service.",
+  "gallery": [],
+  "years_in_business": 57,
+  "licensed_insured": true,
+  "address": "14507 130 Ave NW, Edmonton, AB T5L 3M5",
+  "services": ["Emergency Plumbing", "Drain Cleaning & Repair", "Water Heater Repair & Replacement", "Furnace Repair & Replacement", "Sump Pump Service", "General Plumbing Repair"],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 703
+}

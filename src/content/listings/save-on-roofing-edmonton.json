@@ -1,0 +1,22 @@
+{
+  "name": "Save On Roofing",
+  "category": "roofing-roof-repair",
+  "phone": "780-257-6526",
+  "website": "https://www.saveonroofing.ca/",
+  "description": "An Edmonton roofing contractor with over 30 years of combined experience, offering roof replacement, repair, and leak inspection along with soffit, fascia, eavestrough, and siding installation.",
+  "gallery": [],
+  "years_in_business": 30,
+  "licensed_insured": true,
+  "address": "45-5250 Chappelle Rd SW, Edmonton, AB T6W 5A5",
+  "services": [
+    "Roof Replacement",
+    "Roof Repair & Leak Inspection",
+    "Soffit & Fascia Installation",
+    "Eavestrough Installation",
+    "Siding Installation"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.9,
+  "google_review_count": 99
+}

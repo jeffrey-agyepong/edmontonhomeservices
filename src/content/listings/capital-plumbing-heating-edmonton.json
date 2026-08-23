@@ -1,0 +1,21 @@
+{
+  "name": "Capital Plumbing & Heating",
+  "category": "plumbers",
+  "neighborhood": "",
+  "phone": "780-451-5666",
+  "website": "https://capitalplumbing.ca/",
+  "description": "An Edmonton plumbing and heating company operating since 2001, offering 24/7 residential and commercial plumbing, drain, and furnace repair services.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": 25,
+  "licensed_insured": false,
+  "address": "14843 118 Ave NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Emergency Plumbing", "Drain Cleaning", "Water Heater Service", "Furnace Repair", "Residential & Commercial Plumbing"],
+  "premium": false,
+  "google_rating": 4.8,
+  "google_review_count": 1651
+}

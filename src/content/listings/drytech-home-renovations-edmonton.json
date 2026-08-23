@@ -1,0 +1,21 @@
+{
+  "name": "Drytech Home Renovations",
+  "category": "basement-development",
+  "neighborhood": "",
+  "phone": "587-713-0354",
+  "website": "https://drytechinteriors.com/",
+  "description": "An Edmonton home renovation contractor specializing in basement development, along with kitchen, bathroom, and legal suite projects for local homeowners.",
+  "photo": "",
+  "gallery": [],
+  "hours": "",
+  "years_in_business": null,
+  "licensed_insured": false,
+  "address": "7703 69 St NW, Edmonton, AB",
+  "latitude": null,
+  "longitude": null,
+  "sponsored": false,
+  "services": ["Basement Development", "Legal Suites", "Kitchen Renovation", "Bathroom Renovation"],
+  "premium": false,
+  "google_rating": 5.0,
+  "google_review_count": 36
+}

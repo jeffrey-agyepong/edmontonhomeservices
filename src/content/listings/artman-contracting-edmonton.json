@@ -1,0 +1,16 @@
+{
+  "name": "Artman Contracting Ltd.",
+  "category": "general-contractors",
+  "phone": "780-462-5808",
+  "website": "https://www.artman-contracting.com/",
+  "description": "An Edmonton general contracting company handling residential and commercial renovations, including basement development, kitchen and bathroom renovations, full home remodeling, and commercial maintenance work.",
+  "gallery": [],
+  "years_in_business": null,
+  "licensed_insured": true,
+  "address": "3911 Chrustawka Pl SW, Edmonton, AB T6W 5K6",
+  "services": ["Basement Development", "Kitchen Renovations", "Bathroom Renovations", "Full Home Remodeling", "Commercial Maintenance", "Handyman Services"],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 5.0,
+  "google_review_count": 44
+}

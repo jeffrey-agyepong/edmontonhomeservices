@@ -1,0 +1,23 @@
+{
+  "name": "Modern Air & Water",
+  "category": "furnace-heating-repair",
+  "phone": "780-475-6484",
+  "website": "https://modernairwater.com/furnace-repair/",
+  "description": "An Edmonton HVAC and plumbing company operating since 1976, providing furnace repair, installation, and maintenance along with air conditioning, hot water tank, duct cleaning, and indoor air quality services.",
+  "gallery": [],
+  "years_in_business": 50,
+  "licensed_insured": false,
+  "address": "#4, 16327 130 Ave NW, Edmonton, AB T5V 1K5",
+  "services": [
+    "Furnace Repair",
+    "Furnace Installation",
+    "Air Conditioning Repair",
+    "Duct Cleaning",
+    "Hot Water Tank Replacement",
+    "Indoor Air Quality"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 250
+}

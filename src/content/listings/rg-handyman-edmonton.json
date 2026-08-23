@@ -13,5 +13,7 @@
   "latitude": null,
   "longitude": null,
   "services": ["Drywall Repair", "House Maintenance", "Plumbing Repairs", "Electrical", "Assembly Services"],
-  "slug": "rg-handyman-edmonton"
+  "slug": "rg-handyman-edmonton",
+  "google_rating": 5.0,
+  "google_review_count": 17
 }

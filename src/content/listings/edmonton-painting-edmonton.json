@@ -1,0 +1,16 @@
+{
+  "name": "Edmonton Painting",
+  "category": "painters-painting-contractors",
+  "phone": "587-400-7009",
+  "website": "https://www.edmonton-painting.com/",
+  "description": "An Edmonton painting company with 14 years of experience offering interior, exterior, commercial, and condominium painting services, with over 1,900 houses painted to date.",
+  "gallery": [],
+  "years_in_business": 14,
+  "licensed_insured": false,
+  "address": "6444 157 Ave NW, Edmonton, AB T5Y 2N5",
+  "services": ["Interior Painting", "Exterior Painting", "Commercial Painting", "Condominium Painting", "House Painting"],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 54
+}

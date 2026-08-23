@@ -14,5 +14,7 @@
   "longitude": null,
   "slug": "alta-home-basement-development-edmonton",
   "premium": false,
-  "services": ["Legal Basement Suites", "Home Theatres", "Wet Bars", "Home Gyms", "Extra Bedrooms", "Saunas & Steam Rooms"]
+  "services": ["Legal Basement Suites", "Home Theatres", "Wet Bars", "Home Gyms", "Extra Bedrooms", "Saunas & Steam Rooms"],
+  "google_rating": 4.8,
+  "google_review_count": 48
 }

@@ -1,0 +1,23 @@
+{
+  "name": "McDonald Electrical Services",
+  "category": "electricians",
+  "phone": "780-292-1531",
+  "website": "https://mcdonaldelectricalservices.ca/",
+  "description": "An Edmonton residential electrical company run by a Certified Master Electrician, offering panel upgrades, LED lighting, EV charger installation, and basement, garage, and renovation wiring, with a 5-year warranty on work. States on its website that it is fully licensed and insured.",
+  "gallery": [],
+  "years_in_business": 7,
+  "licensed_insured": true,
+  "address": "10212 74 St NW, Edmonton, AB T6E 3Z7",
+  "services": [
+    "Panel & Service Upgrades",
+    "LED Lighting Installation",
+    "EV Charger Installation",
+    "Basement & Renovation Wiring",
+    "Garage Wiring",
+    "Residential Electrical Repairs"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 5.0,
+  "google_review_count": 33
+}

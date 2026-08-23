@@ -1,0 +1,22 @@
+{
+  "name": "Hawk Construction and Renovations Ltd.",
+  "category": "basement-development",
+  "phone": "780-650-2000",
+  "website": "https://hawkrenovations.ca/",
+  "description": "An Edmonton basement development contractor building legal basement suites with permits and custom basement finishes, also offering kitchen and bathroom renovations, finishing carpentry, and interior painting. States on its website that it is licensed and insured.",
+  "gallery": [],
+  "licensed_insured": true,
+  "address": "6075 180 Ave NW, Edmonton, AB T5Y 3X1",
+  "services": [
+    "Legal Basement Suite Construction",
+    "Basement Finishing",
+    "Kitchen Renovations",
+    "Bathroom Renovations",
+    "Finishing Carpentry",
+    "Interior Painting"
+  ],
+  "premium": false,
+  "sponsored": false,
+  "google_rating": 4.8,
+  "google_review_count": 22
+}
