@@ -18,5 +18,19 @@
   "premium": true,
   "sponsored": true,
   "google_rating": 4.8,
-  "google_review_count": 357
+  "google_review_count": 357,
+  "reviews": [
+    {
+      "name": "Sample Review",
+      "location": "",
+      "rating": 5,
+      "text": "PLACEHOLDER — not a real customer review. Replace this via Keystatic once a genuine, hand-verified review is available."
+    },
+    {
+      "name": "Sample Review",
+      "location": "",
+      "rating": 5,
+      "text": "PLACEHOLDER — not a real customer review. Replace this via Keystatic once a genuine, hand-verified review is available."
+    }
+  ]
 }

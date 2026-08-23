@@ -99,6 +99,27 @@ const galleryStyles =
         )
       }
 
+      {
+        !d.premium && d.photo && (
+          <div class="listing-photo-single">
+            <img src={d.photo} alt={d.name} loading="lazy" decoding="async" />
+          </div>
+        )
+      }
+
+      {
+        !d.premium && !d.photo && (
+          <div class="listing-photo-single">
+            <div
+              class="listing-photo-single-placeholder"
+              style={`background:${placeholderGradient(listing.id)}`}
+            >
+              <span>{d.name.charAt(0)}</span>
+            </div>
+          </div>
+        )
+      }
+
       <div class="flex flex-wrap items-center gap-2 mb-2">
         {category && <span class="service-chip">{category.data.name}</span>}
         {d.premium && <span class="badge-verified">&#10003; Verified</span>}
@@ -117,7 +138,9 @@ const galleryStyles =
             />
           )
         }
-        <h1>{d.name}</h1>
+        <div class="listing-head-text">
+          <h1>{d.name}</h1>
+        </div>
       </div>
 
       {d.description && <p class="page-head-desc">{d.description}</p>}
@@ -160,7 +183,7 @@ const galleryStyles =
           {
             d.premium && d.why_choose_us && (
               <div class="form-card mb-4">
-                <h2 class="section-heading">Why Choose Us</h2>
+                <h2 class="section-heading mt-0">Why Choose Us</h2>
                 <p class="text-(--text-dim) m-0">{d.why_choose_us}</p>
               </div>
             )
@@ -184,11 +207,86 @@ const galleryStyles =
               >
             </a>
           </p>
+
+          {
+            d.premium && (
+              <section class="quote-section" id="quote">
+                <h2 class="quote-heading">Request a Quote from {d.name}</h2>
+                <p class="section-note">
+                  Send a message directly to {d.name}. They typically respond
+                  quickly.
+                </p>
+                <form class="coming-soon-form" data-coming-soon>
+                  <div class="form-row">
+                    <label>
+                      First Name
+                      <input
+                        type="text"
+                        name="first_name"
+                        autocomplete="given-name"
+                        placeholder="Jane"
+                        required
+                      />
+                    </label>
+                    <label>
+                      Last Name
+                      <input
+                        type="text"
+                        name="last_name"
+                        autocomplete="family-name"
+                        placeholder="Doe"
+                        required
+                      />
+                    </label>
+                  </div>
+                  <div class="form-row">
+                    <label>
+                      Email
+                      <input
+                        type="email"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="jane@example.com"
+                        required
+                      />
+                    </label>
+                    <label>
+                      Phone Number
+                      <input
+                        type="tel"
+                        name="phone"
+                        autocomplete="tel"
+                        placeholder="(780) 555-0123"
+                      />
+                    </label>
+                  </div>
+                  <label>
+                    Message / Project Details
+                    <textarea
+                      name="message"
+                      rows="4"
+                      placeholder="Tell us about what you need help with..."
+                      required
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    class="btn-accent text-white inline-block w-auto"
+                  >
+                    Send Request
+                  </button>
+                  <p class="coming-soon-note" hidden>
+                    Quote requests aren't live yet — check back soon.
+                  </p>
+                </form>
+              </section>
+            )
+          }
         </div>
 
         <aside class="listing-sidebar">
           <div class="form-card">
-            <h2 class="section-heading">Contact &amp; Hours</h2>
+            <h2 class="section-heading mt-0">Contact &amp; Hours</h2>
             <ul class="listing-facts">
               {
                 d.phone && (
@@ -265,67 +363,6 @@ const galleryStyles =
       </div>
     </article>
 
-    {
-      d.premium && (
-        <section class="quote-section" id="quote">
-          <h2 class="quote-heading">Request a Quote from {d.name}</h2>
-          <p class="section-note">
-            Send a message directly to {d.name}. They typically respond quickly.
-          </p>
-          <form class="coming-soon-form" data-coming-soon>
-            <div class="form-row">
-              <label>
-                First Name
-                <input
-                  type="text"
-                  name="first_name"
-                  autocomplete="given-name"
-                  required
-                />
-              </label>
-              <label>
-                Last Name
-                <input
-                  type="text"
-                  name="last_name"
-                  autocomplete="family-name"
-                  required
-                />
-              </label>
-            </div>
-            <div class="form-row">
-              <label>
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  autocomplete="email"
-                  required
-                />
-              </label>
-              <label>
-                Phone Number
-                <input type="tel" name="phone" autocomplete="tel" />
-              </label>
-            </div>
-            <label>
-              Message / Project Details
-              <textarea name="message" rows="4" required />
-            </label>
-            <button
-              type="submit"
-              class="btn-accent text-white inline-block w-auto"
-            >
-              Send Request
-            </button>
-            <p class="coming-soon-note" hidden>
-              Quote requests aren't live yet — check back soon.
-            </p>
-          </form>
-        </section>
-      )
-    }
-
     <section class="reviews-section">
       <h2 class="reviews-heading">Reviews &amp; Testimonials</h2>
 
@@ -342,8 +379,17 @@ const galleryStyles =
       }
 
       {
+        d.reviews.some((r) => r.text.startsWith('PLACEHOLDER')) && (
+          <p class="hint mb-2">
+            ⚠ Preview data — the reviews below are placeholders, not real
+            customer feedback.
+          </p>
+        )
+      }
+
+      {
         d.reviews.length > 0 ? (
-          <div class="flex flex-col gap-3 mb-4">
+          <div class="flex flex-col gap-3">
             {d.reviews.map((r) => (
               <article class="review-card">
                 <div class="flex items-center justify-between gap-2">
@@ -362,11 +408,22 @@ const galleryStyles =
           </p>
         )
       }
+    </section>
+
+    <section class="reviews-section">
+      <h2 class="reviews-heading">Write a Review</h2>
+      <p class="section-note">Share your own experience with {d.name}.</p>
 
       <form class="coming-soon-form review-form" data-coming-soon>
         <label>
           Your name
-          <input type="text" name="name" autocomplete="name" required />
+          <input
+            type="text"
+            name="name"
+            autocomplete="name"
+            placeholder="Jane Doe"
+            required
+          />
         </label>
         <label>
           Rating
@@ -381,7 +438,11 @@ const galleryStyles =
         </label>
         <label>
           Your review
-          <textarea name="review" rows="3" required></textarea>
+          <textarea
+            name="review"
+            rows="3"
+            placeholder="Share your experience with this business..."
+            required></textarea>
         </label>
         <button type="submit" class="btn-primary">Submit Review</button>
         <p class="coming-soon-note" hidden>
@@ -447,6 +508,39 @@ const galleryStyles =
     margin: 0;
   }
 
+  /* Stays in view as the left column scrolls past Why Choose Us/Services, so
+     it ends up sitting next to the Request a Quote form lower down instead
+     of being left behind at the top. */
+  .listing-sidebar {
+    position: sticky;
+    top: 90px;
+  }
+
+  /* Basic Listing tier only includes 1 profile photo (see /advertise) — a
+     single modest photo, not the premium multi-photo gallery collage. */
+  .listing-photo-single {
+    margin: 0 0 16px;
+  }
+  .listing-photo-single img,
+  .listing-photo-single-placeholder {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .listing-photo-single-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .listing-photo-single-placeholder span {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgb(255 255 255 / 0.9);
+  }
+
   .review-card {
     background: var(--panel);
     border: 1px solid var(--line);
@@ -457,6 +551,9 @@ const galleryStyles =
   @media (max-width: 760px) {
     .listing-columns {
       grid-template-columns: 1fr;
+    }
+    .listing-sidebar {
+      position: static;
     }
   }
 </style>
