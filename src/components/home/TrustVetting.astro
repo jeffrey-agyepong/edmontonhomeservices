@@ -1,0 +1,70 @@
+---
+// Deliberately scoped to only claim what the site actually does today.
+// Do not reword these without checking with whoever owns the copy.
+const checklist: string[] = [
+  'We verify every business is still active.',
+  'We note licensing, insurance, and certifications.',
+  'Featured placement never lowers our standards.',
+];
+---
+
+<section class="wrap py-14 md:py-20">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <div>
+      <span
+        class="inline-block rounded-full bg-(--accent)/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-(--accent) mb-4"
+      >
+        How we curate
+      </span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-left">
+        Vetted by locals, not scraped from Google.
+      </h2>
+      <p
+        class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl mb-6"
+      >
+        Every business on this site is reviewed by a real person before it's
+        listed, not pulled in bulk.
+      </p>
+
+      <ul class="flex flex-col gap-6 list-none p-0 m-0">
+        {
+          checklist.map((text) => (
+            <li class="flex items-start gap-3">
+              <span class="h-2.5 w-2.5 rounded-full bg-(--primary) flex-none mt-2" />
+              <span class="text-(--text) text-base sm:text-lg">{text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <!--
+        Placeholder graphic, not a real photo. Replace with real, local
+        Edmonton photography (a real listed business, a real job site,
+        etc.) before launch, consistent with the site's
+        no-stock-photography direction. Rendered as a styled box (not an
+        <img src> to a nonexistent file) so it doesn't 404 in the
+        meantime.
+      -->
+      <div
+        class="w-full h-full min-h-96 rounded-xl bg-(--panel-head) flex items-center justify-center"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--text-dim)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-14 w-14"
+          aria-hidden="true"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+          <circle cx="9" cy="9" r="2"></circle>
+          <path d="m21 15-5-5L5 21"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
