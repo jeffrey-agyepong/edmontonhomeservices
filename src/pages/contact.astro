@@ -1,5 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
@@ -9,6 +12,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section
     class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
   >
+    <Breadcrumbs
+      variant="hero"
+      items={[{ label: 'Home', href: base }, { label: 'Contact' }]}
+    />
     <h1
       class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
     >

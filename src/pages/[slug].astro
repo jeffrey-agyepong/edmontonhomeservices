@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 /*
  * The editable pages — about, privacy, terms.
@@ -19,6 +20,7 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 // First sentence of the body, tags stripped, as the meta description.
 const description = page.data.body
@@ -29,6 +31,10 @@ const description = page.data.body
 ---
 
 <BaseLayout title={page.data.title} description={description}>
+  <Breadcrumbs
+    items={[{ label: 'Home', href: base }, { label: page.data.title }]}
+  />
+
   <article class="page-body">
     <h1>{page.data.title}</h1>
     <Fragment set:html={page.data.body} />

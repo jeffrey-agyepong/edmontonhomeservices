@@ -1,0 +1,100 @@
+---
+export interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  // "hero": light text for use inside the green bg-emerald-800 banner
+  // sections (about/contact/advertise/categories/submit-business/c pages).
+  // "plain": muted text for pages with no colored banner (search, the
+  // generic CMS [slug] pages).
+  variant?: 'hero' | 'plain';
+  // Wraps the trail in its own full-bleed bordered strip instead of sitting
+  // as plain text in the page flow. Used on the listing page, which has no
+  // hero banner to anchor the trail to otherwise. Implemented with
+  // display:contents on the wrapper (rather than branching the whole tree)
+  // so there's exactly one copy of the crumb markup regardless of this
+  // prop — Astro doesn't allow JSX-style <> fragments to be hoisted into a
+  // frontmatter variable and reused across two template branches.
+  bar?: boolean;
+}
+
+const { items, variant = 'plain', bar = false } = Astro.props;
+const isHero = variant === 'hero';
+
+const navClass = `flex items-center gap-2 text-sm ${bar ? '' : 'mb-4'} ${
+  isHero ? 'text-white/85' : 'text-(--text-dim)'
+}`;
+
+// The <a> tags need their own explicit color, not just the inherited one
+// from .navClass on the parent <nav> — the sitewide `a { color:
+// var(--primary) }` rule (see app.css) targets anchors directly, and a
+// direct rule on the element always beats an inherited value regardless of
+// layer order. Without this, every breadcrumb link renders green.
+const linkClass = isHero
+  ? 'text-white/85 hover:text-white'
+  : 'text-(--text-dim) hover:text-(--text)';
+---
+
+<div
+  class={bar
+    ? 'relative left-1/2 right-1/2 mx-[-50vw] w-screen border-y border-(--line) bg-(--panel) mb-6'
+    : 'contents'}
+>
+  <div class={bar ? 'wrap py-3' : 'contents'}>
+    <nav class={navClass} aria-label="Breadcrumb">
+      {
+        items.map((item, i) => (
+          <>
+            {i > 0 && (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4 flex-none opacity-60"
+                aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            )}
+            {i === 0 ? (
+              <a
+                href={item.href}
+                class={`flex items-center flex-none ${linkClass}`}
+                aria-label={item.label}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path d="M3 9.5 12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" />
+                </svg>
+              </a>
+            ) : item.href ? (
+              <a href={item.href} class={linkClass}>
+                {item.label}
+              </a>
+            ) : (
+              <span
+                class={`font-semibold ${isHero ? 'text-white' : 'text-(--text)'}`}
+              >
+                {item.label}
+              </span>
+            )}
+          </>
+        ))
+      }
+    </nav>
+  </div>
+</div>

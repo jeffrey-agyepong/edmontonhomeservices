@@ -1,19 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CategoryBox from '../components/CategoryBox.astro';
-import { sortListings } from '../lib/sort';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getPopulatedCategories } from '../lib/categories';
-import { PER_CATEGORY } from '../consts';
+
+const base = import.meta.env.BASE_URL;
+
+/*
+ * Deliberately no <Sponsors /> section on this page. That component sells
+ * ad slots against a specific category's search intent (4 slots on the
+ * homepage, 2 on a single category page like /c/roofing-roof-repair) — this
+ * "all categories" overview isn't scoped to any one category, so there's
+ * nothing specific to sell an ad against here. Zero slots, not a smaller
+ * generic version.
+ *
+ * Same reasoning applies to the category cards below: this is a directory
+ * of categories, not of businesses, so no individual company is named here
+ * either — just each category's name and how many listings it has. See
+ * CategoryBox.astro.
+ */
 
 const populated = await getPopulatedCategories();
-const sections = populated.map(({ category, listings }) => {
-  const mine = sortListings(listings, 'top');
-  return {
-    category,
-    listings: mine.slice(0, PER_CATEGORY),
-    total: mine.length,
-  };
-});
+const sections = populated.map(({ category, listings }) => ({
+  category,
+  total: listings.length,
+}));
 ---
 
 <BaseLayout
@@ -23,6 +34,10 @@ const sections = populated.map(({ category, listings }) => {
   <section
     class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
   >
+    <Breadcrumbs
+      variant="hero"
+      items={[{ label: 'Home', href: base }, { label: 'Categories' }]}
+    />
     <h1
       class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
     >
@@ -45,11 +60,7 @@ const sections = populated.map(({ category, listings }) => {
     ) : (
       <div class="category-grid mb-8">
         {sections.map((s) => (
-          <CategoryBox
-            category={s.category}
-            listings={s.listings}
-            total={s.total}
-          />
+          <CategoryBox category={s.category} total={s.total} />
         ))}
       </div>
     )

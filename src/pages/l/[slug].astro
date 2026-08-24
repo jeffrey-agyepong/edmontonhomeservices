@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Rating from '../../components/Rating.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { COUNT_CLICKS } from '../../consts';
 import { placeholderGradient } from '../../lib/placeholder';
 
@@ -22,9 +23,10 @@ const { listing, category } = Astro.props;
 const d = listing.data;
 const base = import.meta.env.BASE_URL;
 
+const categoriesHref = `${base}categories`.replace(/\/+/g, '/');
 const categoryHref = category
   ? `${base}c/${category.id}`.replace(/\/+/g, '/')
-  : `${base}categories`.replace(/\/+/g, '/');
+  : categoriesHref;
 
 const host = (() => {
   try {
@@ -68,9 +70,17 @@ const galleryStyles =
 
 <BaseLayout title={d.name} description={d.description}>
   <div class="listing-page">
-    <a class="back-link" href={categoryHref}>
-      &larr; Back to {category ? category.data.name : 'Categories'}
-    </a>
+    <Breadcrumbs
+      bar
+      items={[
+        { label: 'Home', href: base },
+        { label: 'Categories', href: categoriesHref },
+        ...(category
+          ? [{ label: category.data.name, href: categoryHref }]
+          : []),
+        { label: d.name },
+      ]}
+    />
 
     <article class="listing-detail">
       {
@@ -469,17 +479,6 @@ const galleryStyles =
 </BaseLayout>
 
 <style>
-  .back-link {
-    display: inline-block;
-    margin: 14px 0;
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 14px;
-  }
-  .back-link:hover {
-    color: var(--primary);
-  }
-
   .badge-verified {
     display: inline-flex;
     align-items: center;

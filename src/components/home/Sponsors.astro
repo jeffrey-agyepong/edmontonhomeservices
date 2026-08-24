@@ -15,9 +15,14 @@ interface Props {
   // ("... searching for Roofing services" instead of the generic homepage
   // phrasing). Leave unset on the homepage.
   categoryName?: string;
+  // The category's id/slug (e.g. "roofing-roof-repair"). Not used yet since
+  // real ad rendering is disabled, but a category page's ads should only
+  // ever show businesses from that same category once re-enabled — see the
+  // commented-out fetch logic below for how this plugs in.
+  categoryId?: string;
 }
 
-const { categoryName } = Astro.props;
+const { categoryName, categoryId } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
@@ -36,15 +41,19 @@ const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
  * ]);
  *
  * const sponsors = listings
- *   .filter((l) => l.data.sponsored)
+ *   .filter(
+ *     (l) =>
+ *       l.data.sponsored && (!categoryId || l.data.category === categoryId),
+ *   )
  *   .map((listing) => ({
  *     listing,
  *     category: categories.find((c) => c.id === listing.data.category) ?? null,
  *   }));
  */
 
-// Always exactly 4 "up for sale" slots while no business has bought a spot.
-const AVAILABLE_SLOTS = 4;
+// The homepage shows 4 open slots; a single category page only shows 2 —
+// there's less sponsorable inventory to sell on any one category.
+const AVAILABLE_SLOTS = categoryName ? 2 : 4;
 const serviceLabel = categoryName
   ? `${categoryName} services`
   : 'home service needs';

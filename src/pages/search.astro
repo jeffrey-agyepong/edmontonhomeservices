@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 /*
  * Search runs in the browser.
@@ -22,6 +23,8 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Search" noindex={true}>
+  <Breadcrumbs items={[{ label: 'Home', href: base }, { label: 'Search' }]} />
+
   <div class="page-head">
     <h1>Search</h1>
     <form class="page-search" role="search" id="search-form">

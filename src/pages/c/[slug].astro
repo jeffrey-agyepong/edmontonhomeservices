@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ListingRow from '../../components/ListingRow.astro';
 import Sponsors from '../../components/home/Sponsors.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { sortListings } from '../../lib/sort';
 
 export async function getStaticPaths() {
@@ -24,22 +25,40 @@ export async function getStaticPaths() {
 const { category, listings } = Astro.props;
 const c = category.data;
 const base = import.meta.env.BASE_URL;
+const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
 ---
 
 <BaseLayout title={c.name} description={c.description}>
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href={base}>Home</a><span>/</span>{c.name}
-  </nav>
-
-  <div class="page-head">
-    <h1>
+  <section
+    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 border-b-4 border-red-400"
+  >
+    <Breadcrumbs
+      variant="hero"
+      items={[
+        { label: 'Home', href: base },
+        { label: 'Categories', href: href('categories') },
+        { label: c.name },
+      ]}
+    />
+    <h1
+      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
+    >
       {c.icon && <span class="category-icon" set:html={c.icon} />}
       {c.name}
     </h1>
-    {c.description && <p class="page-head-desc">{c.description}</p>}
-  </div>
+    <p
+      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl flex justify-center mx-auto text-center text-white"
+    >
+      {
+        c.description ||
+          'Browse our complete directory of Edmonton home service professionals.'
+      }
+    </p>
+  </section>
 
-  <section class="category-box category-box--wide">
+  <Sponsors categoryName={c.name} categoryId={category.id} />
+
+  <section class="category-box category-box--wide my-8">
     <div class="category-sites">
       {
         listings.length === 0 ? (
@@ -50,6 +69,4 @@ const base = import.meta.env.BASE_URL;
       }
     </div>
   </section>
-
-  <Sponsors categoryName={c.name} />
 </BaseLayout>
