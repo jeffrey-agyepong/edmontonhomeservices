@@ -1,101 +1,165 @@
 ---
-import { getCollection } from 'astro:content';
-import { placeholderGradient } from '../../lib/placeholder';
-import Rating from '../Rating.astro';
+/*
+ * This renders a real premium business card. Currently disabled because no
+ * business has purchased a sponsored spot yet, so all slots show as available.
+ * To re-enable: uncomment this block and wire it back to pull businesses
+ * where premium=true.
+ *
+ * import { getCollection } from 'astro:content';
+ * import { placeholderGradient } from '../../lib/placeholder';
+ * import Rating from '../Rating.astro';
+ */
+
+interface Props {
+  // Set on category pages so the "available" copy reads naturally
+  // ("... searching for Roofing services" instead of the generic homepage
+  // phrasing). Leave unset on the homepage.
+  categoryName?: string;
+}
+
+const { categoryName } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
-const listingHref = (slug: string) => `${base}l/${slug}`.replace(/\/+/g, '/');
 
-const [listings, categories] = await Promise.all([
-  getCollection('listings'),
-  getCollection('categories'),
-]);
+/*
+ * This renders a real premium business card. Currently disabled because no
+ * business has purchased a sponsored spot yet, so all slots show as available.
+ * To re-enable: uncomment this block and wire it back to pull businesses
+ * where premium=true.
+ *
+ * const listingHref = (slug: string) => `${base}l/${slug}`.replace(/\/+/g, '/');
+ *
+ * const [listings, categories] = await Promise.all([
+ *   getCollection('listings'),
+ *   getCollection('categories'),
+ * ]);
+ *
+ * const sponsors = listings
+ *   .filter((l) => l.data.sponsored)
+ *   .map((listing) => ({
+ *     listing,
+ *     category: categories.find((c) => c.id === listing.data.category) ?? null,
+ *   }));
+ */
 
-// Only listings a business has actually paid to be sponsored show up here —
-// independent of `premium` (that gates the gallery/quote form on the
-// listing's own page instead) — and no fallback/demo cards when there are
-// none.
-const sponsors = listings
-  .filter((l) => l.data.sponsored)
-  .map((listing) => ({
-    listing,
-    category: categories.find((c) => c.id === listing.data.category) ?? null,
-  }));
+// Always exactly 4 "up for sale" slots while no business has bought a spot.
+const AVAILABLE_SLOTS = 4;
+const serviceLabel = categoryName
+  ? `${categoryName} services`
+  : 'home service needs';
 ---
 
-{
-  sponsors.length > 0 && (
-    <section class="sponsors relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel) py-10">
-      <div class="wrap">
-        <div class="sponsors-header">
-          <div class="sponsors-heading">
-            <span class="sponsors-badge">Sponsored</span>
-            <h2 class="sponsors-title">Local Spotlight</h2>
-            <p class="sponsors-subtitle">
-              Support the businesses that support our community.
-            </p>
-          </div>
-          <a class="sponsors-cta" href={href('advertise')}>
-            Advertise your business here &rarr;
-          </a>
-        </div>
-
-        <div class="sponsor-grid">
-          {sponsors.map(({ listing, category }) => {
-            const d = listing.data;
-            return (
-              <article class="sponsor-card">
-                <div class="sponsor-media">
-                  {d.photo ? (
-                    <img src={d.photo} alt="" loading="lazy" decoding="async" />
-                  ) : (
-                    <div
-                      class="sponsor-media-placeholder"
-                      style={`background:${placeholderGradient(listing.id)}`}
-                    >
-                      <span>{d.name.charAt(0)}</span>
-                    </div>
-                  )}
-                </div>
-                <div class="sponsor-body">
-                  <div class="sponsor-top-row">
-                    <div class="sponsor-meta">
-                      {category && (
-                        <span class="sponsor-category">
-                          {category.data.name}
-                        </span>
-                      )}
-                      <Rating
-                        rating={d.google_rating}
-                        count={d.google_review_count}
-                        showCount={true}
-                      />
-                    </div>
-                    <span class="sponsor-ad-badge">AD</span>
-                  </div>
-
-                  <h3 class="sponsor-name">{d.name}</h3>
-
-                  {d.description && (
-                    <p class="sponsor-description">{d.description}</p>
-                  )}
-
-                  <a class="sponsor-button" href={listingHref(listing.id)}>
-                    View Profile
-                  </a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+<section
+  class="sponsors relative left-1/2 right-1/2 mx-[-50vw] w-screen bg-(--panel) py-10"
+>
+  <div class="wrap">
+    <div class="sponsors-header">
+      <div class="sponsors-heading">
+        <span class="sponsors-badge">Sponsored</span>
+        <h2 class="sponsors-title">Local Spotlight</h2>
+        <p class="sponsors-subtitle">
+          Support the businesses that support our community.
+        </p>
       </div>
-    </section>
-  )
-}
+      <a class="sponsors-cta" href={href('advertise')}>
+        Advertise your business here &rarr;
+      </a>
+    </div>
+
+    <div class="sponsor-grid">
+      <!--
+        This renders a real premium business card. Currently disabled
+        because no business has purchased a sponsored spot yet, so all
+        slots show as available. To re-enable: uncomment this block and
+        wire it back to pull businesses where premium=true.
+
+        {sponsors.map(({ listing, category }) => {
+          const d = listing.data;
+          return (
+            <article class="sponsor-card">
+              <div class="sponsor-media">
+                {d.photo ? (
+                  <img src={d.photo} alt="" loading="lazy" decoding="async" />
+                ) : (
+                  <div
+                    class="sponsor-media-placeholder"
+                    style={`background:${placeholderGradient(listing.id)}`}
+                  >
+                    <span>{d.name.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+              <div class="sponsor-body">
+                <div class="sponsor-top-row">
+                  <div class="sponsor-meta">
+                    {category && (
+                      <span class="sponsor-category">
+                        {category.data.name}
+                      </span>
+                    )}
+                    <Rating
+                      rating={d.google_rating}
+                      count={d.google_review_count}
+                      showCount={true}
+                    />
+                  </div>
+                  <span class="sponsor-ad-badge">AD</span>
+                </div>
+
+                <h3 class="sponsor-name">{d.name}</h3>
+
+                {d.description && (
+                  <p class="sponsor-description">{d.description}</p>
+                )}
+
+                <a class="sponsor-button" href={listingHref(listing.id)}>
+                  View Profile
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      -->
+
+      {
+        Array.from({ length: AVAILABLE_SLOTS }).map(() => (
+          <article class="sponsor-card sponsor-card--available">
+            <div class="sponsor-media sponsor-media--available">
+              <span class="sponsor-available-icon" aria-hidden="true">
+                +
+              </span>
+            </div>
+            <div class="sponsor-body">
+              <div class="sponsor-top-row">
+                <span class="sponsor-available-badge">Spot Available</span>
+              </div>
+
+              <h3 class="sponsor-name sponsor-name--available">
+                Your Business Here
+              </h3>
+
+              <p class="sponsor-description sponsor-available-text">
+                Feature your business here and get seen by Edmonton homeowners
+                searching for {serviceLabel}.
+              </p>
+
+              <a
+                class="sponsor-button sponsor-button--available"
+                href={href('advertise')}
+              >
+                Claim This Spot &rarr;
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
 
 <style>
-  /* Structure only — no color, type, or decoration here on purpose. */
+  /* Structure only: no color, type, or decoration here on purpose. */
 
   .sponsors-header {
     display: flex;
@@ -238,6 +302,51 @@ const sponsors = listings
     border-radius: 9999px;
     font-weight: 600;
     text-decoration: none;
+  }
+
+  /* "Spot available" placeholder: same media+body layout, grid and
+     card dimensions as a real sponsor-card, styled distinctly (dashed
+     border, muted fill) so it reads as open inventory rather than
+     broken/missing content. */
+  .sponsor-card--available {
+    border-style: dashed;
+  }
+  .sponsor-media--available {
+    background: var(--panel-head);
+    border-right: 1px dashed var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sponsor-available-icon {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--text-dim);
+  }
+  .sponsor-available-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    border: 1px solid var(--line);
+    border-radius: 9999px;
+    padding: 0.25rem 0.65rem;
+  }
+  .sponsor-name--available {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .sponsor-available-text {
+    color: var(--text-dim);
+    -webkit-line-clamp: 3;
+  }
+  .sponsor-button--available {
+    width: auto;
+    align-self: flex-start;
+    background: var(--accent);
+    color: white;
   }
 
   @media (max-width: 640px) {
