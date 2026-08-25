@@ -36,6 +36,21 @@ const navClass = `flex items-center gap-2 text-sm ${bar ? '' : 'mb-4'} ${
 const linkClass = isHero
   ? 'text-white/85 hover:text-white'
   : 'text-(--text-dim) hover:text-(--text)';
+
+// Rich-snippet eligibility for free on every page that uses this component.
+// The current page (last item) has no href in our data, and per Google's
+// guidelines its "item" URL can be omitted from the last ListItem.
+const siteOrigin = Astro.site ?? new URL(Astro.url.origin);
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, siteOrigin).toString() } : {}),
+  })),
+};
 ---
 
 <div
@@ -98,3 +113,8 @@ const linkClass = isHero
     </nav>
   </div>
 </div>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(breadcrumbJsonLd)}
+/>

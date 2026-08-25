@@ -10,10 +10,23 @@ interface Props {
 }
 
 const { title, description, canonical, noindex, base } = Astro.props;
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_TITLE,
+  url: (Astro.site ?? canonical).toString(),
+};
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#1c1b19" />
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href={`${base}favicon.svg`.replace(/\/+/g, '/')}
+/>
 <script is:inline>
   /* Runs before first paint so the page never flashes the wrong theme.
      Falls back to system preference when nothing is saved yet. */
@@ -45,4 +58,10 @@ const { title, description, canonical, noindex, base } = Astro.props;
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content="website" />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content="en_CA" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
 <link rel="sitemap" href={`${base}sitemap-index.xml`.replace(/\/+/g, '/')} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />

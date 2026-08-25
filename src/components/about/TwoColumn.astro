@@ -1,0 +1,99 @@
+---
+interface Props {
+  badgeLabel: string;
+  heading: string;
+  paragraph1: string;
+  paragraph2: string;
+  imageUrl: string;
+  statPercent: string;
+  statCaption: string;
+}
+
+const {
+  badgeLabel,
+  heading,
+  paragraph1,
+  paragraph2,
+  imageUrl,
+  statPercent,
+  statCaption,
+} = Astro.props;
+
+// ImageKit supports on-the-fly resizing via a `?tr=w-<px>` query param, so
+// the one source URL from the CMS can serve a real srcset instead of one
+// fixed-size image to every screen. Any other host is used as-is.
+const isImageKit = imageUrl.includes('ik.imagekit.io');
+const imageWidths = [400, 600, 800, 1200, 1600];
+const imageSrcset = isImageKit
+  ? imageWidths.map((w) => `${imageUrl}?tr=w-${w} ${w}w`).join(', ')
+  : undefined;
+---
+
+<section class="wrap py-14 md:py-20">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <div>
+      <span
+        class="inline-flex items-center gap-1.5 rounded-full bg-(--accent)/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-(--accent) mb-4"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="h-3.5 w-3.5"
+          aria-hidden="true"
+        >
+          <path
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+          ></path>
+        </svg>
+        {badgeLabel}
+      </span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-left">
+        {heading}
+      </h2>
+      <p
+        class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl mb-4"
+      >
+        {paragraph1}
+      </p>
+      <p
+        class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl mb-4"
+      >
+        {paragraph2}
+      </p>
+      <p class="text-(--text-dim) text-left text-base sm:text-lg md:text-xl">
+        Edmonton Home Services is built and run by{' '}
+        <a
+          href="https://www.jawebdesign.ca"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-(--primary) hover:opacity-80"
+        >
+          J.A Web Design</a
+        >, a local web design studio. That relationship doesn't affect who gets
+        listed or how they rank.
+      </p>
+    </div>
+
+    <div class="relative">
+      <img
+        src={imageUrl}
+        srcset={imageSrcset}
+        sizes="(min-width: 768px) 50vw, 100vw"
+        alt="Edmonton city skyline"
+        loading="lazy"
+        class="w-full h-full min-h-96 rounded-xl object-cover"
+      />
+
+      <div
+        class="absolute -bottom-6 -left-6 rounded-xl bg-(--bg) border border-(--line) shadow-2xl px-6 py-4 max-w-56"
+      >
+        <p class="text-3xl sm:text-4xl font-bold text-(--accent) mt-0 mb-1">
+          {statPercent}
+        </p>
+        <p class="text-sm text-(--text) mt-0 mb-0">
+          {statCaption}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

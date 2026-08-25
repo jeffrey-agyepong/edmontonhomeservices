@@ -1,4 +1,4 @@
-import { config, fields, collection } from '@keystatic/core';
+import { config, fields, collection, singleton } from '@keystatic/core';
 
 /*
  * Mirrors src/content.config.ts field-for-field. Both must stay in sync —
@@ -12,6 +12,34 @@ import { config, fields, collection } from '@keystatic/core';
  */
 export default config({
   storage: { kind: 'local' },
+  singletons: {
+    about: singleton({
+      label: 'About Page',
+      path: 'src/content/about/',
+      format: { data: 'json' },
+      schema: {
+        heroTitle: fields.text({
+          label: 'Hero title',
+          validation: { isRequired: true },
+        }),
+        heroDescription: fields.text({
+          label: 'Hero description',
+          multiline: true,
+        }),
+        badgeLabel: fields.text({ label: 'Eyebrow badge text' }),
+        sectionHeading: fields.text({ label: 'Section heading' }),
+        paragraph1: fields.text({ label: 'Paragraph 1', multiline: true }),
+        paragraph2: fields.text({ label: 'Paragraph 2', multiline: true }),
+        imageUrl: fields.url({
+          label: 'Photo URL',
+          description:
+            'An ImageKit URL (ik.imagekit.io/...) gets automatic responsive sizing. Any other URL is used as-is.',
+        }),
+        statPercent: fields.text({ label: 'Stat card number (e.g. "100%")' }),
+        statCaption: fields.text({ label: 'Stat card caption' }),
+      },
+    }),
+  },
   collections: {
     listings: collection({
       label: 'Listings',

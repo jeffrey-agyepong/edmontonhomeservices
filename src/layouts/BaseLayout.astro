@@ -10,10 +10,14 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  // Use this exact string as <title>, bypassing the usual "Page | Site
+  // Name" suffix — for the homepage, which leads with the brand name
+  // instead of following it.
+  rawTitle?: string;
 }
 
-const { title, description, noindex = false } = Astro.props;
-const pageTitle = title ? `${title} — ${SITE_TITLE}` : SITE_TITLE;
+const { title, description, noindex = false, rawTitle } = Astro.props;
+const pageTitle = rawTitle ?? (title ? `${title} | ${SITE_TITLE}` : SITE_TITLE);
 const pageDesc = description || SITE_DESCRIPTION;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const base = import.meta.env.BASE_URL;

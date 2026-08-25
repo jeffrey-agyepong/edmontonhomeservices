@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
 import { getPopulatedCategories } from '../lib/categories';
 
 const categories = (await getPopulatedCategories()).map((c) => c.category);
@@ -11,26 +11,14 @@ const base = import.meta.env.BASE_URL;
   title="Submit Your Business"
   description="List your Edmonton home service business in our directory."
 >
-  <section
-    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
-  >
-    <Breadcrumbs
-      variant="hero"
-      items={[{ label: 'Home', href: base }, { label: 'Submit Your Business' }]}
-    />
-    <h1
-      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
-    >
-      Submit Your Business
-    </h1>
-    <p
-      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center text-white"
-    >
-      Get your business listed in front of Edmonton homeowners looking for
-      trusted local pros. Fill out the form below and we'll review your
-      submission.
-    </p>
-  </section>
+  <PageHero
+    title="Submit Your Business"
+    description="Get your business listed in front of Edmonton homeowners looking for trusted local pros. Fill out the form below and we'll review your submission."
+    breadcrumbs={[
+      { label: 'Home', href: base },
+      { label: 'Submit Your Business' },
+    ]}
+  />
 
   <section class="max-w-2xl mx-auto mb-16">
     <div class="form-card">

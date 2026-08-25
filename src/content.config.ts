@@ -1,6 +1,8 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import type { Loader } from 'astro/loaders';
+import { promises as fsPromises } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 /*
  * Two ways to get content, chosen by whether DIRECTORY_API is set.
@@ -93,6 +95,64 @@ const pageSchema = z.object({
   body: z.string().default(''),
   inFooter: z.boolean().default(true),
   order: z.number().default(0),
+});
+
+/*
+ * The About page's own copy (hero, "why we started" section, photo, stat
+ * card). Keystatic edits this as a singleton — one JSON file, no slug — so
+ * editors touch this exact schema rather than the freeform HTML `pages`
+ * collection above, which about.astro doesn't render. The credit link to
+ * J.A Web Design at the bottom of the section is deliberately NOT part of
+ * this schema; it's hardcoded in about.astro so its rel="noopener
+ * noreferrer" and styling can't be broken from the CMS.
+ */
+const aboutSchema = z.object({
+  heroTitle: z.string().default('About Us'),
+  heroDescription: z.string().default(''),
+  badgeLabel: z.string().default('Locally Rooted'),
+  sectionHeading: z.string().default(''),
+  paragraph1: z.string().default(''),
+  paragraph2: z.string().default(''),
+  imageUrl: z.string().default(''),
+  statPercent: z.string().default(''),
+  statCaption: z.string().default(''),
+});
+
+/**
+ * Reads a single JSON file as one content entry with a fixed id, for
+ * Keystatic singletons (a single file, not a directory of many). `glob()`
+ * doesn't fit here — it's built for a directory of many slugged entries.
+ */
+function singletonLoader(id: string, relPath: string): Loader {
+  return {
+    name: `singleton-${id}`,
+    load: async ({ store, parseData, config, watcher, logger }) => {
+      const filePath = fileURLToPath(new URL(relPath, config.root));
+
+      async function sync() {
+        let raw: string;
+        try {
+          raw = await fsPromises.readFile(filePath, 'utf-8');
+        } catch {
+          logger.warn(`${id}: no file at ${relPath}, using schema defaults`);
+          raw = '{}';
+        }
+        const data = await parseData({ id, data: JSON.parse(raw) });
+        store.set({ id, data });
+      }
+
+      await sync();
+      watcher?.add(filePath);
+      watcher?.on('change', (changedPath) => {
+        if (changedPath === filePath) sync();
+      });
+    },
+  };
+}
+
+const about = defineCollection({
+  loader: singletonLoader('about', './src/content/about/index.json'),
+  schema: aboutSchema,
 });
 
 /** Trailing slashes and a missing scheme are the two easy ways to mistype this. */
@@ -237,4 +297,4 @@ const pages = defineCollection({
   schema: pageSchema,
 });
 
-export const collections = { listings, categories, pages };
+export const collections = { listings, categories, pages, about };

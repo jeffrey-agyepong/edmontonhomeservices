@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FAQ from '../components/home/FAQ.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
 
 const base = import.meta.env.BASE_URL;
 
@@ -88,26 +88,11 @@ const advertiseFaqs = [
   title="Advertise"
   description="Grow your local business with an Edmonton Home Services listing — from a free community listing to a complete digital overhaul."
 >
-  <section
-    class="full-bg bg-emerald-800 text-(--bg) px-4 py-8 sm:py-10 md:py-14 mb-10 sm:mb-16 border-b-4 border-red-400"
-  >
-    <Breadcrumbs
-      variant="hero"
-      items={[{ label: 'Home', href: base }, { label: 'Advertise' }]}
-    />
-    <h1
-      class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-3 sm:mb-4 text-center text-white"
-    >
-      Grow your local business.
-    </h1>
-    <p
-      class="page-head-desc text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-center text-white"
-    >
-      Join Edmonton's most trusted home services directory. Claim your existing
-      listing or create a new one, from a free community listing to a complete
-      digital overhaul.
-    </p>
-  </section>
+  <PageHero
+    title="Grow your local business."
+    description="Join Edmonton's most trusted home services directory. Claim your existing listing or create a new one, from a free community listing to a complete digital overhaul."
+    breadcrumbs={[{ label: 'Home', href: base }, { label: 'Advertise' }]}
+  />
 
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch mb-16">
     {
