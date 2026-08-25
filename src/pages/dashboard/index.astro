@@ -1,0 +1,140 @@
+---
+// This page must run on demand, not be baked into a static HTML file at
+// build time — otherwise middleware.ts's session check never gets a
+// chance to run before the page is served, and the auth gate does
+// nothing. See the comment block at the top of middleware.ts.
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { createSupabaseServerClient } from '../../lib/supabase-server';
+
+const base = import.meta.env.BASE_URL;
+const href = (p: string) => `${base}${p}`.replace(/\/+/g, '/');
+
+// middleware.ts already ran for this request: it looked up the session,
+// redirected to /login if there wasn't one, and — only once it confirmed
+// a real user — attached that user to Astro.locals before letting the
+// request continue here. So by the time this line runs, a redirect has
+// already happened for anyone who isn't logged in, and `user` is
+// guaranteed to be set.
+const { user } = Astro.locals;
+
+const supabase = createSupabaseServerClient({
+  request: Astro.request,
+  cookies: Astro.cookies,
+});
+
+// One business per account, matched by owner_id against this user's
+// Supabase auth ID. maybeSingle() (not single()) is deliberate — a brand
+// new account with nothing linked yet is a normal, expected result (zero
+// rows), not an error. `error` here means something actually went wrong
+// (bad query, blocked by a row-level security policy, etc.), which is a
+// different situation from "no business yet" and gets its own message
+// below rather than being lumped in with it.
+const { data: business, error } = await supabase
+  .from('businesses')
+  .select('name, category, phone, description, hours')
+  .eq('owner_id', user!.id)
+  .maybeSingle();
+---
+
+<BaseLayout
+  title="Dashboard"
+  description="Manage your Edmonton Home Services listing."
+  noindex={true}
+>
+  <section class="max-w-2xl mx-auto my-16">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+
+    <div class="form-card mb-6">
+      <p class="text-(--text-dim) mt-0 mb-4">
+        Logged in as <strong class="text-(--text)">{user!.email}</strong>
+      </p>
+      <button
+        id="logout-button"
+        type="button"
+        class="btn-accent text-white border-0"
+      >
+        Log out
+      </button>
+    </div>
+
+    {
+      business ? (
+        <div class="form-card">
+          <h2 class="mt-0">{business.name}</h2>
+          <ul class="listing-facts">
+            {business.category && (
+              <li>
+                <strong>Category:</strong> {business.category}
+              </li>
+            )}
+            {business.phone && (
+              <li>
+                <strong>Phone:</strong> {business.phone}
+              </li>
+            )}
+            {business.hours && (
+              <li>
+                <strong>Hours:</strong> {business.hours}
+              </li>
+            )}
+          </ul>
+          {business.description && (
+            <p class="text-(--text-dim) mt-4 mb-0">{business.description}</p>
+          )}
+        </div>
+      ) : error ? (
+        <div class="form-card">
+          <p class="text-(--text-dim) mt-0 mb-0">
+            We couldn't load your business right now. Try refreshing, or{' '}
+            <a
+              href={href('contact')}
+              class="text-(--primary) hover:opacity-80"
+            >
+              contact us
+            </a>{' '}
+            if this keeps happening.
+          </p>
+        </div>
+      ) : (
+        <div class="form-card">
+          <p class="text-(--text-dim) mt-0 mb-0">
+            No business is linked to this account yet.{' '}
+            <a
+              href={href('contact')}
+              class="text-(--primary) hover:opacity-80"
+            >
+              Contact us
+            </a>{' '}
+            if you believe this is a mistake.
+          </p>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<script>
+  import { createSupabaseBrowserClient } from '../../lib/supabase-browser';
+
+  const supabase = createSupabaseBrowserClient();
+  const base = import.meta.env.BASE_URL;
+
+  const logoutButton = document.getElementById(
+    'logout-button',
+  ) as HTMLButtonElement;
+
+  logoutButton.addEventListener('click', async () => {
+    logoutButton.disabled = true;
+    logoutButton.textContent = 'Logging out…';
+
+    // Clears the session both from the browser's in-memory state and from
+    // the sb-* cookies it's stored in — the same cookies middleware.ts
+    // reads on the server, so the next /dashboard request will correctly
+    // find no session and bounce to /login on its own.
+    await supabase.auth.signOut();
+
+    window.location.href = `${base}login`.replace(/\/+/g, '/');
+  });
+</script>

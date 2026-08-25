@@ -55,5 +55,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return redirect(loginUrl);
   }
 
+  // Hand the already-verified user to the page via Astro.locals, so a page
+  // under /dashboard can read Astro.locals.user directly instead of
+  // re-running its own getUser() check — the one above is already the
+  // real gate; this just makes its result reachable.
+  context.locals.user = user;
+
   return next();
 });
