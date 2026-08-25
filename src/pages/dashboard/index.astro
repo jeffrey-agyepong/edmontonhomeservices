@@ -36,7 +36,7 @@ const supabase = createSupabaseServerClient({
 const { data: business, error } = await supabase
   .from('businesses')
   .select(
-    'id, name, category, neighborhood, phone, website, description, hours, years_in_business, licensed_insured',
+    'id, owner_id, name, category, neighborhood, phone, website, description, hours, years_in_business, licensed_insured',
   )
   .eq('owner_id', user!.id)
   .maybeSingle();
@@ -84,6 +84,10 @@ const allCategories = (await getCollection('categories')).sort(
 
           <form id="edit-form">
             <input type="hidden" name="id" value={business.id} />
+            {/* TEMP DEBUG — remove once the save issue is sorted out. Only
+                here so the client script can log it against the logged-in
+                user's id; never sent in the update payload itself. */}
+            <input type="hidden" name="owner_id" value={business.owner_id} />
 
             <label for="name">
               Business Name
@@ -271,11 +275,29 @@ const allCategories = (await getCollection('categories')).sort(
 
   editForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    // TEMP DEBUG — remove once the save issue is sorted out. If this
+    // never prints, the JS handler isn't the thing running — the browser
+    // is doing a plain form submission instead, which is the bug.
+    console.log('[dashboard] submit intercepted, preventDefault() called');
+
     if (!saveButton) return;
 
     const formData = new FormData(editForm);
     const id = formData.get('id')?.toString();
     if (!id) return;
+
+    // TEMP DEBUG — remove once the save issue is sorted out. If these two
+    // don't match, that's the whole bug: the "Owners update own listing"
+    // RLS policy compares owner_id against the logged-in user's id, so a
+    // mismatch here means the policy will silently match zero rows.
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser();
+    console.log('[dashboard] logged-in user id:', currentUser?.id);
+    console.log(
+      '[dashboard] business.owner_id:',
+      formData.get('owner_id')?.toString(),
+    );
 
     const yearsRaw = formData.get('years_in_business')?.toString().trim();
 
@@ -290,7 +312,13 @@ const allCategories = (await getCollection('categories')).sort(
     // update own listing" row-level security policy on the businesses
     // table matching owner_id against the logged-in user — same
     // enforcement whether this code is honest about it or not.
-    const { error } = await supabase
+    //
+    // .select() on the end matters: Supabase's update() can come back with
+    // error === null and an empty data array when RLS silently matches
+    // zero rows — that's a real failure (nothing was written), but without
+    // .select() there'd be no way to tell it apart from a genuine success,
+    // since neither one produces an error.
+    const { data, error } = await supabase
       .from('businesses')
       .update({
         name: formData.get('name')?.toString().trim(),
@@ -303,13 +331,21 @@ const allCategories = (await getCollection('categories')).sort(
         years_in_business: yearsRaw ? Number(yearsRaw) : null,
         licensed_insured: formData.get('licensed_insured') === 'on',
       })
-      .eq('id', id);
+      .eq('id', id)
+      .select();
 
     saveButton.disabled = false;
     saveButton.textContent = originalLabel;
 
     if (error) {
       showSaveStatus(`Couldn't save your changes: ${error.message}`, true);
+    } else if (!data || data.length === 0) {
+      showSaveStatus(
+        "Couldn't save your changes — no matching row was updated. " +
+          "That usually means a permissions rule blocked the write rather " +
+          'than the save request itself failing.',
+        true,
+      );
     } else {
       showSaveStatus('Saved.', false);
     }

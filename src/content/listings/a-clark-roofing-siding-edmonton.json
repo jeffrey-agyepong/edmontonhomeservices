@@ -5,7 +5,7 @@
   "website": "https://www.aclark.ca/",
   "description": "An Edmonton roofing and siding contractor operating since 1953, handling roof repair, installation, inspections, and maintenance across residential and commercial properties, plus siding, eavestroughs, and insurance claims work.",
   "gallery": [],
-  "years_in_business": 70,
+  "years_in_business": 700,
   "licensed_insured": false,
   "address": "3120 93 St NW, Edmonton, AB T6N 1C7",
   "services": [
@@ -19,5 +19,6 @@
   "premium": false,
   "sponsored": false,
   "google_rating": 4.4,
-  "google_review_count": 377
+  "google_review_count": 377,
+  "reviews": []
 }
