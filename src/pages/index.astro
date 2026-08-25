@@ -1,86 +1,21 @@
 ---
-import '../styles/tailwind.css';
-import Meta from '../components/Meta.astro';
-import { SITE_TITLE, SITE_TAGLINE } from '../consts';
-
-const base = import.meta.env.BASE_URL;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
-const pageTitle = `${SITE_TITLE} | Coming Soon`;
-
-// noindex: this is a thin placeholder, and the real homepage content lives
-// at /home. Indexing this instead would hand search engines a near-empty
-// page as the site's root result. Flip to false once /home replaces this
-// at "/" for launch.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQ from '../components/home/FAQ.astro';
+import Hero from '../components/home/Hero.astro';
+import Category from '../components/home/Category.astro';
+import Sponsors from '../components/home/Sponsors.astro';
+import TrustVetting from '../components/home/TrustVetting.astro';
 ---
 
-<!doctype html>
-<html lang="en" data-theme="dark">
-  <head>
-    <Meta
-      title={pageTitle}
-      description={SITE_TAGLINE}
-      canonical={canonical}
-      noindex={true}
-      base={base}
-    />
-  </head>
-  <body>
-    <main
-      class="flex min-h-screen flex-col items-center justify-center bg-(--bg) px-6 py-16 text-center"
-    >
-      <a
-        class="flex items-center gap-3 no-underline hover:opacity-80"
-        href={base}
-      >
-        <span
-          class="flex h-11 items-center rounded-lg px-2.5"
-          aria-hidden="true"
-        >
-          <span
-            class="font-(family-name:--font-display) text-2xl font-extrabold tracking-tight text-(--primary)"
-            >EH</span
-          ><span
-            class="font-(family-name:--font-display) text-2xl font-extrabold tracking-tight text-(--accent)"
-            >S</span
-          >
-        </span>
-        <span class="h-7 w-px bg-(--line)" aria-hidden="true"></span>
-        <span
-          class="font-(family-name:--font-display) text-2xl font-bold text-(--text)"
-          >{SITE_TITLE}</span
-        >
-      </a>
-
-      <span
-        class="mt-10 inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-sm font-medium tracking-wide text-orange-500 ring-1 ring-black/10 dark:bg-white/5 dark:text-orange-400 dark:ring-white/10"
-      >
-        <span class="relative flex h-2 w-2">
-          <span
-            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"
-          ></span>
-          <span class="relative inline-flex h-2 w-2 rounded-full bg-orange-500"
-          ></span>
-        </span>
-        Coming soon
-      </span>
-
-      <h1
-        class="mt-6 max-w-3xl font-(family-name:--font-display) text-4xl font-bold leading-tight text-(--text) sm:text-5xl md:text-6xl"
-      >
-        Edmonton's home services,<br class="hidden sm:block" /> vetted by locals.
-      </h1>
-
-      <p class="mt-5 max-w-xl text-lg text-(--text-dim) sm:text-xl">
-        {SITE_TAGLINE} We're putting the finishing touches on the directory. Check
-        back soon.
-      </p>
-
-      <!-- <a
-      href={`${base}home`.replace(/\/+/g, '/')}
-      class="mt-9 inline-flex items-center rounded-full bg-(--primary) px-7 py-3 text-sm font-bold text-(--primary-ink) no-underline hover:opacity-90"
-    >
-      Preview the site
-    </a> -->
-    </main>
-  </body>
-</html>
+<BaseLayout
+  rawTitle="Edmonton Home Services | Local Directory"
+  description="A hand-curated directory of Edmonton home service providers. Find trusted, vetted local businesses for your home improvement, repair, and maintenance needs."
+>
+  <div class="landing-header">
+    <Hero />
+  </div>
+  <Sponsors />
+  <TrustVetting />
+  <Category />
+  <FAQ />
+</BaseLayout>

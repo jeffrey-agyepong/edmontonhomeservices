@@ -1,8 +1,10 @@
 ---
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/about/CTA.astro';
 import PageHero from '../components/PageHero.astro';
-import TwoColumn from '../components/about/TwoColumn.astro';
+import TwoColumns from '../components/about/TwoColumns.astro';
+import ThreeCards from '../components/about/ThreeCards.astro';
 
 const base = import.meta.env.BASE_URL;
 const about = await getEntry('about', 'about');
@@ -18,7 +20,7 @@ const data = about!.data;
     description={data.heroDescription}
     breadcrumbs={[{ label: 'Home', href: base }, { label: 'About' }]}
   />
-  <TwoColumn
+  <TwoColumns
     badgeLabel={data.badgeLabel}
     heading={data.sectionHeading}
     paragraph1={data.paragraph1}
@@ -27,4 +29,6 @@ const data = about!.data;
     statPercent={data.statPercent}
     statCaption={data.statCaption}
   />
+  <ThreeCards />
+  <CTA />
 </BaseLayout>
