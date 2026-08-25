@@ -5,6 +5,7 @@
 // nothing. See the comment block at the top of middleware.ts.
 export const prerender = false;
 
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { createSupabaseServerClient } from '../../lib/supabase-server';
 
@@ -30,12 +31,29 @@ const supabase = createSupabaseServerClient({
 // rows), not an error. `error` here means something actually went wrong
 // (bad query, blocked by a row-level security policy, etc.), which is a
 // different situation from "no business yet" and gets its own message
-// below rather than being lumped in with it.
+// below rather than being lumped in with it. `id` is now selected too —
+// the edit form needs it for the update()'s .eq('id', ...) below.
 const { data: business, error } = await supabase
   .from('businesses')
-  .select('name, category, phone, description, hours')
+  .select(
+    'id, name, category, neighborhood, phone, website, description, hours, years_in_business, licensed_insured',
+  )
   .eq('owner_id', user!.id)
   .maybeSingle();
+
+// Same slug -> display-name source every category page on the site
+// already uses (see c/[slug].astro, submit-business.astro's own category
+// <select>). Deliberately NOT getPopulatedCategories() from
+// lib/categories.ts — that helper filters out any category with zero
+// listings in the Astro content collection, which has nothing to do with
+// whether it's a valid category for a Supabase business to belong to. A
+// business's current category could end up filtered out of its own
+// dropdown. This pulls the full, unfiltered list instead, sorted the same
+// way that helper sorts it (admin order, then name).
+const allCategories = (await getCollection('categories')).sort(
+  (a, b) =>
+    a.data.order - b.data.order || a.data.name.localeCompare(b.data.name),
+);
 ---
 
 <BaseLayout
@@ -62,27 +80,123 @@ const { data: business, error } = await supabase
     {
       business ? (
         <div class="form-card">
-          <h2 class="mt-0">{business.name}</h2>
-          <ul class="listing-facts">
-            {business.category && (
-              <li>
-                <strong>Category:</strong> {business.category}
-              </li>
-            )}
-            {business.phone && (
-              <li>
-                <strong>Phone:</strong> {business.phone}
-              </li>
-            )}
-            {business.hours && (
-              <li>
-                <strong>Hours:</strong> {business.hours}
-              </li>
-            )}
-          </ul>
-          {business.description && (
-            <p class="text-(--text-dim) mt-4 mb-0">{business.description}</p>
-          )}
+          <h2 class="mt-0">Edit your listing</h2>
+
+          <form id="edit-form">
+            <input type="hidden" name="id" value={business.id} />
+
+            <label for="name">
+              Business Name
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={business.name}
+                required
+              />
+            </label>
+
+            <label for="category">
+              Category
+              <select name="category" id="category" required>
+                <option value="" disabled selected={!business.category}>
+                  Select a category
+                </option>
+                {allCategories.map((c) => (
+                  <option value={c.id} selected={c.id === business.category}>
+                    {c.data.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label for="neighborhood">
+              Neighborhood
+              <input
+                type="text"
+                name="neighborhood"
+                id="neighborhood"
+                value={business.neighborhood ?? ''}
+                placeholder="e.g. Strathcona"
+              />
+            </label>
+
+            <div class="form-row">
+              <label for="phone">
+                Phone
+                <input
+                  type="tel"
+                  name="phone"
+                  id="phone"
+                  value={business.phone ?? ''}
+                  placeholder="780-555-0123"
+                />
+              </label>
+
+              <label for="website">
+                Website
+                <input
+                  type="url"
+                  name="website"
+                  id="website"
+                  value={business.website ?? ''}
+                  placeholder="https://example.com"
+                  required
+                />
+              </label>
+            </div>
+
+            <label for="hours">
+              Hours
+              <input
+                type="text"
+                name="hours"
+                id="hours"
+                value={business.hours ?? ''}
+                placeholder="e.g. Mon-Fri 8am-5pm"
+              />
+            </label>
+
+            <label for="years_in_business">
+              Years in Business
+              <input
+                type="number"
+                name="years_in_business"
+                id="years_in_business"
+                value={business.years_in_business ?? ''}
+                min="0"
+              />
+            </label>
+
+            <label for="description">
+              Description
+              <textarea name="description" id="description" rows="5">{business.description ?? ''}</textarea>
+            </label>
+
+            <label class="check">
+              <input
+                type="checkbox"
+                name="licensed_insured"
+                checked={business.licensed_insured}
+              />
+              <span>Licensed &amp; insured</span>
+            </label>
+
+            <button
+              type="submit"
+              id="save-button"
+              class="btn-accent text-white border-0 mt-2"
+            >
+              Save changes
+            </button>
+          </form>
+
+          <p
+            id="save-status"
+            class="mt-4 mb-0 text-sm hidden"
+            role="status"
+            aria-live="polite"
+          />
         </div>
       ) : error ? (
         <div class="form-card">
@@ -136,5 +250,68 @@ const { data: business, error } = await supabase
     await supabase.auth.signOut();
 
     window.location.href = `${base}login`.replace(/\/+/g, '/');
+  });
+
+  const editForm = document.getElementById(
+    'edit-form',
+  ) as HTMLFormElement | null;
+  const saveButton = document.getElementById(
+    'save-button',
+  ) as HTMLButtonElement | null;
+  const saveStatus = document.getElementById(
+    'save-status',
+  ) as HTMLParagraphElement | null;
+
+  function showSaveStatus(message: string, isError: boolean) {
+    if (!saveStatus) return;
+    saveStatus.textContent = message;
+    saveStatus.classList.remove('hidden');
+    saveStatus.style.color = isError ? 'var(--danger)' : 'var(--primary)';
+  }
+
+  editForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!saveButton) return;
+
+    const formData = new FormData(editForm);
+    const id = formData.get('id')?.toString();
+    if (!id) return;
+
+    const yearsRaw = formData.get('years_in_business')?.toString().trim();
+
+    saveButton.disabled = true;
+    const originalLabel = saveButton.textContent;
+    saveButton.textContent = 'Saving…';
+
+    // update(), not insert() — this row already exists (that's what
+    // maybeSingle() found server-side). Sent through the browser client,
+    // never the service_role key, so the ONLY thing standing between this
+    // request and writing to someone else's business is the "Owners
+    // update own listing" row-level security policy on the businesses
+    // table matching owner_id against the logged-in user — same
+    // enforcement whether this code is honest about it or not.
+    const { error } = await supabase
+      .from('businesses')
+      .update({
+        name: formData.get('name')?.toString().trim(),
+        category: formData.get('category')?.toString() || null,
+        neighborhood: formData.get('neighborhood')?.toString().trim() || null,
+        phone: formData.get('phone')?.toString().trim() || null,
+        website: formData.get('website')?.toString().trim(),
+        description: formData.get('description')?.toString().trim() || null,
+        hours: formData.get('hours')?.toString().trim() || null,
+        years_in_business: yearsRaw ? Number(yearsRaw) : null,
+        licensed_insured: formData.get('licensed_insured') === 'on',
+      })
+      .eq('id', id);
+
+    saveButton.disabled = false;
+    saveButton.textContent = originalLabel;
+
+    if (error) {
+      showSaveStatus(`Couldn't save your changes: ${error.message}`, true);
+    } else {
+      showSaveStatus('Saved.', false);
+    }
   });
 </script>
