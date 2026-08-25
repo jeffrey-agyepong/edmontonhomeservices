@@ -29,13 +29,17 @@
  *   hours                                    -> hours
  *   years_in_business                        -> years_in_business
  *   licensed_insured                         -> licensed_insured
+ *   address                                  -> address
+ *   latitude                                 -> latitude
+ *   longitude                                -> longitude
+ *   google_rating                            -> google_rating
+ *   google_review_count                      -> google_review_count
  *   (always false)                           -> premium
  *   (always null)                            -> owner_id
  *
- * Not migrated (present in Keystatic, not in the target column list you
- * gave me — tell me if any of these should be added):
- *   email, why_choose_us, gallery, address, latitude, longitude,
- *   sponsored, services, reviews, google_rating, google_review_count
+ * Not migrated yet (present in Keystatic, not in the target column list —
+ * tell me if any of these should be added):
+ *   email, why_choose_us, gallery, sponsored, services, reviews
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -63,6 +67,11 @@ interface KeystaticListing {
   hours?: string;
   years_in_business?: number | null;
   licensed_insured?: boolean;
+  address?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  google_rating?: number | null;
+  google_review_count?: number | null;
 }
 
 interface BusinessRow {
@@ -77,6 +86,11 @@ interface BusinessRow {
   hours: string | null;
   years_in_business: number | null;
   licensed_insured: boolean;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  google_rating: number | null;
+  google_review_count: number | null;
   premium: false;
   owner_id: null;
 }
@@ -115,6 +129,11 @@ function mapListing(fileSlug: string, data: KeystaticListing): BusinessRow {
     hours: emptyToNull(data.hours),
     years_in_business: data.years_in_business ?? null,
     licensed_insured: Boolean(data.licensed_insured),
+    address: emptyToNull(data.address),
+    latitude: data.latitude ?? null,
+    longitude: data.longitude ?? null,
+    google_rating: data.google_rating ?? null,
+    google_review_count: data.google_review_count ?? null,
     premium: false,
     owner_id: null,
   };
