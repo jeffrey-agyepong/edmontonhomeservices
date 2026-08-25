@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Log In"
+  description="Log in to Edmonton Home Services."
+  noindex={true}
+>
+  <section class="max-w-md mx-auto my-16">
+    <div class="form-card">
+      <h2 class="flex items-center gap-3">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--accent)"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-6 h-6"
+          aria-hidden="true"
+        >
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          ></path>
+        </svg>Log in
+      </h2>
+      <p class="text-(--text-dim) mt-0 mb-4">
+        Enter your email and we'll send you a link to log in. No password
+        needed.
+      </p>
+
+      <form id="login-form">
+        <label for="email"
+          >Email
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="you@example.com"
+            required
+          />
+        </label>
+
+        <button
+          type="submit"
+          id="login-submit"
+          class="btn-accent text-white border-0 mt-2"
+        >
+          Send magic link
+        </button>
+      </form>
+
+      <p
+        id="login-status"
+        class="mt-4 mb-0 text-sm hidden"
+        role="status"
+        aria-live="polite"
+      >
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { createSupabaseBrowserClient } from '../lib/supabase-browser';
+
+  const supabase = createSupabaseBrowserClient();
+  const base = import.meta.env.BASE_URL;
+
+  const form = document.getElementById('login-form') as HTMLFormElement;
+  const submitButton = document.getElementById(
+    'login-submit',
+  ) as HTMLButtonElement;
+  const status = document.getElementById(
+    'login-status',
+  ) as HTMLParagraphElement;
+
+  function showStatus(message: string, isError: boolean) {
+    status.textContent = message;
+    status.classList.remove('hidden');
+    status.style.color = isError ? 'var(--danger)' : 'var(--primary)';
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = (
+      form.elements.namedItem('email') as HTMLInputElement
+    ).value.trim();
+    if (!email) return;
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending…';
+
+    const redirectTo = `${window.location.origin}${base}auth/callback`.replace(
+      /([^:])\/\/+/g,
+      '$1/',
+    );
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: redirectTo },
+    });
+
+    submitButton.disabled = false;
+    submitButton.textContent = 'Send magic link';
+
+    if (error) {
+      showStatus(error.message, true);
+    } else {
+      showStatus(
+        `Check ${email} for a link to log in. It'll expire shortly, so use it soon.`,
+        false,
+      );
+      form.reset();
+    }
+  });
+</script>
