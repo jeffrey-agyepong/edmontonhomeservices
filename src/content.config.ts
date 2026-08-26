@@ -84,6 +84,10 @@ const categorySchema = z.object({
   slug: z.string().optional(),
   description: z.string().default(''),
   icon: z.string().default(''),
+  // Shown on the /categories page's card grid (CategoryBox.astro). Empty
+  // by default — no per-category photo data exists yet, so the card
+  // falls back to its decorative placeholder box until this is set.
+  image: z.string().default(''),
   order: z.number().default(0),
 });
 

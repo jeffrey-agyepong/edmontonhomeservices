@@ -12,9 +12,14 @@
   --line: #3a3832;
   --text: #f8f6f1;
   --text-dim: #a8a296;
-  /* Deep green for headings, primary buttons and branding. */
-  --primary: #37765f;
+  /* Deep green for primary buttons, links, and branding. */
+  --primary: #34d399;
   --primary-ink: #ffffff;
+  /* h1-h3 use this instead of --primary — a brighter green just for large
+     headings in dark mode. Kept as its own variable rather than changing
+     --primary itself, since --primary also drives buttons, links, and
+     focus rings, which aren't part of this change. */
+  --heading: #34d399;
   /* Warm terracotta, used sparingly: CTA buttons, ratings, badges. */
   --accent: #d98868;
   --accent-ink: #1c1b19;
@@ -57,6 +62,13 @@ h5,
 h6 {
   font-family: var(--font-display);
   color: var(--primary);
+}
+/* Large section/page headings get the brighter dark-mode green; smaller
+   ones (h4-h6) keep --primary, same as buttons/links/branding. */
+h1,
+h2,
+h3 {
+  color: var(--heading);
 }
 
 a {
@@ -335,7 +347,7 @@ main.wrap {
   padding: 11px 14px;
   text-align: left;
   text-decoration: none;
-  color: var(--primary);
+  color: var(--text);
   font-size: 14px;
   border-top: 1px solid var(--line);
 }
@@ -1134,6 +1146,9 @@ label.check:hover input[type='radio']:not(:disabled) {
   --text-dim: #6b665c;
   --primary: #1f4e3d;
   --primary-ink: #ffffff;
+  /* Same value as --primary here on purpose — headings keep their current
+     look in light mode. Only dark mode's --heading (above) changes. */
+  --heading: #1f4e3d;
   --accent: #c46d4b;
   --accent-ink: #1c1b19;
   --input-bg: #ffffff;

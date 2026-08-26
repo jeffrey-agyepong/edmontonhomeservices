@@ -1,0 +1,195 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ListingCard from './ListingCard.astro';
+
+interface Props {
+  listings: CollectionEntry<'listings'>[];
+  categoryName: string;
+}
+
+const { listings, categoryName } = Astro.props;
+
+// Real values only — never a hardcoded/placeholder option list. Collapses
+// to an empty array (and the group just doesn't render) for a category
+// where nobody has that data yet, rather than inventing options.
+//
+// No Neighborhood filter here on purpose — most listings have no
+// neighborhood set, and most that do are mobile trades serving the whole
+// city rather than one physical location, so a location-based filter
+// would misrepresent how these businesses actually operate.
+const services = [
+  ...new Set(listings.flatMap((l) => l.data.services)),
+].sort((a, b) => a.localeCompare(b));
+
+// "Recommended" (the default sort) isn't a fabricated ranking — it's
+// premium listings first (the one thing on this site that's actually an
+// earned, paid distinction — see /advertise), then alphabetical. The
+// client-side sort script re-derives this same order if "Recommended" is
+// picked again after switching away from it.
+const recommended = [...listings].sort(
+  (a, b) =>
+    Number(b.data.premium) - Number(a.data.premium) ||
+    a.data.name.localeCompare(b.data.name),
+);
+---
+
+{
+  listings.length === 0 ? (
+    <p class="category-description">Nothing here yet.</p>
+  ) : (
+    <div class="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8 items-start">
+      <aside class="flex flex-col gap-6">
+        <h2
+          class="mt-0 mb-0 flex items-center gap-2 text-lg font-bold text-(--text)"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--primary)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-5 w-5 flex-none"
+            aria-hidden="true"
+          >
+            <line x1="21" x2="14" y1="4" y2="4" />
+            <line x1="10" x2="3" y1="4" y2="4" />
+            <line x1="21" x2="12" y1="12" y2="12" />
+            <line x1="8" x2="3" y1="12" y2="12" />
+            <line x1="21" x2="16" y1="20" y2="20" />
+            <line x1="12" x2="3" y1="20" y2="20" />
+            <line x1="14" x2="14" y1="2" y2="6" />
+            <line x1="8" x2="8" y1="10" y2="14" />
+            <line x1="16" x2="16" y1="18" y2="22" />
+          </svg>
+          Filters
+        </h2>
+
+        {services.length > 0 && (
+          <div class="flex flex-col gap-2">
+            <h3 class="mt-0 mb-1 text-sm font-semibold uppercase tracking-wide text-(--text-dim)">
+              Service Type
+            </h3>
+            {services.map((s) => (
+              <label class="check">
+                <input type="checkbox" data-filter="service" value={s} />
+                <span>{s}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </aside>
+
+      <div>
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <p class="mt-0 mb-0 text-(--text-dim)">
+            <span data-results-count>{listings.length}</span>{' '}
+            {listings.length === 1 ? 'provider' : 'providers'} found
+          </p>
+
+          <label class="flex items-center gap-2 text-sm text-(--text-dim)">
+            Sort by
+            <select data-sort-select id="category-sort">
+              <option value="recommended">Recommended</option>
+              <option value="rating">Highest Rated</option>
+              <option value="alpha">Alphabetical</option>
+            </select>
+          </label>
+        </div>
+
+        <div
+          data-results-grid
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {recommended.map((l) => (
+            <ListingCard listing={l} categoryName={categoryName} />
+          ))}
+        </div>
+
+        <p
+          data-no-results
+          class="hidden mt-0 mb-0 text-(--text-dim) text-center py-10"
+        >
+          No providers match the selected filters.
+        </p>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  // Client-side filter + sort over the already-rendered cards — no
+  // re-fetching, just showing/hiding and reordering the DOM nodes that are
+  // already there.
+  const grid = document.querySelector<HTMLElement>('[data-results-grid]');
+  const noResults = document.querySelector<HTMLElement>('[data-no-results]');
+  const countEl = document.querySelector<HTMLElement>('[data-results-count]');
+  const sortSelect = document.querySelector<HTMLSelectElement>(
+    '[data-sort-select]',
+  );
+  const filterInputs = document.querySelectorAll<HTMLInputElement>(
+    '[data-filter]',
+  );
+
+  if (grid) {
+    const cards = Array.from(
+      grid.querySelectorAll<HTMLElement>('[data-listing-card]'),
+    );
+
+    function checkedValues(filter: string): string[] {
+      return Array.from(filterInputs)
+        .filter((el) => el.dataset.filter === filter && el.checked)
+        .map((el) => el.value);
+    }
+
+    function applyFilters() {
+      const wantedServices = checkedValues('service');
+      let visibleCount = 0;
+
+      for (const card of cards) {
+        const cardServices = (card.dataset.services ?? '')
+          .split('|')
+          .filter(Boolean);
+
+        const matchesService =
+          wantedServices.length === 0 ||
+          wantedServices.some((s) => cardServices.includes(s));
+
+        card.classList.toggle('hidden', !matchesService);
+        if (matchesService) visibleCount++;
+      }
+
+      if (countEl) countEl.textContent = String(visibleCount);
+      noResults?.classList.toggle('hidden', visibleCount !== 0);
+    }
+
+    function applySort() {
+      const mode = sortSelect?.value ?? 'recommended';
+
+      const sorted = [...cards].sort((a, b) => {
+        if (mode === 'alpha') {
+          return (a.dataset.name ?? '').localeCompare(b.dataset.name ?? '');
+        }
+        if (mode === 'rating') {
+          return (
+            Number(b.dataset.rating ?? -1) - Number(a.dataset.rating ?? -1) ||
+            (a.dataset.name ?? '').localeCompare(b.dataset.name ?? '')
+          );
+        }
+        // recommended: premium first, then alphabetical — matches the
+        // server-rendered initial order.
+        return (
+          Number(b.dataset.premium ?? 0) - Number(a.dataset.premium ?? 0) ||
+          (a.dataset.name ?? '').localeCompare(b.dataset.name ?? '')
+        );
+      });
+
+      for (const card of sorted) grid.appendChild(card);
+    }
+
+    filterInputs.forEach((input) =>
+      input.addEventListener('change', applyFilters),
+    );
+    sortSelect?.addEventListener('change', applySort);
+  }
+</script>

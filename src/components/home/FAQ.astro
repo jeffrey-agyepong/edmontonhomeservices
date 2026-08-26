@@ -56,7 +56,7 @@ const {
       collapsible
         ? faqs.map(({ question, answer }) => (
             <details class="faq-item">
-              <summary class="faq-question text-lg font-bold text-(--primary) cursor-pointer">
+              <summary class="faq-question text-lg font-bold text-(--heading) cursor-pointer">
                 <span>{question}</span>
                 <span class="faq-icon" aria-hidden="true" />
               </summary>
@@ -65,7 +65,7 @@ const {
           ))
         : faqs.map(({ question, answer }) => (
             <div class="faq-item">
-              <h3 class="text-lg font-bold text-(--primary)">{question}</h3>
+              <h3 class="text-lg font-bold text-(--heading)">{question}</h3>
               <p class="faq-answer text-(--text-dim) mt-2">{answer}</p>
             </div>
           ))

@@ -52,7 +52,7 @@ const cards = populated.map(({ category, listings }) => ({
               class="category-card-title-wrap no-underline"
               href={categoryHref(category.id)}
             >
-              <h3 class="category-card-title text-lg sm:text-2xl font-medium text-left text-(--primary) mb-2">
+              <h3 class="category-card-title text-lg sm:text-2xl font-medium text-left text-(--heading) mb-2">
                 {category.data.name}
               </h3>
             </a>
@@ -113,7 +113,7 @@ const cards = populated.map(({ category, listings }) => ({
             </div>
 
             <a
-              class="category-view-all text-(--primary)"
+              class="category-view-all text-(--text)"
               href={categoryHref(category.id)}
             >
               View all {category.data.name} &rarr;

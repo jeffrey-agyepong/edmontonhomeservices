@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ListingRow from '../../components/ListingRow.astro';
 import Sponsors from '../../components/home/Sponsors.astro';
 import PageHero from '../../components/PageHero.astro';
+import CategoryListings from '../../components/category/CategoryListings.astro';
 import { sortListings } from '../../lib/sort';
 
 export async function getStaticPaths() {
@@ -58,15 +58,7 @@ const categoryMetaDescription = [
 
   <Sponsors categoryName={c.name} categoryId={category.id} />
 
-  <section class="category-box category-box--wide my-8">
-    <div class="category-sites">
-      {
-        listings.length === 0 ? (
-          <p class="category-description">Nothing here yet.</p>
-        ) : (
-          listings.map((l, i) => <ListingRow listing={l} rank={i + 1} />)
-        )
-      }
-    </div>
+  <section class="wrap my-8">
+    <CategoryListings listings={listings} categoryName={c.name} />
   </section>
 </BaseLayout>
