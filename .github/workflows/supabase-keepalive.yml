@@ -1,0 +1,34 @@
+name: Supabase Keepalive
+
+# Free-tier Supabase projects pause themselves after 7 days with no
+# activity. This workflow's only job is to look active: one lightweight
+# read against the businesses table, once a week, comfortably inside that
+# window. It reads nothing sensitive and writes nothing, so it only needs
+# the publishable (anon) key — never the service_role key.
+
+on:
+  schedule:
+    # Every Monday at 00:00 UTC. GitHub Actions cron can run several
+    # minutes late on the free plan, which doesn't matter here — this only
+    # needs to land sometime well within each 7-day window, not on the
+    # dot.
+    - cron: '0 0 * * 1'
+  # Lets this run on demand from the Actions tab (a "Run workflow" button),
+  # so it can be tested right away instead of waiting for next Monday.
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase (read businesses table)
+        env:
+          SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl -sS -f \
+            "$SUPABASE_URL/rest/v1/businesses?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY"
+          echo
+          echo "Supabase responded — project is active."

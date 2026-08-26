@@ -82,7 +82,21 @@ const allCategories = (await getCollection('categories')).sort(
         <div class="form-card">
           <h2 class="mt-0">Edit your listing</h2>
 
-          <form id="edit-form">
+          {/*
+            onsubmit is a plain inline HTML attribute here, deliberately not
+            left to the module <script> below to attach via
+            addEventListener. It runs no matter what — even if that script
+            fails to load entirely (as it currently does locally: the
+            browser is blocking node_modules/.vite/deps/@supabase_ssr.js
+            with a corrupted-content/MIME error, which stops the whole
+            module — including its own preventDefault() — from ever
+            running). This won't make Save actually work while that's
+            broken (the update() call still lives in the module script),
+            but it stops the native-GET fallback and the resulting
+            /dashboard?id=1&name=... URL regardless of whether that deeper
+            issue is fixed.
+          */}
+          <form id="edit-form" onsubmit="event.preventDefault()">
             <input type="hidden" name="id" value={business.id} />
             {/* TEMP DEBUG — remove once the save issue is sorted out. Only
                 here so the client script can log it against the logged-in
