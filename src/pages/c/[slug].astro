@@ -26,11 +26,25 @@ const { category, listings } = Astro.props;
 const c = category.data;
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
+
+// "in Edmonton" belongs on the title tag and H1 — the two places it
+// actually earns local-SEO value — but not in the breadcrumb trail below,
+// which stays a plain "Home > Categories > House Cleaning" path.
+const categoryTitle = `${c.name} in Edmonton`;
+
+// A real sentence that happens to mention Edmonton, not the category's
+// raw description with "in Edmonton" appended onto the end of it.
+const categoryMetaDescription = [
+  `Find trusted ${c.name.toLowerCase()} services in Edmonton.`,
+  c.description,
+]
+  .filter(Boolean)
+  .join(' ');
 ---
 
-<BaseLayout title={c.name} description={c.description}>
+<BaseLayout title={categoryTitle} description={categoryMetaDescription}>
   <PageHero
-    title={c.name}
+    title={categoryTitle}
     icon={c.icon}
     description={c.description ||
       'Browse our complete directory of Edmonton home service professionals.'}

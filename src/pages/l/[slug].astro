@@ -66,9 +66,16 @@ const galleryStyles =
   d.premium && d.gallery.length === 0
     ? [0, 1, 2].map((i) => placeholderGradient(listing.id, i))
     : [];
+
+// The real neighborhood is more specific (and more useful for local SEO)
+// than a generic "in Edmonton" when a business actually has one on file —
+// most don't yet, so this falls back to the city name.
+const listingTitle = d.neighborhood
+  ? `${d.name} in ${d.neighborhood}`
+  : `${d.name} in Edmonton`;
 ---
 
-<BaseLayout title={d.name} description={d.description}>
+<BaseLayout title={listingTitle} description={d.description}>
   <div class="listing-page">
     <Breadcrumbs
       bar
@@ -149,7 +156,7 @@ const galleryStyles =
           )
         }
         <div class="listing-head-text">
-          <h1>{d.name}</h1>
+          <h1>{listingTitle}</h1>
         </div>
       </div>
 
