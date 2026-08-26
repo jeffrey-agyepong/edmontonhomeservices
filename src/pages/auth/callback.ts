@@ -30,15 +30,7 @@ export const GET: APIRoute = async ({ request, cookies, redirect, url }) => {
   }
 
   const supabase = createSupabaseServerClient({ request, cookies });
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-
-  // TEMP DEBUG — remove once the redirect loop is sorted out.
-  console.log('[auth/callback] exchange error:', error?.message ?? null);
-  console.log('[auth/callback] exchange session present:', !!data.session);
-  console.log(
-    '[auth/callback] outgoing Set-Cookie headers:',
-    Array.from(cookies.headers()),
-  );
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
     return redirect(join(`login?error=${encodeURIComponent(error.message)}`));

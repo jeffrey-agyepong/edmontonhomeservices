@@ -83,25 +83,15 @@ const allCategories = (await getCollection('categories')).sort(
           <h2 class="mt-0">Edit your listing</h2>
 
           {/*
-            onsubmit is a plain inline HTML attribute here, deliberately not
-            left to the module <script> below to attach via
-            addEventListener. It runs no matter what — even if that script
-            fails to load entirely (as it currently does locally: the
-            browser is blocking node_modules/.vite/deps/@supabase_ssr.js
-            with a corrupted-content/MIME error, which stops the whole
-            module — including its own preventDefault() — from ever
-            running). This won't make Save actually work while that's
-            broken (the update() call still lives in the module script),
-            but it stops the native-GET fallback and the resulting
-            /dashboard?id=1&name=... URL regardless of whether that deeper
-            issue is fixed.
+            onsubmit as a plain inline HTML attribute, not left solely to
+            the module <script> below to attach via addEventListener. It
+            runs even if that script fails to load for some reason (a
+            Vite/CDN hiccup, an ad blocker, etc.) — belt-and-suspenders so
+            a broken script degrades to "the button does nothing" instead
+            of leaking every field into the URL via a native GET submit.
           */}
           <form id="edit-form" onsubmit="event.preventDefault()">
             <input type="hidden" name="id" value={business.id} />
-            {/* TEMP DEBUG — remove once the save issue is sorted out. Only
-                here so the client script can log it against the logged-in
-                user's id; never sent in the update payload itself. */}
-            <input type="hidden" name="owner_id" value={business.owner_id} />
 
             <label for="name">
               Business Name
@@ -289,29 +279,11 @@ const allCategories = (await getCollection('categories')).sort(
 
   editForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    // TEMP DEBUG — remove once the save issue is sorted out. If this
-    // never prints, the JS handler isn't the thing running — the browser
-    // is doing a plain form submission instead, which is the bug.
-    console.log('[dashboard] submit intercepted, preventDefault() called');
-
     if (!saveButton) return;
 
     const formData = new FormData(editForm);
     const id = formData.get('id')?.toString();
     if (!id) return;
-
-    // TEMP DEBUG — remove once the save issue is sorted out. If these two
-    // don't match, that's the whole bug: the "Owners update own listing"
-    // RLS policy compares owner_id against the logged-in user's id, so a
-    // mismatch here means the policy will silently match zero rows.
-    const {
-      data: { user: currentUser },
-    } = await supabase.auth.getUser();
-    console.log('[dashboard] logged-in user id:', currentUser?.id);
-    console.log(
-      '[dashboard] business.owner_id:',
-      formData.get('owner_id')?.toString(),
-    );
 
     const yearsRaw = formData.get('years_in_business')?.toString().trim();
 

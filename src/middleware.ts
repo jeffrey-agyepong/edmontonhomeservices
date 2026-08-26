@@ -27,14 +27,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const supabase = createSupabaseServerClient({ request, cookies });
 
-  // TEMP DEBUG — remove once the redirect loop is sorted out. Raw incoming
-  // Cookie header, so we can see whether the browser sent any sb-* cookies
-  // back at all on this /dashboard request.
-  console.log(
-    '[middleware] incoming Cookie header:',
-    request.headers.get('cookie'),
-  );
-
   // getUser() (not getSession()) deliberately — getSession() just reads
   // the session out of cookies and trusts it, which means a forged or
   // stale cookie would pass. getUser() re-checks with Supabase's Auth
@@ -43,12 +35,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // anywhere a session is used to gate access, not just a style choice.
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
-
-  // TEMP DEBUG — remove once the redirect loop is sorted out.
-  console.log('[middleware] getUser() user:', user?.id ?? null);
-  console.log('[middleware] getUser() error:', error?.message ?? null);
 
   if (!user) {
     const loginUrl = `${base}login`.replace(/\/+/g, '/');
