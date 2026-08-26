@@ -46,13 +46,35 @@ const websiteJsonLd = {
 <link rel="canonical" href={canonical} />
 
 <!-- Outfit for headings/brand, Inter for body copy and UI — see the
-     --font-display / --font-body variables in app.css. -->
+     --font-display / --font-body variables in app.css.
+
+     Loaded async (preload + swap-on-load) rather than a plain <link
+     rel="stylesheet">, which is render-blocking — Lighthouse flagged this
+     stylesheet as sitting in the critical path (~750ms). This keeps the
+     browser fetching it at high priority (same as before) but lets the
+     page paint without waiting on it; `media="print"` is a standard trick
+     to mark a stylesheet as not render-blocking, then onload flips it to
+     "all" once it's actually in. <noscript> covers browsers with JS
+     disabled, where onload never fires. -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  rel="stylesheet"
+  rel="preload"
+  as="style"
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
 />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+  media="print"
+  onload="this.media='all'"
+/>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+  />
+</noscript>
 {noindex && <meta name="robots" content="noindex, follow" />}
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:title" content={title} />

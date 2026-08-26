@@ -46,4 +46,18 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  build: {
+    /*
+     * Astro's default ('auto') only inlines a page's stylesheet directly
+     * into the HTML when it's under ~4KB — this site's global stylesheet
+     * (app.css + Tailwind) is larger than that, so it was shipping as a
+     * separate <link rel="stylesheet">, which Lighthouse flagged as
+     * render-blocking (~310ms on its own, on top of the font CSS above).
+     * 'always' inlines it regardless of size, trading a slightly bigger
+     * HTML payload (repeated per page, since there's no separate file to
+     * cache across page loads) for removing that extra round-trip from
+     * the critical rendering path entirely.
+     */
+    inlineStylesheets: 'always',
+  },
 });
