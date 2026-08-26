@@ -1,7 +1,6 @@
 {
   "name": "Furnace & Heating Repair",
-  "slug": "furnace-heating-repair",
   "description": "Furnace repair, replacement, and seasonal maintenance.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/yeghomeservices-heating-furnace-repair.webp",
   "order": 6
 }

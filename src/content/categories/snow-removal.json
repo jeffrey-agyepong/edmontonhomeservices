@@ -1,7 +1,6 @@
 {
   "name": "Snow Removal",
-  "slug": "snow-removal",
   "description": "Driveway and walkway clearing, residential and commercial.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/yeghomeservices-snow-removal.webp",
   "order": 5
 }

@@ -1,7 +1,6 @@
 {
   "name": "House Cleaning",
-  "slug": "house-cleaning",
   "description": "Deep cleans, regular maintenance, and move-out cleaning.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/yeghomeservices-home-cleaning.webp",
   "order": 1
 }

@@ -148,21 +148,28 @@ main.wrap {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 18px;
-  align-items: start;
+  /* No align-items: start here on purpose — the default (stretch) is what
+     makes every card in a row match the tallest one, regardless of how
+     long that category's description happens to be. See .category-box
+     and .category-header below for how that extra height gets used
+     instead of just sitting as blank space under a short card. */
 }
 .category-box {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .category-box--wide {
   max-width: 820px;
   margin: 0 auto;
 }
 
-/* Decorative only, no per-category photo data exists yet. See the
-   comment in CategoryBox.astro. */
+/* Shown only when a category has no image set in Keystatic yet — see
+   CategoryBox.astro. */
 .category-image-placeholder {
   aspect-ratio: 16 / 9;
   background: var(--bg);
@@ -170,6 +177,13 @@ main.wrap {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.category-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
 }
 .category-image-placeholder svg {
   width: 40px;
@@ -181,6 +195,11 @@ main.wrap {
   border-bottom: 1px solid var(--line);
   background: var(--panel-head);
   transition: background 0.25s linear;
+  /* Absorbs whatever extra height .category-box gets stretched to, so a
+     short description doesn't just leave blank space above the "View
+     all" link — the link stays flush at the bottom of every card either
+     way. */
+  flex: 1 1 auto;
 }
 .category-header:hover {
   background: var(--panel-hover);

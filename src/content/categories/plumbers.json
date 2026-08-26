@@ -1,7 +1,6 @@
 {
   "name": "Plumbers",
-  "slug": "plumbers",
   "description": "Leaks, clogs, installs, and emergency repairs.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/edmontonhomeservices-plumbing.webp",
   "order": 9
 }

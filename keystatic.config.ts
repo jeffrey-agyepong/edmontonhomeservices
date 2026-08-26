@@ -147,11 +147,23 @@ export default config({
       slugField: 'slug',
       path: 'src/content/categories/*',
       format: { data: 'json' },
+      // Without this, Keystatic falls back to showing just the raw
+      // slugField value (the slug) anywhere a category is represented —
+      // its own list view, and the relationship picker on a listing's
+      // Category field. Just 'name' — Keystatic already shows the slug
+      // itself as the list view's leading/link column automatically;
+      // listing 'slug' again here in columns renders a second, broken,
+      // empty column rather than a useful one.
+      columns: ['name'],
       schema: {
         name: fields.text({ label: 'Name', validation: { isRequired: true } }),
         slug: fields.text({ label: 'Slug', validation: { isRequired: true } }),
         description: fields.text({ label: 'Description', multiline: true }),
-        icon: fields.text({ label: 'Icon (inline SVG)', multiline: true }),
+        image: fields.url({
+          label: 'Card image',
+          description:
+            'Shown on the /categories page. An ImageKit URL (ik.imagekit.io/...) gets automatic responsive sizing; any other URL is used as-is. Leave blank to keep the placeholder box.',
+        }),
         order: fields.number({ label: 'Order', defaultValue: 0 }),
       },
     }),

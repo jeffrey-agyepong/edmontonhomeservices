@@ -1,7 +1,6 @@
 {
   "name": "Handyman Services",
-  "slug": "handyman-services",
   "description": "Small repairs, installs, and odd jobs around the house.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/yeghomeservices-handyman.webp",
   "order": 13
 }

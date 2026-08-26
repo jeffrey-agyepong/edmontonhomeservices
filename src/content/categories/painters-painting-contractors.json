@@ -1,7 +1,6 @@
 {
   "name": "Painters & Painting Contractors",
-  "slug": "painters-painting-contractors",
   "description": "Interior and exterior painting for homes and businesses.",
-  "icon": "",
+  "image": "https://ik.imagekit.io/boxhuwbys/yeghomeservices-painter.webp",
   "order": 11
 }
