@@ -67,12 +67,10 @@ const galleryStyles =
     ? [0, 1, 2].map((i) => placeholderGradient(listing.id, i))
     : [];
 
-// The real neighborhood is more specific (and more useful for local SEO)
-// than a generic "in Edmonton" when a business actually has one on file —
-// most don't yet, so this falls back to the city name.
-const listingTitle = d.neighborhood
-  ? `${d.name} in ${d.neighborhood}`
-  : `${d.name} in Edmonton`;
+// Real neighborhood only, no generic "in Edmonton" filler when a listing
+// doesn't have one on file — most don't yet, so this is plain d.name for
+// most listings today.
+const listingTitle = d.neighborhood ? `${d.name} in ${d.neighborhood}` : d.name;
 ---
 
 <BaseLayout title={listingTitle} description={d.description}>
