@@ -138,6 +138,24 @@ const base = import.meta.env.BASE_URL;
             ></path>
           </svg>Send a message
         </h2>
+
+        <!-- Hidden form for Netlify build-time detection. Netlify unions
+             this with the real form below by matching `name="contact"` —
+             but only if every field name here actually matches a field
+             down there. This previously listed phone/website (which don't
+             exist on this form at all — looks like it was copied from
+             submit-business.astro) and was missing lastname/topic/the
+             honeypot, so Netlify's registered schema for "contact" didn't
+             match what the real form actually submits. -->
+        <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+          <input type="text" name="name" />
+          <input type="text" name="lastname" />
+          <input type="email" name="email" />
+          <input type="text" name="topic" />
+          <input name="bot-field" />
+          <textarea name="message"></textarea>
+        </form>
+
         <form
           name="contact"
           method="POST"
