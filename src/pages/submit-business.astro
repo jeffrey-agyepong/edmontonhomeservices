@@ -36,21 +36,8 @@ const base = import.meta.env.BASE_URL;
           <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"></path>
         </svg>Business details
       </h2>
-      <form
-        name="submit-business"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-      >
-        <input type="hidden" name="form-name" value="submit-business" />
-        <p class="hidden">
-          <label
-            >Don't fill this out if you're human: <input
-              name="bot-field"
-            /></label
-          >
-        </p>
 
+      <form id="submit-business-form" onsubmit="event.preventDefault()">
         <label for="business-name"
           >Business Name
           <input
@@ -67,7 +54,6 @@ const base = import.meta.env.BASE_URL;
           <select name="category" id="category" required>
             <option value="" selected disabled>Select a category</option>
             {categories.map((c) => <option value={c.id}>{c.data.name}</option>)}
-            <option value="other">Other</option>
           </select>
         </label>
 
@@ -95,23 +81,12 @@ const base = import.meta.env.BASE_URL;
         </div>
 
         <label for="neighborhood"
-          >Neighborhood
+          >Neighborhood / Service Area
           <input
             type="text"
             name="neighborhood"
             id="neighborhood"
-            placeholder="e.g. Strathcona"
-          />
-        </label>
-
-        <label for="contact-email"
-          >Your Email
-          <input
-            type="email"
-            name="contact-email"
-            id="contact-email"
-            placeholder="you@example.com"
-            required
+            placeholder="e.g. Strathcona, or 'all of Edmonton'"
           />
         </label>
 
@@ -125,10 +100,81 @@ const base = import.meta.env.BASE_URL;
             required></textarea>
         </label>
 
-        <button type="submit" class="btn-accent text-white border-0 mt-2"
-          >Submit Business</button
+        <button
+          type="submit"
+          id="submit-business-button"
+          class="btn-accent text-white border-0 mt-2"
         >
+          Submit Business
+        </button>
       </form>
+
+      <p
+        id="submit-business-status"
+        class="mt-4 mb-0 text-sm hidden"
+        role="status"
+        aria-live="polite"
+      />
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import { createSupabaseBrowserClient } from '../lib/supabase-browser';
+
+  const supabase = createSupabaseBrowserClient();
+
+  const form = document.getElementById(
+    'submit-business-form',
+  ) as HTMLFormElement;
+  const submitButton = document.getElementById(
+    'submit-business-button',
+  ) as HTMLButtonElement;
+  const status = document.getElementById(
+    'submit-business-status',
+  ) as HTMLParagraphElement;
+
+  function showStatus(message: string, isError: boolean) {
+    status.textContent = message;
+    status.classList.remove('hidden');
+    status.style.color = isError ? 'var(--danger)' : 'var(--primary)';
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    submitButton.disabled = true;
+    const originalLabel = submitButton.textContent;
+    submitButton.textContent = 'Submitting…';
+
+    // Deliberately no `approved` or `premium` here at all — this client
+    // never decides its own trust status. The businesses table's
+    // "Public can submit a pending business" insert policy is what
+    // actually enforces approved = false (and premium = false), whether
+    // this form sends nothing for them (defaults apply) or someone
+    // skips this form and calls the API directly.
+    const { error } = await supabase.from('businesses').insert({
+      name: formData.get('business-name')?.toString().trim(),
+      category: formData.get('category')?.toString() || null,
+      phone: formData.get('phone')?.toString().trim() || null,
+      website: formData.get('website')?.toString().trim() || null,
+      neighborhood: formData.get('neighborhood')?.toString().trim() || null,
+      description: formData.get('description')?.toString().trim() || null,
+    });
+
+    submitButton.disabled = false;
+    submitButton.textContent = originalLabel;
+
+    if (error) {
+      showStatus(`Couldn't submit your business: ${error.message}`, true);
+    } else {
+      showStatus(
+        "Thanks! Your listing is being reviewed and will appear on the site once approved.",
+        false,
+      );
+      form.reset();
+    }
+  });
+</script>
