@@ -37,7 +37,11 @@ const base = import.meta.env.BASE_URL;
         </svg>Business details
       </h2>
 
-      <form id="submit-business-form" onsubmit="event.preventDefault()">
+      <form
+        id="submit-business-form"
+        onsubmit="event.preventDefault()"
+        novalidate
+      >
         <label for="business-name"
           >Business Name
           <input
@@ -48,6 +52,10 @@ const base = import.meta.env.BASE_URL;
             required
           />
         </label>
+        <p
+          id="business-name-error"
+          class="field-error mt-1 mb-0 text-sm hidden"
+          style="color: var(--danger)"></p>
 
         <label for="category"
           >Category
@@ -56,6 +64,10 @@ const base = import.meta.env.BASE_URL;
             {categories.map((c) => <option value={c.id}>{c.data.name}</option>)}
           </select>
         </label>
+        <p
+          id="category-error"
+          class="field-error mt-1 mb-0 text-sm hidden"
+          style="color: var(--danger)"></p>
 
         <div class="form-row">
           <label for="phone"
@@ -65,6 +77,8 @@ const base = import.meta.env.BASE_URL;
               name="phone"
               id="phone"
               placeholder="780-555-0123"
+              pattern="[0-9+\(\)\-. ]+"
+              title="Numbers only, e.g. 780-555-0123"
               required
             />
           </label>
@@ -72,12 +86,24 @@ const base = import.meta.env.BASE_URL;
           <label for="website"
             >Website
             <input
-              type="url"
+              type="text"
               name="website"
               id="website"
               placeholder="https://example.com"
+              pattern="(https?://)?([-\w]+\.)+[a-zA-Z]{2,}(/\S*)?"
+              title="Enter a domain, e.g. example.com or https://example.com"
             />
           </label>
+        </div>
+        <div class="form-row">
+          <p
+            id="phone-error"
+            class="field-error mt-1 mb-0 text-sm hidden"
+            style="color: var(--danger)"></p>
+          <p
+            id="website-error"
+            class="field-error mt-1 mb-0 text-sm hidden"
+            style="color: var(--danger)"></p>
         </div>
 
         <label for="neighborhood"
@@ -99,6 +125,10 @@ const base = import.meta.env.BASE_URL;
             placeholder="Services offered, years in business, what makes you stand out..."
             required></textarea>
         </label>
+        <p
+          id="description-error"
+          class="field-error mt-1 mb-0 text-sm hidden"
+          style="color: var(--danger)"></p>
 
         <button
           type="submit"
@@ -110,19 +140,44 @@ const base = import.meta.env.BASE_URL;
       </form>
 
       <p
-        id="submit-business-status"
+        id="submit-business-error"
         class="mt-4 mb-0 text-sm hidden"
         role="status"
         aria-live="polite"
+        style="color: var(--danger)"
       />
+
+      <!-- Inline success state, shown in place of the form after a
+           successful submit -->
+      <div id="submit-business-success" class="hidden">
+        <div
+          class="bg-(--primary)/10 border-(--primary)/20 mb-6 flex h-16 w-16 items-center justify-center rounded-full border"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--primary)"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-8 w-8"
+            aria-hidden="true"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+        </div>
+        <h3 class="mb-2 text-xl font-bold">Thanks, your listing is in.</h3>
+        <p class="text-(--text-dim)">
+          Your listing is being reviewed and will appear on the site once
+          approved.
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <script>
-  import { createSupabaseBrowserClient } from '../lib/supabase-browser';
-
-  const supabase = createSupabaseBrowserClient();
+  import { validateForm, clearFieldErrorOnInput } from '../lib/form-errors';
 
   const form = document.getElementById(
     'submit-business-form',
@@ -130,24 +185,57 @@ const base = import.meta.env.BASE_URL;
   const submitButton = document.getElementById(
     'submit-business-button',
   ) as HTMLButtonElement;
-  const status = document.getElementById(
-    'submit-business-status',
+  const errorMessage = document.getElementById(
+    'submit-business-error',
   ) as HTMLParagraphElement;
+  const successState = document.getElementById('submit-business-success');
 
-  function showStatus(message: string, isError: boolean) {
-    status.textContent = message;
-    status.classList.remove('hidden');
-    status.style.color = isError ? 'var(--danger)' : 'var(--primary)';
+  form
+    .querySelectorAll('input, select, textarea')
+    .forEach((field) =>
+      clearFieldErrorOnInput(
+        field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+      ),
+    );
+
+  function showError(message: string) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('hidden');
   }
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    errorMessage.classList.add('hidden');
+
+    if (!validateForm(form)) return;
 
     const formData = new FormData(form);
 
     submitButton.disabled = true;
     const originalLabel = submitButton.textContent;
     submitButton.textContent = 'Submitting…';
+
+    // Loaded dynamically, not as a static top-level import: if this
+    // module fails to load (a stale dev-server dependency cache, a
+    // blocked script, etc.), a static import would have silently broken
+    // this entire file before the submit listener above ever attached —
+    // the button would just do nothing, with no way to tell the visitor
+    // why. A dynamic import lets that failure be caught and shown instead.
+    let supabase;
+    try {
+      const { createSupabaseBrowserClient } = await import(
+        '../lib/supabase-browser'
+      );
+      supabase = createSupabaseBrowserClient();
+    } catch (moduleError) {
+      console.error('Failed to load the Supabase client:', moduleError);
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
+      showError(
+        "Couldn't load the submission form. Please refresh the page and try again, or contact us directly.",
+      );
+      return;
+    }
 
     // Deliberately no `approved` or `premium` here at all — this client
     // never decides its own trust status. The businesses table's
@@ -168,13 +256,19 @@ const base = import.meta.env.BASE_URL;
     submitButton.textContent = originalLabel;
 
     if (error) {
-      showStatus(`Couldn't submit your business: ${error.message}`, true);
+      // Postgres error code 42501 = insufficient_privilege, which is what
+      // a row-level security policy rejection surfaces as — a different,
+      // more actionable situation for the visitor than a generic failure.
+      if (error.code === '42501') {
+        showError(
+          "We couldn't save your listing due to a permissions issue on our end. Please contact us directly so we can help.",
+        );
+      } else {
+        showError(`Couldn't submit your business: ${error.message}`);
+      }
     } else {
-      showStatus(
-        "Thanks! Your listing is being reviewed and will appear on the site once approved.",
-        false,
-      );
-      form.reset();
+      form.classList.add('hidden');
+      successState?.classList.remove('hidden');
     }
   });
 </script>

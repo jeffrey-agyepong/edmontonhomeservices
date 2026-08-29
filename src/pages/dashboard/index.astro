@@ -75,6 +75,13 @@ const allCategories = (await getCollection('categories')).sort(
       >
         Log out
       </button>
+      <p
+        id="logout-error"
+        class="mt-2 mb-0 text-sm hidden"
+        role="status"
+        aria-live="polite"
+        style="color: var(--danger)"
+      ></p>
     </div>
 
     {
@@ -90,7 +97,7 @@ const allCategories = (await getCollection('categories')).sort(
             a broken script degrades to "the button does nothing" instead
             of leaking every field into the URL via a native GET submit.
           */}
-          <form id="edit-form" onsubmit="event.preventDefault()">
+          <form id="edit-form" onsubmit="event.preventDefault()" novalidate>
             <input type="hidden" name="id" value={business.id} />
 
             <label for="name">
@@ -103,6 +110,11 @@ const allCategories = (await getCollection('categories')).sort(
                 required
               />
             </label>
+            <p
+              id="name-error"
+              class="field-error mt-1 mb-0 text-sm hidden"
+              style="color: var(--danger)"
+            ></p>
 
             <label for="category">
               Category
@@ -117,6 +129,11 @@ const allCategories = (await getCollection('categories')).sort(
                 ))}
               </select>
             </label>
+            <p
+              id="category-error"
+              class="field-error mt-1 mb-0 text-sm hidden"
+              style="color: var(--danger)"
+            ></p>
 
             <label for="neighborhood">
               Neighborhood
@@ -138,20 +155,36 @@ const allCategories = (await getCollection('categories')).sort(
                   id="phone"
                   value={business.phone ?? ''}
                   placeholder="780-555-0123"
+                  pattern="[0-9+\(\)\-. ]+"
+                  title="Numbers only, e.g. 780-555-0123"
                 />
               </label>
 
               <label for="website">
                 Website
                 <input
-                  type="url"
+                  type="text"
                   name="website"
                   id="website"
                   value={business.website ?? ''}
                   placeholder="https://example.com"
+                  pattern="(https?://)?([-\w]+\.)+[a-zA-Z]{2,}(/\S*)?"
+                  title="Enter a domain, e.g. example.com or https://example.com"
                   required
                 />
               </label>
+            </div>
+            <div class="form-row">
+              <p
+                id="phone-error"
+                class="field-error mt-1 mb-0 text-sm hidden"
+                style="color: var(--danger)"
+              ></p>
+              <p
+                id="website-error"
+                class="field-error mt-1 mb-0 text-sm hidden"
+                style="color: var(--danger)"
+              ></p>
             </div>
 
             <label for="hours">
@@ -238,18 +271,50 @@ const allCategories = (await getCollection('categories')).sort(
 </BaseLayout>
 
 <script>
-  import { createSupabaseBrowserClient } from '../../lib/supabase-browser';
+  import { validateForm, clearFieldErrorOnInput } from '../../lib/form-errors';
 
-  const supabase = createSupabaseBrowserClient();
   const base = import.meta.env.BASE_URL;
+
+  // Loaded lazily inside each handler rather than as a static top-level
+  // import: if this module fails to load (a stale dev-server dependency
+  // cache, a blocked script, etc.), a static import would have silently
+  // broken this entire file before either addEventListener below ever
+  // attached — both buttons would just do nothing. Repeated calls resolve
+  // from the browser's module cache once a load succeeds, so this doesn't
+  // re-fetch anything on every click.
+  async function getSupabase() {
+    const { createSupabaseBrowserClient } = await import(
+      '../../lib/supabase-browser'
+    );
+    return createSupabaseBrowserClient();
+  }
 
   const logoutButton = document.getElementById(
     'logout-button',
   ) as HTMLButtonElement;
+  const logoutError = document.getElementById(
+    'logout-error',
+  ) as HTMLParagraphElement | null;
 
   logoutButton.addEventListener('click', async () => {
     logoutButton.disabled = true;
     logoutButton.textContent = 'Logging out…';
+    logoutError?.classList.add('hidden');
+
+    let supabase;
+    try {
+      supabase = await getSupabase();
+    } catch (moduleError) {
+      console.error('Failed to load the Supabase client:', moduleError);
+      logoutButton.disabled = false;
+      logoutButton.textContent = 'Log out';
+      if (logoutError) {
+        logoutError.textContent =
+          "Couldn't log out — please refresh the page and try again.";
+        logoutError.classList.remove('hidden');
+      }
+      return;
+    }
 
     // Clears the session both from the browser's in-memory state and from
     // the sb-* cookies it's stored in — the same cookies middleware.ts
@@ -270,6 +335,14 @@ const allCategories = (await getCollection('categories')).sort(
     'save-status',
   ) as HTMLParagraphElement | null;
 
+  editForm
+    ?.querySelectorAll('input, select, textarea')
+    .forEach((field) =>
+      clearFieldErrorOnInput(
+        field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+      ),
+    );
+
   function showSaveStatus(message: string, isError: boolean) {
     if (!saveStatus) return;
     saveStatus.textContent = message;
@@ -280,6 +353,9 @@ const allCategories = (await getCollection('categories')).sort(
   editForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!saveButton) return;
+    saveStatus?.classList.add('hidden');
+
+    if (!validateForm(editForm)) return;
 
     const formData = new FormData(editForm);
     const id = formData.get('id')?.toString();
@@ -290,6 +366,20 @@ const allCategories = (await getCollection('categories')).sort(
     saveButton.disabled = true;
     const originalLabel = saveButton.textContent;
     saveButton.textContent = 'Saving…';
+
+    let supabase;
+    try {
+      supabase = await getSupabase();
+    } catch (moduleError) {
+      console.error('Failed to load the Supabase client:', moduleError);
+      saveButton.disabled = false;
+      saveButton.textContent = originalLabel;
+      showSaveStatus(
+        "Couldn't load the dashboard's save function. Please refresh the page and try again.",
+        true,
+      );
+      return;
+    }
 
     // update(), not insert() — this row already exists (that's what
     // maybeSingle() found server-side). Sent through the browser client,
@@ -324,7 +414,17 @@ const allCategories = (await getCollection('categories')).sort(
     saveButton.textContent = originalLabel;
 
     if (error) {
-      showSaveStatus(`Couldn't save your changes: ${error.message}`, true);
+      // Postgres error code 42501 = insufficient_privilege, which is what
+      // a row-level security policy rejection surfaces as — a different,
+      // more actionable situation for the visitor than a generic failure.
+      if (error.code === '42501') {
+        showSaveStatus(
+          "We couldn't save your changes due to a permissions issue on our end. Please contact us so we can help.",
+          true,
+        );
+      } else {
+        showSaveStatus(`Couldn't save your changes: ${error.message}`, true);
+      }
     } else if (!data || data.length === 0) {
       showSaveStatus(
         "Couldn't save your changes — no matching row was updated. " +

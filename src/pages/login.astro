@@ -45,9 +45,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button
           type="submit"
           id="login-submit"
-          class="btn-accent text-white border-0 mt-2"
+          class="btn-accent text-white border-0 mt-2 text-light flex items-center justify-center gap-2 font-normal text-xl"
         >
-          Send magic link
+          <span id="login-submit-label">Send magic link</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
         </button>
       </form>
 
@@ -72,6 +84,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const submitButton = document.getElementById(
     'login-submit',
   ) as HTMLButtonElement;
+  // The button also holds an arrow icon as a sibling element, so its label
+  // is updated through this span rather than the button's textContent —
+  // overwriting textContent directly would wipe out the icon too.
+  const submitLabel = document.getElementById(
+    'login-submit-label',
+  ) as HTMLSpanElement;
   const status = document.getElementById(
     'login-status',
   ) as HTMLParagraphElement;
@@ -91,7 +109,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (!email) return;
 
     submitButton.disabled = true;
-    submitButton.textContent = 'Sending…';
+    submitLabel.textContent = 'Sending…';
 
     const redirectTo = `${window.location.origin}${base}auth/callback`.replace(
       /([^:])\/\/+/g,
@@ -104,7 +122,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     });
 
     submitButton.disabled = false;
-    submitButton.textContent = 'Send magic link';
+    submitLabel.textContent = 'Send magic link';
 
     if (error) {
       showStatus(error.message, true);

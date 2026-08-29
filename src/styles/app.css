@@ -25,11 +25,9 @@
   --accent-ink: #1c1b19;
   --radius: 4px;
   --wrap: 1280px;
-  /* Outfit for headings and bold brand elements, Inter for body copy and
-       UI (buttons, nav) — loaded in BaseLayout.astro's <head>. */
-  --font-display:
-    'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
+  /* Fraunces (serif) for headings and bold brand elements, Inter for body
+       copy and UI (buttons, nav) — loaded in BaseLayout.astro's <head>. */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-body:
     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;

@@ -142,14 +142,9 @@ const base = import.meta.env.BASE_URL;
         <!-- Hidden form for Netlify build-time detection. Netlify unions
              this with the real form below by matching `name="contact"` —
              but only if every field name here actually matches a field
-             down there. This previously listed phone/website (which don't
-             exist on this form at all — looks like it was copied from
-             submit-business.astro) and was missing lastname/topic/the
-             honeypot, so Netlify's registered schema for "contact" didn't
-             match what the real form actually submits. -->
+             down there. -->
         <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
           <input type="text" name="name" />
-          <input type="text" name="lastname" />
           <input type="email" name="email" />
           <input type="text" name="topic" />
           <input name="bot-field" />
@@ -157,10 +152,12 @@ const base = import.meta.env.BASE_URL;
         </form>
 
         <form
+          id="contact-form"
           name="contact"
           method="POST"
           data-netlify="true"
           netlify-honeypot="bot-field"
+          novalidate
         >
           <input type="hidden" name="form-name" value="contact" />
           <p class="hidden">
@@ -170,29 +167,22 @@ const base = import.meta.env.BASE_URL;
               /></label
             >
           </p>
-          <div class="form-row">
-            <label for="name"
-              >First Name
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="John"
-                required
-              />
-            </label>
-
-            <label for="lastname"
-              >Last Name
-              <input
-                type="text"
-                name="lastname"
-                id="lastname"
-                placeholder="Doe"
-                required
-              />
-            </label>
-          </div>
+          <label for="name"
+            >Name
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="John Doe"
+              pattern="[A-Za-z\s'\-]+"
+              title="Letters only, please"
+              required
+            />
+          </label>
+          <p
+            id="name-error"
+            class="field-error mt-1 mb-0 text-sm hidden"
+            style="color: var(--danger)"></p>
 
           <label for="email"
             >Email
@@ -201,9 +191,15 @@ const base = import.meta.env.BASE_URL;
               name="email"
               id="email"
               placeholder="john.doe@example.com"
+              title="Enter a valid email address"
               required
             />
           </label>
+          <p
+            id="email-error"
+            class="field-error mt-1 mb-0 text-sm hidden"
+            style="color: var(--danger)"></p>
+
           <label for="topic"
             >Topic
             <select name="topic" id="topic">
@@ -223,12 +219,119 @@ const base = import.meta.env.BASE_URL;
               placeholder="Your message here..."
               required></textarea>
           </label>
+          <p
+            id="message-error"
+            class="field-error mt-1 mb-0 text-sm hidden"
+            style="color: var(--danger)"></p>
 
           <button type="submit" class="btn-accent text-white border-0 mt-2"
             >Send Message</button
           >
         </form>
+
+        <p
+          id="contact-form-error"
+          class="mt-4 mb-0 text-sm hidden"
+          role="status"
+          aria-live="polite"
+          style="color: var(--danger)"
+        ></p>
+
+        <!-- Inline success state, shown in place of the form after a
+             successful submit -->
+        <div id="contact-form-success" class="hidden">
+          <div
+            class="bg-(--primary)/10 border-(--primary)/20 mb-6 flex h-16 w-16 items-center justify-center rounded-full border"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--primary)"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-8 w-8"
+              aria-hidden="true"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </div>
+          <h3 class="mb-2 text-xl font-bold">Thanks, your message is in.</h3>
+          <p class="text-(--text-dim)">
+            We've received your message and will reply within 24 hours.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import { validateForm, clearFieldErrorOnInput } from '../lib/form-errors';
+
+  const form = document.getElementById(
+    'contact-form',
+  ) as HTMLFormElement | null;
+  const errorMessage = document.getElementById('contact-form-error');
+  const successState = document.getElementById('contact-form-success');
+
+  form
+    ?.querySelectorAll('input, select, textarea')
+    .forEach((field) =>
+      clearFieldErrorOnInput(
+        field as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+      ),
+    );
+
+  function showError(message: string) {
+    if (!errorMessage) return;
+    errorMessage.textContent = message;
+    errorMessage.classList.remove('hidden');
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorMessage?.classList.add('hidden');
+
+    if (!validateForm(form)) return;
+
+    const submitButton = form.querySelector(
+      'button[type="submit"]',
+    ) as HTMLButtonElement | null;
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const response = await fetch(window.location.pathname, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(
+          new FormData(form) as unknown as Record<string, string>,
+        ).toString(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Netlify Forms responded with ${response.status}`);
+      }
+
+      form.classList.add('hidden');
+      successState?.classList.remove('hidden');
+    } catch (error) {
+      console.error('Contact form submission failed:', error);
+      // A TypeError here (as opposed to the explicit Error thrown above
+      // for a non-OK response) means fetch() itself never got a response
+      // at all — no network connection, DNS failure, etc. — a different
+      // situation from "the server said no" and worth telling visitors
+      // apart from a generic failure.
+      if (error instanceof TypeError) {
+        showError(
+          "Couldn't reach the server. Check your connection and try again.",
+        );
+      } else {
+        showError(
+          'Something went wrong sending your message. Please try again, or email us directly at info@edmontonhomeservices.com.',
+        );
+      }
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+</script>
