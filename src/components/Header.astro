@@ -56,6 +56,11 @@ const { base, href, submitHref } = Astro.props;
           class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)"
           href={href('advertise')}>Advertise</a
         >
+        <a
+          class="px-1 py-1 text-[15px] font-medium text-(--text) no-underline hover:text-(--primary)"
+          href={href('login')}
+          data-auth-link>Business Login</a
+        >
       </nav>
 
       <div class="flex items-center gap-3">
@@ -118,6 +123,7 @@ const { base, href, submitHref } = Astro.props;
               <a href={href('categories')}>Categories</a>
               <a href={href('about')}>About</a>
               <a href={href('advertise')}>Advertise</a>
+              <a href={href('login')} data-auth-link>Business Login</a>
               <a href={submitHref}>Submit Your Business</a>
             </nav>
           </div>
@@ -152,5 +158,38 @@ const { base, href, submitHref } = Astro.props;
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
     });
+  }
+
+  // Every page (except /dashboard) is static HTML baked at build time, so
+  // there's no per-request server to ask "is this visitor logged in?" —
+  // that's only possible client-side, after the page has already painted
+  // with the logged-out "Business Login" label. getSession() (not
+  // getUser()) deliberately: this is cosmetic, not a security gate — the
+  // real gate is middleware.ts's getUser() check on /dashboard itself — so
+  // it's fine to trust the locally-stored session without a round trip to
+  // Supabase's Auth server, which keeps this swap as fast as possible.
+  const base = import.meta.env.BASE_URL;
+  const authLinks = document.querySelectorAll<HTMLAnchorElement>(
+    '[data-auth-link]',
+  );
+  if (authLinks.length > 0) {
+    import('../lib/supabase-browser')
+      .then(({ createSupabaseBrowserClient }) =>
+        createSupabaseBrowserClient().auth.getSession(),
+      )
+      .then(({ data: { session } }) => {
+        if (!session) return;
+        const dashboardHref = `${base}dashboard`.replace(/\/+/g, '/');
+        authLinks.forEach((link) => {
+          link.textContent = 'Dashboard';
+          link.href = dashboardHref;
+        });
+      })
+      .catch((error) => {
+        // Not logged in vs. couldn't check are indistinguishable to the
+        // visitor either way — leave the link reading "Business Login" and
+        // move on rather than surfacing an error for a cosmetic check.
+        console.error('Failed to check login state for nav:', error);
+      });
   }
 </script>

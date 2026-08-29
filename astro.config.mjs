@@ -26,7 +26,7 @@ import netlify from '@astrojs/netlify';
 const isDev = process.argv.includes('dev');
 
 export default defineConfig({
-  site: process.env.SITE || 'https://example.com',
+  site: process.env.SITE || 'https://www.edmontonhomeservices.ca',
   base: process.env.BASE || '/',
   trailingSlash: 'ignore',
   /*

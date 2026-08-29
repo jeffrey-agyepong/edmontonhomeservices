@@ -5,21 +5,43 @@ import Rating from '../../components/Rating.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { COUNT_CLICKS } from '../../consts';
 import { placeholderGradient } from '../../lib/placeholder';
+import { createSupabaseAnonClient } from '../../lib/supabase-anon';
 
 export async function getStaticPaths() {
   const listings = await getCollection('listings');
   const categories = await getCollection('categories');
 
-  return listings.map((listing) => ({
-    params: { slug: listing.id },
-    props: {
-      listing,
-      category: categories.find((c) => c.id === listing.data.category) ?? null,
-    },
-  }));
+  // One query for every listing's matching businesses row (joined by
+  // slug — see supabase/001_businesses_slug_and_backfill.sql), rather than
+  // one query per listing. Powers the "Claim This Listing" button below:
+  // a null owner_id means unclaimed, and businessId is what a submitted
+  // claim_requests row points at. A listing with no matching row at all
+  // (not yet backfilled) just won't show the button — see the Astro
+  // template below.
+  const supabase = createSupabaseAnonClient();
+  const { data: businesses } = await supabase
+    .from('businesses')
+    .select('id, owner_id, slug')
+    .not('slug', 'is', null);
+  const businessBySlug = new Map(
+    (businesses ?? []).map((b) => [b.slug, b]),
+  );
+
+  return listings.map((listing) => {
+    const business = businessBySlug.get(listing.id);
+    return {
+      params: { slug: listing.id },
+      props: {
+        listing,
+        category: categories.find((c) => c.id === listing.data.category) ?? null,
+        businessId: business?.id ?? null,
+        ownerId: business?.owner_id ?? null,
+      },
+    };
+  });
 }
 
-const { listing, category } = Astro.props;
+const { listing, category, businessId, ownerId } = Astro.props;
 const d = listing.data;
 const base = import.meta.env.BASE_URL;
 
@@ -374,6 +396,68 @@ const listingTitle = d.neighborhood ? `${d.name} in ${d.neighborhood}` : d.name;
               )
             }
           </div>
+
+          {
+            businessId && !ownerId && (
+              <div
+                class="form-card claim-card mt-4"
+                data-business-id={businessId}
+              >
+                <div class="claim-prompt">
+                  <h2 class="section-heading mt-0">Own this business?</h2>
+                  <p class="section-note mb-3">
+                    Claim this listing to manage its details going forward.
+                  </p>
+                  <button
+                    type="button"
+                    id="claim-button"
+                    class="btn-secondary w-full"
+                  >
+                    Claim This Listing
+                  </button>
+                </div>
+
+                <form
+                  id="claim-form"
+                  class="hidden"
+                  onsubmit="event.preventDefault()"
+                  novalidate
+                >
+                  <label for="claim-message">
+                    Message (optional)
+                    <textarea
+                      name="message"
+                      id="claim-message"
+                      rows="3"
+                      placeholder="I'm the owner, here's my phone number for verification..."
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    id="claim-submit"
+                    class="btn-accent text-white border-0 w-full"
+                  >
+                    Submit Claim Request
+                  </button>
+                  <p
+                    id="claim-error"
+                    class="mt-2 mb-0 text-sm hidden"
+                    style="color: var(--danger)"
+                  />
+                </form>
+
+                <p
+                  id="claim-success"
+                  class="hidden m-0 text-sm"
+                  style="color: var(--primary)"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Thanks, we'll review your request and follow up by email.
+                </p>
+              </div>
+            )
+          }
         </aside>
       </div>
     </article>
@@ -480,6 +564,117 @@ const listingTitle = d.neighborhood ? `${d.name} in ${d.neighborhood}` : d.name;
           form.querySelector('.coming-soon-note')?.removeAttribute('hidden');
         });
       });
+
+    // ------------------------------------------------------------- claim
+    const claimCard = document.querySelector<HTMLElement>('.claim-card');
+    if (claimCard) {
+      const businessId = claimCard.dataset.businessId as string;
+      const claimButton = document.getElementById('claim-button');
+      const claimPrompt = claimCard.querySelector<HTMLElement>('.claim-prompt');
+      const claimForm = document.getElementById(
+        'claim-form',
+      ) as HTMLFormElement | null;
+      const claimSubmit = document.getElementById(
+        'claim-submit',
+      ) as HTMLButtonElement | null;
+      const claimError = document.getElementById(
+        'claim-error',
+      ) as HTMLParagraphElement | null;
+      const claimSuccess = document.getElementById('claim-success');
+      const base = import.meta.env.BASE_URL;
+
+      // Loaded lazily, same reasoning as the dashboard and login pages: a
+      // static top-level import would break this whole script if the
+      // module fails to load, taking the button down with it.
+      async function getSupabase() {
+        const { createSupabaseBrowserClient } = await import(
+          '../../lib/supabase-browser'
+        );
+        return createSupabaseBrowserClient();
+      }
+
+      claimButton?.addEventListener('click', async () => {
+        let supabase;
+        try {
+          supabase = await getSupabase();
+        } catch (moduleError) {
+          console.error('Failed to load the Supabase client:', moduleError);
+          return;
+        }
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+          window.location.href = `${base}login`.replace(/\/+/g, '/');
+          return;
+        }
+
+        claimPrompt?.classList.add('hidden');
+        claimForm?.classList.remove('hidden');
+      });
+
+      claimForm?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!claimSubmit) return;
+        claimError?.classList.add('hidden');
+
+        const message = (
+          new FormData(claimForm).get('message')?.toString() ?? ''
+        ).trim();
+
+        claimSubmit.disabled = true;
+        const originalLabel = claimSubmit.textContent;
+        claimSubmit.textContent = 'Submitting…';
+
+        let supabase;
+        try {
+          supabase = await getSupabase();
+        } catch (moduleError) {
+          console.error('Failed to load the Supabase client:', moduleError);
+          claimSubmit.disabled = false;
+          claimSubmit.textContent = originalLabel;
+          if (claimError) {
+            claimError.textContent =
+              "Couldn't load the claim form. Please refresh the page and try again.";
+            claimError.classList.remove('hidden');
+          }
+          return;
+        }
+
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+          window.location.href = `${base}login`.replace(/\/+/g, '/');
+          return;
+        }
+
+        // No `status` sent — the column default and the insert policy's
+        // WITH CHECK both land on 'pending' regardless, same
+        // defense-in-depth pattern as businesses.approved/premium.
+        const { error } = await supabase.from('claim_requests').insert({
+          business_id: businessId,
+          user_id: session.user.id,
+          message: message || null,
+        });
+
+        claimSubmit.disabled = false;
+        claimSubmit.textContent = originalLabel;
+
+        if (error) {
+          if (claimError) {
+            claimError.textContent = `Couldn't submit your claim request: ${error.message}`;
+            claimError.classList.remove('hidden');
+          }
+        } else {
+          claimForm.classList.add('hidden');
+          claimSuccess?.classList.remove('hidden');
+        }
+      });
+    }
   </script>
 </BaseLayout>
 
