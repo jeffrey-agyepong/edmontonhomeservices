@@ -18,14 +18,33 @@ export async function getStaticPaths() {
   // claim_requests row points at. A listing with no matching row at all
   // (not yet backfilled) just won't show the button — see the Astro
   // template below.
-  const supabase = createSupabaseAnonClient();
-  const { data: businesses } = await supabase
-    .from('businesses')
-    .select('id, owner_id, slug')
-    .not('slug', 'is', null);
-  const businessBySlug = new Map(
-    (businesses ?? []).map((b) => [b.slug, b]),
-  );
+  //
+  // Wrapped in try/catch deliberately: this runs during the build's static
+  // prerendering step, not per-request, so an unhandled throw here doesn't
+  // just break this one feature — it fails `astro build` outright and takes
+  // every page on the site down with it (this is exactly what happened when
+  // PUBLIC_SUPABASE_URL wasn't set in Netlify's build environment;
+  // createClient() throws synchronously before any network call is even
+  // made). "Claim This Listing" is supplementary to the listing pages
+  // themselves, so any failure here — missing env vars, Supabase down, a
+  // network hiccup — should degrade to "button doesn't show anywhere," the
+  // same behavior as a listing simply having no matching businesses row,
+  // never take down the build.
+  let businessBySlug = new Map<string, { id: number; owner_id: string | null }>();
+  try {
+    const supabase = createSupabaseAnonClient();
+    const { data: businesses, error } = await supabase
+      .from('businesses')
+      .select('id, owner_id, slug')
+      .not('slug', 'is', null);
+    if (error) throw error;
+    businessBySlug = new Map((businesses ?? []).map((b) => [b.slug, b]));
+  } catch (err) {
+    console.warn(
+      '[l/[slug]] Skipping "Claim This Listing" for this build — could not read businesses from Supabase:',
+      err instanceof Error ? err.message : err,
+    );
+  }
 
   return listings.map((listing) => {
     const business = businessBySlug.get(listing.id);
