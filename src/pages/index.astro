@@ -5,6 +5,19 @@ import Hero from '../components/home/Hero.astro';
 import Category from '../components/home/Category.astro';
 import Sponsors from '../components/home/Sponsors.astro';
 import TrustVetting from '../components/home/TrustVetting.astro';
+
+// ImageKit resizes on the fly via a `?tr=w-<px>` query param (same trick
+// about.astro's photo uses) — this serves each visitor a file sized to
+// their actual viewport instead of one fixed-size image to everyone. The
+// hero always spans the full viewport width (see Hero.astro's full-bleed
+// .hero-bg), hence `sizes="100vw"` and a width ladder that goes all the
+// way up to large desktop monitors, unlike a half-width image's ladder.
+const heroImageUrl =
+  'https://ik.imagekit.io/boxhuwbys/edmonton-home-services-hero.webp';
+const heroImageWidths = [640, 960, 1280, 1600, 1920, 2560];
+const heroImageSrcset = heroImageWidths
+  .map((w) => `${heroImageUrl}?tr=w-${w} ${w}w`)
+  .join(', ');
 ---
 
 <BaseLayout
@@ -12,7 +25,18 @@ import TrustVetting from '../components/home/TrustVetting.astro';
   description="A hand-curated directory of Edmonton home service providers. Find trusted, vetted local businesses for your home improvement, repair, and maintenance needs."
 >
   <div class="landing-header">
-    <Hero />
+    <Hero>
+      <img
+        slot="background"
+        src={`${heroImageUrl}?tr=w-1920`}
+        srcset={heroImageSrcset}
+        sizes="100vw"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </Hero>
   </div>
   <Sponsors />
   <TrustVetting />

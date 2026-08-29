@@ -25,11 +25,9 @@
   --accent-ink: #1c1b19;
   --radius: 4px;
   --wrap: 1280px;
-  /* Plus Jakarta Sans for headings and bold brand elements, Inter for body
+  /* Bitter (serif) for headings and bold brand elements, Inter for body
        copy and UI (buttons, nav) — loaded in BaseLayout.astro's <head>. */
-  --font-display:
-    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Bitter', Georgia, 'Times New Roman', serif;
   --font-body:
     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;

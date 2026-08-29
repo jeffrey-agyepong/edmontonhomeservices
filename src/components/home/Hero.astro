@@ -1,11 +1,31 @@
 ---
 const base = import.meta.env.BASE_URL;
 const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
+
+// The overlay/light-text treatment only makes sense once there's actually a
+// photo behind it — checked server-side so the section renders with none of
+// that markup (and none of the contrast overrides below) when no one's
+// passed a background image in.
+const hasBackground = Astro.slots.has('background');
 ---
 
-<section class="text-left min-h-full py-8 sm:py-12 md:py-16 lg:py-20">
+<section
+  class:list={[
+    'hero-section text-left min-h-full py-8 sm:py-12 md:py-16 lg:py-20',
+    { 'hero-has-bg': hasBackground },
+  ]}
+>
+  {
+    hasBackground && (
+      <div class="hero-bg" aria-hidden="true">
+        <slot name="background" />
+        <div class="hero-overlay" />
+      </div>
+    )
+  }
+
   <span
-    class="mb-4 inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-sm sm:text-base md:text-lg font-medium tracking-wide text-orange-500 ring-1 ring-black/10 dark:bg-white/5 dark:text-orange-400 dark:ring-white/10"
+    class="hero-pill mb-4 inline-flex items-center gap-2 rounded-full bg-black/5 px-4 py-1.5 text-sm sm:text-base md:text-lg font-medium tracking-wide text-orange-500 ring-1 ring-black/10 dark:bg-white/5 dark:text-orange-400 dark:ring-white/10"
   >
     <svg
       class="h-4 w-4 flex-none"
@@ -19,20 +39,20 @@ const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
     </svg>
     The curated guide to local pros
   </span>
-  <h1 class="text-4xl sm:text-5xl md:text-7xl font-semibold leading-tight">
+  <h1 class="hero-heading text-4xl sm:text-5xl md:text-7xl font-semibold leading-tight">
     <span class="dark:text-slate-50 text-black">Edmonton's home services,</span>
     <br />
     vetted by locals.
   </h1>
   <p
-    class="text-lg sm:text-xl md:text-2xl text-(--text-dim) dark:text-slate-300 mt-4 max-w-[700px]"
+    class="hero-subtitle text-lg sm:text-xl md:text-2xl text-(--text-dim) dark:text-slate-300 mt-4 max-w-[700px]"
   >
     We personally review and curate the best home service professionals in
     Edmonton.
   </p>
 
   <form
-    class="mt-8 flex max-w-[700px] items-center gap-2 rounded-full bg-black/5 p-2 pl-5 ring-1 ring-black/10 dark:bg-white/5 dark:ring-white/10"
+    class="hero-search-form mt-8 flex max-w-[700px] items-center gap-2 rounded-full bg-black/5 p-2 pl-5 ring-1 ring-black/10 dark:bg-white/5 dark:ring-white/10"
     role="search"
     method="get"
     action={href('search')}
@@ -62,20 +82,92 @@ const href = (p: string) => `${base}/${p}`.replace(/\/+/g, '/');
       Search Providers
     </button>
   </form>
-  <div class="mt-6 flex">
+  <div class="hero-popular mt-6 flex">
     <p class="px-2">Popular:</p>
     <div class="flex gap-2">
       <p
-        class="rounded-full bg-black/5 px-3 py-1 text-sm text-(--text-dim) dark:bg-white/5 dark:text-slate-300"
+        class="hero-chip rounded-full bg-black/5 px-3 py-1 text-sm text-(--text-dim) dark:bg-white/5 dark:text-slate-300"
       >
         House Cleaning
       </p>
 
       <p
-        class="rounded-full bg-black/5 px-3 py-1 text-sm text-(--text-dim) dark:bg-white/5 dark:text-slate-300"
+        class="hero-chip rounded-full bg-black/5 px-3 py-1 text-sm text-(--text-dim) dark:bg-white/5 dark:text-slate-300"
       >
         Landscaping
       </p>
     </div>
   </div>
 </section>
+
+<style>
+  .hero-section {
+    /* Establishes a stacking context so .hero-bg's negative z-index stays
+       contained to this section, rather than dropping behind the page. */
+    position: relative;
+    z-index: 0;
+  }
+
+  /* Breaks out of the .wrap max-width this section normally renders inside
+     (see BaseLayout.astro/app.css), without having to move the component
+     itself outside that container — a common full-bleed technique: center
+     a viewport-wide box on the section regardless of how narrow its
+     parent actually is. */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    overflow: hidden;
+  }
+  .hero-bg :global(img),
+  .hero-bg :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  /* Text sitting on a photo needs reliable contrast regardless of the
+     site's own light/dark theme — these override the theme-aware Tailwind
+     classes above only when a background image is actually present. */
+  .hero-has-bg :global(h1),
+  .hero-has-bg :global(h1 span) {
+    color: #fff;
+  }
+  .hero-has-bg .hero-subtitle {
+    color: rgb(255 255 255 / 0.85);
+  }
+  .hero-has-bg .hero-pill {
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  }
+  .hero-has-bg .hero-search-form {
+    background: rgb(255 255 255 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  }
+  .hero-has-bg .hero-search-form input {
+    color: #fff;
+  }
+  .hero-has-bg .hero-search-form input::placeholder {
+    color: rgb(255 255 255 / 0.65);
+  }
+  .hero-has-bg .hero-search-form svg {
+    color: rgb(255 255 255 / 0.65);
+  }
+  .hero-has-bg .hero-popular > p:first-child {
+    color: rgb(255 255 255 / 0.85);
+  }
+  .hero-has-bg .hero-chip {
+    background: rgb(255 255 255 / 0.14);
+    color: rgb(255 255 255 / 0.9);
+  }
+</style>

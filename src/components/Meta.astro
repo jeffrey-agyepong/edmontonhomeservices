@@ -45,8 +45,8 @@ const websiteJsonLd = {
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 
-<!-- Plus Jakarta Sans for headings/brand, Inter for body copy and UI — see
-     the --font-display / --font-body variables in app.css.
+<!-- Bitter for headings/brand, Inter for body copy and UI — see the
+     --font-display / --font-body variables in app.css.
 
      Loaded async (preload + swap-on-load) rather than a plain <link
      rel="stylesheet">, which is render-blocking — Lighthouse flagged this
@@ -61,18 +61,18 @@ const websiteJsonLd = {
 <link
   rel="preload"
   as="style"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bitter:wght@500;600;700;800&display=swap"
 />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bitter:wght@500;600;700;800&display=swap"
   media="print"
   onload="this.media='all'"
 />
 <noscript>
   <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bitter:wght@500;600;700;800&display=swap"
   />
 </noscript>
 {noindex && <meta name="robots" content="noindex, follow" />}
